@@ -28,7 +28,15 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Navigator(
+        pages: [
+          MaterialPage(
+            key: ValueKey('MyHomePage'),
+            child: MyHomePage(title: 'Flutter Demo Home Page'),
+          )
+        ],
+        onPopPage: (route, result) => route.didPop(result),
+      ),
     );
   }
 }
