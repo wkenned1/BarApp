@@ -1,3 +1,4 @@
+import 'package:bar_app/ui/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -31,8 +32,8 @@ class MyApp extends StatelessWidget {
       home: Navigator(
         pages: [
           MaterialPage(
-            key: ValueKey('MyHomePage'),
-            child: MyHomePage(title: 'Flutter Demo Home Page'),
+            key: ValueKey('LoginPage'),
+            child: LoginPage(),
           )
         ],
         onPopPage: (route, result) => route.didPop(result),
