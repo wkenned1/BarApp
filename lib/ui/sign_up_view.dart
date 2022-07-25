@@ -24,11 +24,9 @@ class SignUpView extends StatelessWidget {
                   builder: (context) =>
                       AlertDialog(content: Text(state.errorMessage)));
             } else if (state.isFormValid && !state.isLoading) {
-              print("AUTH STARTING");
               context.read<AuthenticationBloc>().add(AuthenticationStarted());
               //context.read<FormBloc>().add(const FormSucceeded());
             } else if (state.isFormValidateFailed) {
-              print("FORM FAILED");
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("invalid submission")));
             }

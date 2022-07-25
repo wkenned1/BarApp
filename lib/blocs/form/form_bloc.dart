@@ -45,7 +45,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
   }
 
   _onFormSubmitted(FormSubmitted event, Emitter<FormAuthState> emit) async {
-    print("SUBMITTED");
     emit(state.copyWith(
       isFormSuccessful: false,
       isFormValid: false,
@@ -61,10 +60,8 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
         displayName: state.displayName);
 
     if (event.value == Status.signUp) {
-      print("SIGN UP");
       await _updateUIAndSignUp(event, emit, user);
     } else if (event.value == Status.signIn) {
-      print("SIGN IN");
       await _authenticateUser(event, emit, user);
     }
   }
@@ -88,9 +85,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
         isFormValid:
             _isPasswordValid(state.password) && _isEmailValid(state.email),
         isLoading: true));
-    print(
-        "Email valid: ${_isEmailValid(state.email)} Password valid: ${_isPasswordValid(state.password)}");
-    print("PASSWORD: ${state.password}");
     if (state.isFormValid) {
       try {
         UserCredential? authUser = await _authenticationRepository.signUp(user);
