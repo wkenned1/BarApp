@@ -1,0 +1,27 @@
+part of 'authentication_bloc.dart';
+
+@immutable
+abstract class AuthenticationState {
+  const AuthenticationState();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthenticationInitial extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuthenticationSuccess extends AuthenticationState {
+  final String? displayName;
+  const AuthenticationSuccess({this.displayName});
+
+  @override
+  List<Object?> get props => [displayName];
+}
+
+class AuthenticationFailure extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}

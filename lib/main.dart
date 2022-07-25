@@ -1,14 +1,45 @@
-import 'package:bar_app/ui/login_page.dart';
+import 'package:bar_app/resources/repositories/authentication_repository_impl.dart';
+import 'package:bar_app/resources/repositories/database_repository_impl.dart';
+import 'package:bar_app/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'blocs/authentication/authentication_bloc.dart';
+import 'blocs/database/database_bloc.dart';
+import 'blocs/form/form_bloc.dart';
 import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'app.dart';
+import 'app_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  BlocOverrides.runZoned(
+    () => runApp(MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              AuthenticationBloc(AuthenticationRepositoryImpl())
+                ..add(AuthenticationStarted()),
+        ),
+        BlocProvider(
+          create: (context) => FormBloc(
+              AuthenticationRepositoryImpl(), DatabaseRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => DatabaseBloc(DatabaseRepositoryImpl()),
+        )
+      ],
+      child: MyApp(),
+    )),
+    blocObserver: AppBlocObserver(),
+  );
+  //runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -33,7 +64,7 @@ class MyApp extends StatelessWidget {
         pages: [
           MaterialPage(
             key: ValueKey('LoginPage'),
-            child: LoginPage(),
+            child: SignUpView(),
           )
         ],
         onPopPage: (route, result) => route.didPop(result),
