@@ -3,6 +3,8 @@
    <application
         android:label="bar_app"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+           android:value="AIzaSyAgovt_dVjgsyz_T9rU9zRWVLhAScM_R0Y"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

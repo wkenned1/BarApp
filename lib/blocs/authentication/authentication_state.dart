@@ -14,11 +14,11 @@ class AuthenticationInitial extends AuthenticationState {
 }
 
 class AuthenticationSuccess extends AuthenticationState {
-  final String? displayName;
-  const AuthenticationSuccess({this.displayName});
+  final String? email;
+  const AuthenticationSuccess({this.email});
 
   @override
-  List<Object?> get props => [displayName];
+  List<Object?> get props => [email];
 }
 
 class AuthenticationFailure extends AuthenticationState {

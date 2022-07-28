@@ -6,6 +6,7 @@ import '../blocs/form/form_bloc.dart';
 import '../constants.dart';
 import '../resources/validator.dart';
 import 'home_view.dart';
+import 'map_test.dart';
 
 class SignUpView extends StatelessWidget {
   final _emailTextController = TextEditingController();
@@ -34,8 +35,9 @@ class SignUpView extends StatelessWidget {
           BlocListener<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {
               if (state is AuthenticationSuccess) {
+                print("NAVIGATING!!");
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const HomeView()),
+                    MaterialPageRoute(builder: (context) => MapSample()),
                     (Route<dynamic> route) => false);
               }
             },
@@ -63,17 +65,37 @@ class SignUpView extends StatelessWidget {
                             Validator.validatePassword(password: value!!),
                       ),
                       SizedBox(height: size.height * 0.01),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<FormBloc>().add(FormSubmitted(
-                              value: Status.signUp,
-                              email: _emailTextController.text,
-                              password: _passwordTextController.text));
-                        },
-                        child: Text(
-                          'Register',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.read<FormBloc>().add(FormSubmitted(
+                                    value: Status.signUp,
+                                    email: _emailTextController.text,
+                                    password: _passwordTextController.text));
+                              },
+                              child: Text(
+                                'Register',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                context.read<FormBloc>().add(FormSubmitted(
+                                    value: Status.signIn,
+                                    email: _emailTextController.text,
+                                    password: _passwordTextController.text));
+                              },
+                              child: Text(
+                                'Login',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ]),
               ),

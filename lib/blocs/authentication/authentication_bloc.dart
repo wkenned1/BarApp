@@ -18,10 +18,10 @@ class AuthenticationBloc
     on<AuthenticationEvent>((event, emit) async {
       if (event is AuthenticationStarted) {
         UserModel user = await _authenticationRepository.getCurrentUser().first;
+        print("USER: ${user.uid}");
         if (user.uid != "uid") {
-          String? displayName =
-              await _authenticationRepository.retrieveUserName(user);
-          emit(AuthenticationSuccess(displayName: displayName));
+          print("USER2: ${user.uid}");
+          emit(AuthenticationSuccess(email: user.email));
         } else {
           emit(AuthenticationFailure());
         }

@@ -76,7 +76,30 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
   }
 
   _authenticateUser(
-      FormSubmitted event, Emitter<FormAuthState> emit, UserModel user) async {}
+      FormSubmitted event, Emitter<FormAuthState> emit, UserModel user) async {
+    print("Login: Email ${user.email}, Password ${user.password}");
+    emit(state.copyWith(
+        errorMessage: "",
+        isFormValid:
+            _isPasswordValid(state.password) && _isEmailValid(state.email),
+        isLoading: true));
+    if (state.isFormValid) {
+      try {
+        UserCredential? authUser = await _authenticationRepository.signIn(user);
+        UserModel updatedUser = user.copyWith(uid: authUser!.user!.uid);
+        print(
+            "Updated Login: Email ${updatedUser.email}, Password ${updatedUser.password}");
+        await _databaseRepository.saveUserData(updatedUser);
+        emit(state.copyWith(isLoading: false, errorMessage: ""));
+      } on FirebaseAuthException catch (e) {
+        emit(state.copyWith(
+            isLoading: false, errorMessage: e.message, isFormValid: false));
+      }
+    } else {
+      emit(state.copyWith(
+          isLoading: false, isFormValid: false, isFormValidateFailed: true));
+    }
+  }
 
   _updateUIAndSignUp(
       FormSubmitted event, Emitter<FormAuthState> emit, UserModel user) async {
