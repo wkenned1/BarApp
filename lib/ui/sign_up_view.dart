@@ -36,9 +36,12 @@ class SignUpView extends StatelessWidget {
             listener: (context, state) {
               if (state is AuthenticationSuccess) {
                 print("NAVIGATING!!");
-                Navigator.of(context).pushAndRemoveUntil(
+                /*Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (context) => MapSample()),
-                    (Route<dynamic> route) => false);
+                    (Route<dynamic> route) => false);*/
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => MapSample()),
+                );
               }
             },
           ),

@@ -11,10 +11,11 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   Completer<GoogleMapController> _controller = Completer();
+  List<Marker> _markers = <Marker>[];
 
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
+    target: LatLng(42.3503, -71.0775),
+    zoom: 11, //14.4746,
   );
 
   static final CameraPosition _kLake = CameraPosition(
@@ -25,19 +26,24 @@ class MapSampleState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
+    _markers.add(Marker(
+        markerId: MarkerId('Bijou'),
+        position: LatLng(42.351238, -71.064209),
+        infoWindow: InfoWindow(title: 'Bijou Night Club')));
     return new Scaffold(
       body: GoogleMap(
         mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
+        markers: Set<Marker>.of(_markers),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      /*floatingActionButton: FloatingActionButton.extended(
         onPressed: _goToTheLake,
         label: Text('To the lake!'),
         icon: Icon(Icons.directions_boat),
-      ),
+      ),*/
     );
   }
 

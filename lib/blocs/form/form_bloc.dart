@@ -114,7 +114,8 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
         UserModel updatedUser = user.copyWith(
             uid: authUser!.user!.uid, isVerified: authUser.user!.emailVerified);
         await _databaseRepository.saveUserData(updatedUser);
-        if (updatedUser.isVerified!) {
+        emit(state.copyWith(isLoading: false, errorMessage: ""));
+        /*if (updatedUser.isVerified!) {
           emit(state.copyWith(isLoading: false, errorMessage: ""));
         } else {
           emit(state.copyWith(
@@ -122,7 +123,7 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
               errorMessage:
                   "Please Verify your email, by clicking the link sent to you by mail.",
               isLoading: false));
-        }
+        }*/
       } on FirebaseAuthException catch (e) {
         emit(state.copyWith(
             isLoading: false, errorMessage: e.message, isFormValid: false));
