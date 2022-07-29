@@ -14,8 +14,8 @@ class MapSampleState extends State<MapSample> {
   List<Marker> _markers = <Marker>[];
 
   static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(42.3503, -71.0775),
-    zoom: 11, //14.4746,
+    target: LatLng(42.340080, -71.088890),
+    zoom: 14, //14.4746,
   );
 
   static final CameraPosition _kLake = CameraPosition(
