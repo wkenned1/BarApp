@@ -36,6 +36,8 @@ class MapSampleState extends State<MapSample> {
         initialCameraPosition: _kGooglePlex,
         markers: Set<Marker>.of(_markers),
         onMapCreated: (GoogleMapController controller) {
+          controller.setMapStyle(
+              '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
           _controller.complete(controller);
         },
       ),
