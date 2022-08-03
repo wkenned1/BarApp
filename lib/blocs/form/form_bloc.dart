@@ -27,7 +27,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
             age: 0,
             isAgeValid: true,
             isFormValidateFailed: false)) {
-    //on<FormSucceeded>(_onFormSuccess);
     on<FormSubmitted>(_onFormSubmitted);
   }
 
@@ -77,7 +76,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
 
   _authenticateUser(
       FormSubmitted event, Emitter<FormAuthState> emit, UserModel user) async {
-    print("Login: Email ${user.email}, Password ${user.password}");
     emit(state.copyWith(
         errorMessage: "",
         isFormValid:
@@ -115,15 +113,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
             uid: authUser!.user!.uid, isVerified: authUser.user!.emailVerified);
         await _databaseRepository.saveUserData(updatedUser);
         emit(state.copyWith(isLoading: false, errorMessage: ""));
-        /*if (updatedUser.isVerified!) {
-          emit(state.copyWith(isLoading: false, errorMessage: ""));
-        } else {
-          emit(state.copyWith(
-              isFormValid: false,
-              errorMessage:
-                  "Please Verify your email, by clicking the link sent to you by mail.",
-              isLoading: false));
-        }*/
       } on FirebaseAuthException catch (e) {
         emit(state.copyWith(
             isLoading: false, errorMessage: e.message, isFormValid: false));

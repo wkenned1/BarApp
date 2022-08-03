@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/authentication/authentication_bloc.dart';
 import '../blocs/form/form_bloc.dart';
-import '../constants.dart';
 import '../resources/validator.dart';
-import 'home_view.dart';
 import 'map_test.dart';
 
 class SignUpView extends StatelessWidget {
@@ -26,7 +24,6 @@ class SignUpView extends StatelessWidget {
                       AlertDialog(content: Text(state.errorMessage)));
             } else if (state.isFormValid && !state.isLoading) {
               context.read<AuthenticationBloc>().add(AuthenticationStarted());
-              //context.read<FormBloc>().add(const FormSucceeded());
             } else if (state.isFormValidateFailed) {
               ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("invalid submission")));
@@ -35,10 +32,6 @@ class SignUpView extends StatelessWidget {
           BlocListener<AuthenticationBloc, AuthenticationState>(
             listener: (context, state) {
               if (state is AuthenticationSuccess) {
-                print("NAVIGATING!!");
-                /*Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => MapSample()),
-                    (Route<dynamic> route) => false);*/
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => MapSample()),
                 );
@@ -53,12 +46,14 @@ class SignUpView extends StatelessWidget {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Text("Sign In"),
                       Padding(
                           padding: EdgeInsets.only(bottom: size.height * 0.02)),
                       TextFormField(
                         controller: _emailTextController,
                         validator: (value) =>
                             Validator.validateEmail(email: value!!),
+                        decoration: InputDecoration(labelText: "Email"),
                       ),
                       SizedBox(height: size.height * 0.01),
                       TextFormField(
@@ -66,6 +61,7 @@ class SignUpView extends StatelessWidget {
                         obscureText: true,
                         validator: (value) =>
                             Validator.validatePassword(password: value!!),
+                        decoration: InputDecoration(labelText: "Password"),
                       ),
                       SizedBox(height: size.height * 0.01),
                       Row(
