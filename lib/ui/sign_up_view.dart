@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../blocs/authentication/authentication_bloc.dart';
 import '../blocs/form/form_bloc.dart';
 import '../resources/validator.dart';
+import 'home_page.dart';
 import 'map_test.dart';
 
 class SignUpView extends StatelessWidget {
@@ -33,7 +34,8 @@ class SignUpView extends StatelessWidget {
             listener: (context, state) {
               if (state is AuthenticationSuccess) {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => MapSample()),
+                  MaterialPageRoute(
+                      builder: (context) => HomePage() /*MapSample()*/),
                 );
               }
             },
