@@ -49,11 +49,14 @@ class MapSample extends StatefulWidget {
   _MapState createState() => _MapState();
 }
 
-class _MapState extends State<MapSample> {
+class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   GoogleMapController? mapController; //contrller for Google map
   Set<Marker> markers = Set(); //markers for google map
 
   LatLng startLocation = LatLng(42.340080, -71.088890);
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -90,6 +93,8 @@ class _MapState extends State<MapSample> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
         body: GoogleMap(
       //Map widget from google_maps_flutter package

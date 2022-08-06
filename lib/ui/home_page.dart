@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
     _page2 = MapSample();
     _pages = [_page1, _page2];
     _currentIndex = 0;
-    _currentPage = _page1;
+    _currentPage = _page2;
   }
 
   void _changeTab(int index) {
@@ -98,7 +98,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Linez"),
       ),
-      body: _currentPage,
+      body: /*_currentPage*/ IndexedStack(
+        children: <Widget>[
+          SearchPage(),
+          MapSample(),
+        ],
+        index: _currentIndex,
+      ),
       bottomNavigationBar: BottomNavigationBar(
           onTap: (index) {
             _changeTab(index);
