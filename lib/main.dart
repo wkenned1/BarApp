@@ -1,9 +1,12 @@
+import 'package:bar_app/blocs/wait_time/wait_time_bloc.dart';
 import 'package:bar_app/resources/repositories/authentication_repository_impl.dart';
 import 'package:bar_app/resources/repositories/database_repository_impl.dart';
+import 'package:bar_app/resources/services/database_service.dart';
 import 'package:bar_app/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
@@ -33,13 +36,15 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => DatabaseBloc(DatabaseRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => WaitTimeBloc(DatabaseRepositoryImpl()),
         )
       ],
       child: MyApp(),
     )),
     blocObserver: AppBlocObserver(),
   );
-  //runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

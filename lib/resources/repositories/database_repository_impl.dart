@@ -13,9 +13,15 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   Future<List<UserModel>> retrieveUserData() {
     return service.retrieveUserData();
   }
+
+  @override
+  Future<void> addWaitTime(String address, int waitTime) {
+    return service.addWaitTime(address, waitTime);
+  }
 }
 
 abstract class DatabaseRepository {
   Future<void> saveUserData(UserModel user);
   Future<List<UserModel>> retrieveUserData();
+  Future<void> addWaitTime(String address, int waitTime);
 }

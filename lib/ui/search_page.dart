@@ -1,3 +1,4 @@
+import 'package:bar_app/ui/bar_page.dart';
 import 'package:flutter/material.dart';
 import '../models/location_model.dart';
 import 'map_test.dart';
@@ -5,7 +6,7 @@ import 'map_test.dart';
 class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
 
-  Widget clickableLocation(LocationModel location) {
+  Widget clickableLocation(LocationModel location, BuildContext context) {
     return GestureDetector(
       child: Column(
         children: [
@@ -15,7 +16,10 @@ class SearchPage extends StatelessWidget {
           Center(child: Text(location.address, style: TextStyle(fontSize: 15))),
         ],
       ),
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BarPage(location: location)));
+      },
     );
   }
 
@@ -25,7 +29,7 @@ class SearchPage extends StatelessWidget {
     return Container(
         child: Column(
       children: <Widget>[
-        for (var location in locations) clickableLocation(location)
+        for (var location in locations) clickableLocation(location, context)
       ],
     ));
   }
