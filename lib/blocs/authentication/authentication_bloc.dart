@@ -20,9 +20,7 @@ class AuthenticationBloc
       if (event is AuthenticationStarted) {
         UserModel user = await _authenticationRepository.getCurrentUser().first;
         if (user.uid != "uid") {
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setString("uid", user.uid!);
-          emit(AuthenticationSuccess(email: user.email));
+          emit(AuthenticationSuccess());
         } else {
           emit(AuthenticationFailure());
         }
