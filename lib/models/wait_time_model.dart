@@ -3,20 +3,18 @@ import 'package:equatable/equatable.dart';
 class WaitTimeModel extends Equatable {
   final int waitTime;
   final DateTime timestamp;
-  final String userId;
 
-  const WaitTimeModel(
-      {required this.waitTime, required this.timestamp, required this.userId});
+  const WaitTimeModel({required this.waitTime, required this.timestamp});
 
   Map<String, dynamic> toMap() {
-    return {'waitTime': waitTime, 'timestamp': timestamp, 'userId': userId};
+    return {'waitTime': waitTime, 'timestamp': timestamp};
   }
 
   factory WaitTimeModel.fromMap(Map<String, dynamic> map) {
     return WaitTimeModel(
-        waitTime: map['waitTime'] as int,
-        timestamp: map['timestamp'] as DateTime,
-        userId: map['userId'] as String);
+      waitTime: map['waitTime'] as int,
+      timestamp: map['timestamp'] as DateTime,
+    );
   }
 
   @override

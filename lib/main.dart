@@ -1,4 +1,3 @@
-import 'package:bar_app/blocs/wait_time/wait_time_bloc.dart';
 import 'package:bar_app/resources/repositories/authentication_repository_impl.dart';
 import 'package:bar_app/resources/repositories/database_repository_impl.dart';
 import 'package:bar_app/resources/services/database_service.dart';
@@ -10,6 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
+import 'blocs/get_wait_time/wait_time_bloc.dart';
+import 'blocs/wait_time_report/wait_time_report_bloc.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,9 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => WaitTimeBloc(DatabaseRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => WaitTimeReportBloc(DatabaseRepositoryImpl()),
         )
       ],
       child: MyApp(),

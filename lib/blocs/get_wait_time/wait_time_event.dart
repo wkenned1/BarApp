@@ -16,13 +16,3 @@ class GetWaitTime extends WaitTimeEvent {
   @override
   List<Object> get props => [];
 }
-
-class ReportWaitTime extends WaitTimeEvent {
-  final String address;
-  final int waitTime;
-
-  const ReportWaitTime({required this.address, required this.waitTime});
-
-  @override
-  List<Object> get props => [];
-}
