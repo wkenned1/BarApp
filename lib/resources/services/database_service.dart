@@ -24,16 +24,13 @@ class DatabaseService {
       ref = await _db.collection("WaitTimes").doc(address).get();
     }
     List<dynamic> dynamics = List<dynamic>.from(ref.get("reports"));
-    print("TWO");
     List<WaitTimeModel> reports = [];
     for (dynamic r in dynamics) {
-      print("loop");
       var cast = new Map<String, dynamic>.from(r);
       reports.add(WaitTimeModel(
           waitTime: cast["waitTime"] as int,
           timestamp: cast["timestamp"].toDate()));
     }
-    print("UTC: ${DateTime.now().toUtc()}, Local: ${DateTime.now()}");
     reports.add(
         WaitTimeModel(waitTime: waitTime, timestamp: DateTime.now().toUtc()));
     await _db
@@ -51,20 +48,14 @@ class DatabaseService {
       ref = await _db.collection("WaitTimes").doc(address).get();
     }
 
-    //List<WaitTimeModel> waitTimes = ref.toObject(WaitTimeLocationModel.class).reports;
     List<dynamic> dynamics = List<dynamic>.from(ref.get("reports"));
-    print("TWO");
     List<WaitTimeModel> reports = [];
     for (dynamic r in dynamics) {
-      print("loop");
       var cast = new Map<String, dynamic>.from(r);
       reports.add(WaitTimeModel(
           waitTime: cast["waitTime"] as int,
           timestamp: cast["timestamp"].toDate()));
     }
-    print("reports length: ${reports.length}");
-    //List<WaitTimeModel> reports = List<WaitTimeModel>.from(ref.get("reports"));
-    print("three");
     return reports;
   }
 

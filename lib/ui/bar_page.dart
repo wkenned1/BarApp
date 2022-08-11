@@ -18,14 +18,6 @@ class BarPage extends StatelessWidget {
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
         ));
-    /*return BlocListener<WaitTimeBloc, WaitTimeState>(
-      listener: (context, state) {
-        if (state.waitTime != null) {
-          print("wait time from bloc: ${state.waitTime!}");
-          waitTime = state.waitTime!;
-        }
-      },
-      child: */
     return Scaffold(
         body: Column(children: [
       BlocBuilder<WaitTimeBloc, WaitTimeState>(builder: (context, state) {
@@ -50,6 +42,5 @@ class BarPage extends StatelessWidget {
           },
           child: Text("Submit"))
     ]));
-    //);
   }
 }
