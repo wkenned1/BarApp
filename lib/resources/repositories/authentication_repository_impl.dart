@@ -25,7 +25,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<UserCredential?> signIn(UserModel user) {
     try {
-      return service.signIn(user);
+      return service.signInAnon();
     } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(code: e.code, message: e.message);
     }

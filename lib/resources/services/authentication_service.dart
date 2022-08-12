@@ -38,6 +38,15 @@ class AuthenticationService {
     }
   }
 
+  Future<UserCredential?> signInAnon() async {
+    try {
+      final userCredential = await FirebaseAuth.instance.signInAnonymously();
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthException(code: e.code, message: e.message);
+    }
+  }
+
   Future<void> verifyEmail() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null && !user.emailVerified) {
