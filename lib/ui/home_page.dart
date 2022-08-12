@@ -1,6 +1,9 @@
+import 'package:bar_app/resources/util/location_util.dart';
 import 'package:bar_app/ui/map_test.dart';
 import 'package:bar_app/ui/search_page.dart';
 import 'package:flutter/material.dart';
+
+import 'package:location/location.dart';
 
 /*class HomePage extends StatelessWidget {
   late Widget _currentPage;
@@ -49,6 +52,79 @@ import 'package:flutter/material.dart';
   }
 }*/
 
+class GetLocationWidget extends StatefulWidget {
+  const GetLocationWidget({Key? key}) : super(key: key);
+
+  @override
+  _GetLocationState createState() => _GetLocationState();
+}
+
+class _GetLocationState extends State<GetLocationWidget> {
+  late bool _serviceEnabled;
+  late PermissionStatus _permissionGranted;
+  LocationData? _userLocation;
+
+  Future<void> _getUserLocation() async {
+    print("FINDING LOCATION");
+    Location location = Location();
+
+    // Check if location service is enable
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    // Check if permission is granted
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    final _locationData = await location.getLocation();
+    LocationUtil util = LocationUtil();
+    util.setUserLocation(_locationData);
+    print(
+        "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
+    setState(() {
+      _userLocation = _locationData;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _getUserLocation();
+    return Scaffold(
+        /*body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 25),
+            // Display latitude & longtitude
+            _userLocation != null
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      children: [
+                        Text('Your latitude: ${_userLocation?.latitude}'),
+                        const SizedBox(width: 10),
+                        Text('Your longtitude: ${_userLocation?.longitude}')
+                      ],
+                    ),
+                  )
+                : Container()
+          ],
+        ),
+      ),*/
+        );
+  }
+}
+
 class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
 
@@ -78,7 +154,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _page1 = const SearchPage();
+    _page1 = SearchPage();
     _page2 = MapSample();
     _pages = [_page1, _page2];
     _currentIndex = 0;

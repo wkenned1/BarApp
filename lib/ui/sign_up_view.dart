@@ -15,6 +15,7 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    context.read<AuthenticationBloc>().add(AuthenticationStarted());
     return MultiBlocListener(
         listeners: [
           BlocListener<FormBloc, FormAuthState>(listener: (context, state) {
@@ -35,14 +36,15 @@ class SignUpView extends StatelessWidget {
               if (state is AuthenticationSuccess) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => HomePage() /*MapSample()*/),
+                      builder: (context) => /*GetLocationWidget()*/ HomePage()),
                 );
               }
             },
           ),
         ],
         child: Scaffold(
-            backgroundColor: Color(0xFFFFFFFF),
+
+            /*backgroundColor: Color(0xFFFFFFFF),
             body: Center(
               child: SingleChildScrollView(
                 child: Column(
@@ -100,6 +102,7 @@ class SignUpView extends StatelessWidget {
                       ),
                     ]),
               ),
-            )));
+            )*/
+            ));
   }
 }

@@ -8,7 +8,7 @@ class AuthenticationService {
   Stream<UserModel> retrieveCurrentUser() {
     return auth.authStateChanges().map((User? user) {
       if (user != null) {
-        return UserModel(uid: user.uid, email: user.email);
+        return UserModel(uid: user.uid);
       } else {
         return UserModel(uid: "uid");
       }

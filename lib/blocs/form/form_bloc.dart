@@ -85,8 +85,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
       try {
         UserCredential? authUser = await _authenticationRepository.signIn(user);
         UserModel updatedUser = user.copyWith(uid: authUser!.user!.uid);
-        print(
-            "Updated Login: Email ${updatedUser.email}, Password ${updatedUser.password}");
         await _databaseRepository.saveUserData(updatedUser);
         emit(state.copyWith(isLoading: false, errorMessage: ""));
       } on FirebaseAuthException catch (e) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,7 +23,14 @@ class AuthenticationBloc
         if (user.uid != "uid") {
           emit(AuthenticationSuccess());
         } else {
-          emit(AuthenticationFailure());
+          try {
+            UserCredential? authUser =
+                await _authenticationRepository.signIn(user);
+            UserModel updatedUser = user.copyWith(uid: authUser!.user!.uid);
+            emit(AuthenticationSuccess());
+          } catch (e) {
+            emit(AuthenticationFailure());
+          }
         }
       } else if (event is AuthenticationSignedOut) {
         await _authenticationRepository.signOut();
