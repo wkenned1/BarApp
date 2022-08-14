@@ -95,8 +95,9 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
-        body: GoogleMap(
+    return Container(
+        child: GoogleMap(
+      myLocationEnabled: false,
       //Map widget from google_maps_flutter package
       zoomGesturesEnabled: true, //enable Zoom in, out on map
       initialCameraPosition: CameraPosition(

@@ -14,7 +14,7 @@ class SignUpView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    //Size size = MediaQuery.of(context).size;
     context.read<AuthenticationBloc>().add(AuthenticationStarted());
     return MultiBlocListener(
         listeners: [

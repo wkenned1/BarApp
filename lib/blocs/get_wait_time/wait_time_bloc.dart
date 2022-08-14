@@ -22,7 +22,10 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
         await _databaseRepository.getWaitTimes(event.address);
     List<int> newWaitTimes = <int>[];
     for (var model in waitTimes) {
-      if (DateTime.now().toUtc().hour - model.timestamp.hour < 2) {
+      print(
+          "wait times: ${DateTime.now().toUtc().difference(model.timestamp).inMinutes}");
+      if (DateTime.now().toUtc().difference(model.timestamp).inMinutes < 90) {
+        //if (DateTime.now().toUtc().hour - model.timestamp.hour < 2) {
         newWaitTimes.add(model.waitTime);
       }
     }
