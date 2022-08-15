@@ -5,6 +5,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../constants.dart';
 import '../../resources/repositories/database_repository_impl.dart';
 
 part 'wait_time_event.dart';
@@ -24,7 +25,8 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
     for (var model in waitTimes) {
       print(
           "wait times: ${DateTime.now().toUtc().difference(model.timestamp).inMinutes}");
-      if (DateTime.now().toUtc().difference(model.timestamp).inMinutes < 90) {
+      if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
+          Constants.waitTimeReset) {
         //if (DateTime.now().toUtc().hour - model.timestamp.hour < 2) {
         newWaitTimes.add(model.waitTime);
       }

@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:bar_app/constants.dart';
 import 'package:bar_app/models/location_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,18 @@ import 'package:location/location.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../blocs/wait_time_report/wait_time_report_bloc.dart';
+
+Widget waitTimeDisplay(int time) {
+  return Text(
+    "${time} min",
+    style: TextStyle(
+        color: Color((time <= 10)
+            ? Constants.waitTimeTextGreen
+            : (time > 10 && time <= 30)
+                ? Constants.waitTimeTextOrange
+                : Constants.waitTimeTextRed)),
+  );
+}
 
 class BarPage extends StatefulWidget {
   final LocationModel location;
@@ -42,7 +55,10 @@ class _BarPageState extends State<BarPage> {
         body: Column(children: [
           BlocBuilder<WaitTimeBloc, WaitTimeState>(builder: (context, state) {
             final time = state.waitTime ?? -1;
-            return Text("Current Wait Time: ${time >= 0 ? time : "none"}");
+
+            return time >= 0
+                ? waitTimeDisplay(time)
+                : Text("No wait time available");
             // return widget here based on BlocA's state
           }),
           ElevatedButton(
@@ -57,7 +73,7 @@ class _BarPageState extends State<BarPage> {
                     index = 0;
                     setState(() => pressAttention = 0);
                   },
-                  child: Text("< 5 min"),
+                  child: Text("0 min"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         pressAttention != 0 ? Colors.grey : Colors.blue,
@@ -67,7 +83,7 @@ class _BarPageState extends State<BarPage> {
                     index = 1;
                     setState(() => pressAttention = 1);
                   },
-                  child: Text("< 10 min"),
+                  child: Text("5 min"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         pressAttention != 1 ? Colors.grey : Colors.blue,
@@ -77,7 +93,7 @@ class _BarPageState extends State<BarPage> {
                     index = 2;
                     setState(() => pressAttention = 2);
                   },
-                  child: Text("< 20 min"),
+                  child: Text("10 min"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         pressAttention != 2 ? Colors.grey : Colors.blue,
@@ -87,7 +103,7 @@ class _BarPageState extends State<BarPage> {
                     index = 3;
                     setState(() => pressAttention = 3);
                   },
-                  child: Text("> 30 min"),
+                  child: Text("20 min"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         pressAttention != 3 ? Colors.grey : Colors.blue,
@@ -97,10 +113,30 @@ class _BarPageState extends State<BarPage> {
                     index = 4;
                     setState(() => pressAttention = 4);
                   },
-                  child: Text("> 60 min"),
+                  child: Text("30 min"),
                   style: ElevatedButton.styleFrom(
                     backgroundColor:
                         pressAttention != 4 ? Colors.grey : Colors.blue,
+                  )),
+              ElevatedButton(
+                  onPressed: () {
+                    index = 5;
+                    setState(() => pressAttention = 5);
+                  },
+                  child: Text("45 min"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        pressAttention != 5 ? Colors.grey : Colors.blue,
+                  )),
+              ElevatedButton(
+                  onPressed: () {
+                    index = 6;
+                    setState(() => pressAttention = 6);
+                  },
+                  child: Text("60+ min"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor:
+                        pressAttention != 6 ? Colors.grey : Colors.blue,
                   )),
             ],
           ),
@@ -109,18 +145,24 @@ class _BarPageState extends State<BarPage> {
                 int submission = -1;
                 switch (index) {
                   case 0:
-                    submission = 5;
+                    submission = 0;
                     break;
                   case 1:
-                    submission = 10;
+                    submission = 5;
                     break;
                   case 2:
-                    submission = 20;
+                    submission = 10;
                     break;
                   case 3:
-                    submission = 30;
+                    submission = 20;
                     break;
                   case 4:
+                    submission = 30;
+                    break;
+                  case 5:
+                    submission = 45;
+                    break;
+                  case 6:
                     submission = 60;
                     break;
                 }
