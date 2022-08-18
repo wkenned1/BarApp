@@ -30,10 +30,10 @@ List<LocationModel> getDefaultLocations() {
         address: "82 Lansdowne St, Boston, MA 02215",
         type: "bar"),
     LocationModel(
-        markerId: "Two Saints Tavern",
+        markerId: "OHE",
         position: LatLng(41.187030, -73.130230),
-        infoWindowTitle: "Two Saints Tavern",
-        address: "1884 Main St, Stratford, CT 06615",
+        infoWindowTitle: "OHE",
+        address: "52 Gainsborough St, Boston, MA 02115",
         type: "bar"),
     LocationModel(
         markerId: "Lansdowne Pub",
