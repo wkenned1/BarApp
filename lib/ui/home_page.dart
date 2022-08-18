@@ -4,6 +4,11 @@ import 'package:bar_app/ui/search_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:location/location.dart';
+import 'package:notification_permissions/notification_permissions.dart'
+    as NotificationPermissions;
+import 'package:workmanager/workmanager.dart';
+
+import '../resources/util/get_location.dart';
 
 class GetLocationWidget extends StatefulWidget {
   const GetLocationWidget({Key? key}) : super(key: key);

@@ -5,9 +5,13 @@ import 'package:bar_app/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/location_model.dart';
+import '../resources/util/get_location.dart';
 import '../resources/util/location_util.dart';
 import 'map_test.dart';
 import 'package:location/location.dart';
+import 'package:notification_permissions/notification_permissions.dart'
+    as NotificationPermissions;
+import 'package:workmanager/workmanager.dart';
 
 class SearchPage extends StatelessWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -41,11 +45,35 @@ class SearchPage extends StatelessWidget {
     final _locationData = await location.getLocation();
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
+
+    initBackgroundTracking();
+
     print(
         "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
-    /*setState(() {
-      _userLocation = _locationData;
-    });*/
+  }
+
+  Future<void> initBackgroundTracking() async {
+    /*final notificationPermissions = await NotificationPermissions
+        .NotificationPermissions.getNotificationPermissionStatus();
+    if (notificationPermissions == PermissionStatus.granted ||
+        notificationPermissions == PermissionStatus.grantedLimited) {*/
+    print("one");
+    Workmanager manager = Workmanager();
+    manager.initialize(
+      callbackDispatcher,
+      isInDebugMode: true,
+    );
+    print("two");
+    manager.registerPeriodicTask(
+      "1",
+      fetchBackground,
+      frequency: Duration(minutes: 30),
+    );
+    print("three");
+    /*} else {
+      final permissionStatus = await NotificationPermissions
+          .NotificationPermissions.requestNotificationPermissions();
+    }*/
   }
 
   String calculateDistanceMiles(lat1, lon1, lat2, lon2) {
