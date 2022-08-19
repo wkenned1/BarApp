@@ -25,7 +25,7 @@ void callbackDispatcher() {
         //check if the current time is within the allowed range for sending notifications
         int hour = DateTime.now().hour;
         int weekday = DateTime.now().weekday;
-        if ((hour > 20 &&
+        /*if ((hour > 20 &&
                 hour <= 23 &&
                 (weekday == 4 ||
                     weekday == 5 ||
@@ -36,51 +36,50 @@ void callbackDispatcher() {
                 (weekday == 5 ||
                     weekday == 6 ||
                     weekday == 7 ||
-                    weekday == 1))) {
-          LatLng? userLocation = await _getUserPosition();
-          if (userLocation != null) {
-            final locations = getDefaultLocations();
-            LocationModel? shortestLocation = null;
-            double shortestDistance = double.infinity;
-            for (LocationModel location in locations) {
-              double temp = calculateDistanceMeters(
-                  userLocation.latitude,
-                  userLocation.longitude,
-                  location.position.latitude,
-                  location.position.longitude);
-              if (temp < shortestDistance) {
-                shortestDistance = temp;
-                shortestLocation = location;
-              }
+                    weekday == 1))) {*/
+        LatLng? userLocation = await _getUserPosition();
+        if (userLocation != null) {
+          final locations = getDefaultLocations();
+          LocationModel? shortestLocation = null;
+          double shortestDistance = double.infinity;
+          for (LocationModel location in locations) {
+            double temp = calculateDistanceMeters(
+                userLocation.latitude,
+                userLocation.longitude,
+                location.position.latitude,
+                location.position.longitude);
+            if (temp < shortestDistance) {
+              shortestDistance = temp;
+              shortestLocation = location;
             }
-            if (shortestLocation != null) {
-              if (shortestDistance <= 50) {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
-                prefs.setString(
-                    Constants.notifiedBarMarkerId, shortestLocation.markerId);
-                prefs.setDouble(Constants.notifiedBarLatitude,
-                    shortestLocation.position.latitude);
-                prefs.setDouble(Constants.notifiedBarLongitude,
-                    shortestLocation.position.longitude);
-                prefs.setString(Constants.notifiedBarInfoWindowTitle,
-                    shortestLocation.infoWindowTitle);
-                prefs.setString(
-                    Constants.notifiedBarAddress, shortestLocation.address);
-                prefs.setString(
-                    Constants.notifiedBarType, shortestLocation.type);
-                NotificationService().showNotification(
-                    1,
-                    "Near ${shortestLocation.markerId}? What's the wait?",
-                    "Click to report wait the time",
-                    1);
-              }
+          }
+          if (shortestLocation != null) {
+            if (shortestDistance <= 50) {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString(
+                  Constants.notifiedBarMarkerId, shortestLocation.markerId);
+              prefs.setDouble(Constants.notifiedBarLatitude,
+                  shortestLocation.position.latitude);
+              prefs.setDouble(Constants.notifiedBarLongitude,
+                  shortestLocation.position.longitude);
+              prefs.setString(Constants.notifiedBarInfoWindowTitle,
+                  shortestLocation.infoWindowTitle);
+              prefs.setString(
+                  Constants.notifiedBarAddress, shortestLocation.address);
+              prefs.setString(Constants.notifiedBarType, shortestLocation.type);
+              NotificationService().showNotification(
+                  1,
+                  "Near ${shortestLocation.markerId}? What's the wait?",
+                  "Click to report wait the time",
+                  1);
             }
-          } else {
-            print("location: null");
           }
         } else {
-          print("time out of range. current hour: ${hour}");
+          print("location: null");
         }
+        /*} else {
+          print("time out of range. current hour: ${hour}");
+        }*/
         break;
     }
     return Future.value(true);

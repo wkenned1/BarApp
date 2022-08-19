@@ -62,7 +62,7 @@ class NotificationService {
     print("initializing notification");
     NotificationService.context = context;
     final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('mipmap/ic_launcher');
 
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
@@ -91,7 +91,7 @@ class NotificationService {
         android: AndroidNotificationDetails('main_channel', 'Main Channel',
             importance: Importance.max,
             priority: Priority.max,
-            icon: '@drawable/app_icon'),
+            icon: 'mipmap/ic_launcher'),
         iOS: IOSNotificationDetails(
           sound: 'default.wav',
           presentAlert: true,
@@ -114,7 +114,7 @@ class NotificationService {
         android: AndroidNotificationDetails('main_channel', 'Main Channel',
             importance: Importance.max,
             priority: Priority.max,
-            icon: '@drawable/app_icon'),
+            icon: 'mipmap/ic_launcher'),
         iOS: IOSNotificationDetails(
           sound: 'default.wav',
           presentAlert: true,
