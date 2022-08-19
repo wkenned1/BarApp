@@ -22,6 +22,8 @@ import 'app_bloc_observer.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
+late final NotificationAppLaunchDetails? appLaunchDetails;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -30,19 +32,8 @@ void main() async {
   tz.initializeTimeZones();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  final details =
+  appLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  if (details != null) {
-    if (details!.didNotificationLaunchApp) {
-      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Notification");
-    }
-  }
-  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
-      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-
-  print('payload=');
-  String? payload = notificationAppLaunchDetails!.payload;
-  print(payload);
 
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(

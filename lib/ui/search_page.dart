@@ -1,9 +1,12 @@
 import 'dart:math';
 
+import 'package:bar_app/main.dart';
 import 'package:bar_app/ui/bar_page.dart';
 import 'package:bar_app/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../constants.dart';
 import '../models/location_model.dart';
 import '../resources/util/get_distance.dart';
 import '../resources/util/get_location.dart';
@@ -15,9 +18,17 @@ import 'package:notification_permissions/notification_permissions.dart'
 import 'package:workmanager/workmanager.dart';
 
 class SearchPage extends StatelessWidget {
-  SearchPage({Key? key}) : super(key: key);
-
+  bool launchBarPage = false;
+  SearchPage({Key? key}) : super(key: key) {
+    //should set launchBarPage to true once
+    if (appLaunchDetails != null) {
+      if (appLaunchDetails!.didNotificationLaunchApp) {
+        launchBarPage = true;
+      }
+    }
+  }
   late bool _serviceEnabled;
+
   late PermissionStatus _permissionGranted;
   LocationData? _userLocation;
 
@@ -54,10 +65,6 @@ class SearchPage extends StatelessWidget {
   }
 
   Future<void> initBackgroundTracking() async {
-    /*final notificationPermissions = await NotificationPermissions
-        .NotificationPermissions.getNotificationPermissionStatus();
-    if (notificationPermissions == PermissionStatus.granted ||
-        notificationPermissions == PermissionStatus.grantedLimited) {*/
     print("one");
     Workmanager manager = Workmanager();
     manager.initialize(
@@ -71,10 +78,6 @@ class SearchPage extends StatelessWidget {
       frequency: Duration(minutes: 30),
     );
     print("three");
-    /*} else {
-      final permissionStatus = await NotificationPermissions
-          .NotificationPermissions.requestNotificationPermissions();
-    }*/
   }
 
   Widget clickableLocation(
@@ -99,8 +102,39 @@ class SearchPage extends StatelessWidget {
     );
   }
 
+  Future<void> pushBarPage(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? markerId = prefs.getString(Constants.notifiedBarMarkerId);
+    double? latitude = prefs.getDouble(Constants.notifiedBarLatitude);
+    double? longitude = prefs.getDouble(Constants.notifiedBarLongitude);
+    String? infoWindowTitle =
+        prefs.getString(Constants.notifiedBarInfoWindowTitle);
+    String? address = prefs.getString(Constants.notifiedBarAddress);
+    String? type = prefs.getString(Constants.notifiedBarType);
+    if (markerId != null &&
+        latitude != null &&
+        longitude != null &&
+        infoWindowTitle != null &&
+        address != null &&
+        type != null) {
+      LocationModel location = LocationModel(
+          markerId: markerId,
+          position: LatLng(latitude, longitude),
+          infoWindowTitle: infoWindowTitle,
+          address: address,
+          type: type);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => BarPage(location: location)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (launchBarPage) {
+      launchBarPage = false;
+      pushBarPage(context);
+    }
     List<LocationModel> locations = getDefaultLocations();
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
