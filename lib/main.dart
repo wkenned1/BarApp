@@ -1,10 +1,12 @@
 import 'package:bar_app/resources/repositories/authentication_repository_impl.dart';
 import 'package:bar_app/resources/repositories/database_repository_impl.dart';
 import 'package:bar_app/resources/services/database_service.dart';
+import 'package:bar_app/resources/services/notification_service.dart';
 import 'package:bar_app/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
@@ -17,12 +19,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'app.dart';
 import 'app_bloc_observer.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  tz.initializeTimeZones();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+  final details =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  if (details != null) {
+    if (details!.didNotificationLaunchApp) {
+      print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Notification");
+    }
+  }
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(
       providers: [

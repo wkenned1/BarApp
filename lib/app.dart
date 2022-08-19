@@ -1,3 +1,4 @@
+import 'package:bar_app/resources/services/notification_service.dart';
 import 'package:bar_app/ui/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NotificationService().initNotification(context);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const BlocNavigate(),
