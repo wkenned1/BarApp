@@ -37,6 +37,13 @@ void main() async {
       print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Notification");
     }
   }
+  final NotificationAppLaunchDetails? notificationAppLaunchDetails =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+  print('payload=');
+  String? payload = notificationAppLaunchDetails!.payload;
+  print(payload);
+
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(
       providers: [

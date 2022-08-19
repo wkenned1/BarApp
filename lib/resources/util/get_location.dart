@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:bar_app/constants.dart';
 import 'package:bar_app/resources/util/get_distance.dart';
 import 'package:geolocator/geolocator.dart' as Geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -41,7 +44,18 @@ void callbackDispatcher() {
           print("shortest distance: ${shortestDistance} meters");
           if (shortestLocation != null) {
             if (shortestDistance <= 50) {
-              NotificationService.barLocation = shortestLocation;
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.setString(
+                  Constants.notifiedBarMarkerId, shortestLocation.markerId);
+              prefs.setDouble(Constants.notifiedBarLatitude,
+                  shortestLocation.position.latitude);
+              prefs.setDouble(Constants.notifiedBarLongitude,
+                  shortestLocation.position.longitude);
+              prefs.setString(Constants.notifiedBarInfoWindowTitle,
+                  shortestLocation.infoWindowTitle);
+              prefs.setString(
+                  Constants.notifiedBarAddress, shortestLocation.address);
+              prefs.setString(Constants.notifiedBarType, shortestLocation.type);
               NotificationService().showNotification(
                   1,
                   "Near ${shortestLocation.markerId}? What's the wait?",

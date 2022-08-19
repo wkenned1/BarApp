@@ -12,7 +12,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NotificationService().initNotification(context);
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const BlocNavigate(),

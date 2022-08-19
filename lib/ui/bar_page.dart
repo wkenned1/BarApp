@@ -53,6 +53,10 @@ class _BarPageState extends State<BarPage> {
           ),
         ),
         body: Column(children: [
+          Text(
+            "${location.markerId}",
+            style: TextStyle(fontSize: 30),
+          ),
           BlocBuilder<WaitTimeBloc, WaitTimeState>(builder: (context, state) {
             final time = state.waitTime ?? -1;
 

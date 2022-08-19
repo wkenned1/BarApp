@@ -8,6 +8,7 @@ import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:workmanager/workmanager.dart';
 
+import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
 
 class GetLocationWidget extends StatefulWidget {
@@ -130,6 +131,7 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    NotificationService().initNotification(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Linez"),

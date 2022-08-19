@@ -1,12 +1,17 @@
+import 'dart:convert';
+
 import 'package:bar_app/ui/bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
+import '../../app.dart';
+import '../../constants.dart';
 import '../../models/location_model.dart';
 
 class NotificationService {
@@ -14,7 +19,6 @@ class NotificationService {
       NotificationService._internal();
 
   static late BuildContext context;
-  static late LocationModel barLocation;
 
   factory NotificationService() {
     return _notificationService;
@@ -28,14 +32,37 @@ class NotificationService {
   void selectNotification(String? payload) async {
     //Handle notification tapped logic here
     print("Notification clicked");
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => BarPage(location: barLocation)),
-    );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? markerId = prefs.getString(Constants.notifiedBarMarkerId);
+    double? latitude = prefs.getDouble(Constants.notifiedBarLatitude);
+    double? longitude = prefs.getDouble(Constants.notifiedBarLongitude);
+    String? infoWindowTitle =
+        prefs.getString(Constants.notifiedBarInfoWindowTitle);
+    String? address = prefs.getString(Constants.notifiedBarAddress);
+    String? type = prefs.getString(Constants.notifiedBarType);
+    if (markerId != null &&
+        latitude != null &&
+        longitude != null &&
+        infoWindowTitle != null &&
+        address != null &&
+        type != null) {
+      LocationModel location = LocationModel(
+          markerId: markerId,
+          position: LatLng(latitude, longitude),
+          infoWindowTitle: infoWindowTitle,
+          address: address,
+          type: type);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => BarPage(location: location)),
+      );
+    }
   }
 
   Future<void> initNotification(BuildContext context) async {
+    print("initializing notification");
+    NotificationService.context = context;
     final AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@drawable/app_icon');
+        AndroidInitializationSettings('app_icon');
 
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
@@ -48,15 +75,10 @@ class NotificationService {
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsIOS);
-
+    print("init1");
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String? payload) async {
-      //Handle notification tapped logic here
-      print("Notification clicked");
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => BarPage(location: barLocation)),
-      );
-    });
+        onSelectNotification: selectNotification);
+    print("init2");
   }
 
   Future<void> showNotificationInApp(
