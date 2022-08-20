@@ -1,18 +1,34 @@
 import 'dart:math';
 
+import 'package:bar_app/main.dart';
 import 'package:bar_app/ui/bar_page.dart';
 import 'package:bar_app/ui/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../constants.dart';
 import '../models/location_model.dart';
+import '../resources/util/get_distance.dart';
+import '../resources/util/get_location.dart';
 import '../resources/util/location_util.dart';
 import 'map_test.dart';
 import 'package:location/location.dart';
+import 'package:notification_permissions/notification_permissions.dart'
+    as NotificationPermissions;
+import 'package:workmanager/workmanager.dart';
 
 class SearchPage extends StatelessWidget {
-  SearchPage({Key? key}) : super(key: key);
-
+  bool launchBarPage = false;
+  SearchPage({Key? key}) : super(key: key) {
+    //should set launchBarPage to true once
+    if (appLaunchDetails != null) {
+      if (appLaunchDetails!.didNotificationLaunchApp) {
+        launchBarPage = true;
+      }
+    }
+  }
   late bool _serviceEnabled;
+
   late PermissionStatus _permissionGranted;
   LocationData? _userLocation;
 
@@ -41,20 +57,27 @@ class SearchPage extends StatelessWidget {
     final _locationData = await location.getLocation();
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
+
+    initBackgroundTracking();
+
     print(
         "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
-    /*setState(() {
-      _userLocation = _locationData;
-    });*/
   }
 
-  String calculateDistanceMiles(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var c = cos;
-    var a = 0.5 -
-        c((lat2 - lat1) * p) / 2 +
-        c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p)) / 2;
-    return (0.621371 * 12742 * asin(sqrt(a))).toStringAsFixed(1);
+  Future<void> initBackgroundTracking() async {
+    print("one");
+    Workmanager manager = Workmanager();
+    manager.initialize(
+      callbackDispatcher,
+      isInDebugMode: true,
+    );
+    print("two");
+    manager.registerPeriodicTask(
+      "1",
+      fetchBackground,
+      frequency: Duration(minutes: 30),
+    );
+    print("three");
   }
 
   Widget clickableLocation(
@@ -79,8 +102,39 @@ class SearchPage extends StatelessWidget {
     );
   }
 
+  Future<void> pushBarPage(BuildContext context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? markerId = prefs.getString(Constants.notifiedBarMarkerId);
+    double? latitude = prefs.getDouble(Constants.notifiedBarLatitude);
+    double? longitude = prefs.getDouble(Constants.notifiedBarLongitude);
+    String? infoWindowTitle =
+        prefs.getString(Constants.notifiedBarInfoWindowTitle);
+    String? address = prefs.getString(Constants.notifiedBarAddress);
+    String? type = prefs.getString(Constants.notifiedBarType);
+    if (markerId != null &&
+        latitude != null &&
+        longitude != null &&
+        infoWindowTitle != null &&
+        address != null &&
+        type != null) {
+      LocationModel location = LocationModel(
+          markerId: markerId,
+          position: LatLng(latitude, longitude),
+          infoWindowTitle: infoWindowTitle,
+          address: address,
+          type: type);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => BarPage(location: location)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (launchBarPage) {
+      launchBarPage = false;
+      pushBarPage(context);
+    }
     List<LocationModel> locations = getDefaultLocations();
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();

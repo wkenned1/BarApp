@@ -38,6 +38,10 @@ dependencies:
   mockito: ^5.3.0
   location: ^4.4.0
   workmanager: ^0.5.0
+  notification_permissions: ^0.6.1
+  geolocator: ^9.0.1
+  flutter_local_notifications: ^9.8.0+1
+  timezone: ^0.8.0
 
   #mapbox_geocoding: ^0.1.3
 
