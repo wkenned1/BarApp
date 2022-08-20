@@ -17,4 +17,5 @@ class Constants {
   static const notifiedBarInfoWindowTitle = "notifiedBarInfoWindowTitle";
   static const notifiedBarAddress = "notifiedBarAddress";
   static const notifiedBarType = "notifiedBarType";
+  static const notificationLastSentTime = "notificationLastSentTime";
 }

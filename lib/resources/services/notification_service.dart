@@ -126,6 +126,9 @@ class NotificationService {
           UILocalNotificationDateInterpretation.absoluteTime,
       androidAllowWhileIdle: true,
     );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int timestamp = DateTime.now().millisecondsSinceEpoch;
+    prefs.setInt(Constants.notificationLastSentTime, timestamp);
   }
 
   Future<void> cancelAllNotifications() async {

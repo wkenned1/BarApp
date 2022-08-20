@@ -22,64 +22,83 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
       case fetchBackground:
-        //check if the current time is within the allowed range for sending notifications
-        int hour = DateTime.now().hour;
-        int weekday = DateTime.now().weekday;
-        /*if ((hour > 20 &&
-                hour <= 23 &&
-                (weekday == 4 ||
-                    weekday == 5 ||
-                    weekday == 6 ||
-                    weekday == 7)) ||
-            (hour > 0 &&
-                hour <= 2 &&
-                (weekday == 5 ||
-                    weekday == 6 ||
-                    weekday == 7 ||
-                    weekday == 1))) {*/
-        LatLng? userLocation = await _getUserPosition();
-        if (userLocation != null) {
-          final locations = getDefaultLocations();
-          LocationModel? shortestLocation = null;
-          double shortestDistance = double.infinity;
-          for (LocationModel location in locations) {
-            double temp = calculateDistanceMeters(
-                userLocation.latitude,
-                userLocation.longitude,
-                location.position.latitude,
-                location.position.longitude);
-            if (temp < shortestDistance) {
-              shortestDistance = temp;
-              shortestLocation = location;
-            }
-          }
-          if (shortestLocation != null) {
-            if (shortestDistance <= 50) {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              prefs.setString(
-                  Constants.notifiedBarMarkerId, shortestLocation.markerId);
-              prefs.setDouble(Constants.notifiedBarLatitude,
-                  shortestLocation.position.latitude);
-              prefs.setDouble(Constants.notifiedBarLongitude,
-                  shortestLocation.position.longitude);
-              prefs.setString(Constants.notifiedBarInfoWindowTitle,
-                  shortestLocation.infoWindowTitle);
-              prefs.setString(
-                  Constants.notifiedBarAddress, shortestLocation.address);
-              prefs.setString(Constants.notifiedBarType, shortestLocation.type);
-              NotificationService().showNotification(
-                  1,
-                  "Near ${shortestLocation.markerId}? What's the wait?",
-                  "Click to report wait the time",
-                  1);
-            }
+        final prefs = await SharedPreferences.getInstance();
+        int? ts = prefs.getInt(Constants.notificationLastSentTime);
+        bool sendNotification = false;
+        if (ts != null) {
+          final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts);
+          print(
+              "time difference: ${prev_ts.difference(DateTime.now()).inHours}");
+          if (prev_ts.difference(DateTime.now()).inHours > 7) {
+            print("enough time passed");
+            sendNotification = true;
           }
         } else {
-          print("location: null");
+          print("timestamp was null");
+          sendNotification = true;
         }
-        /*} else {
-          print("time out of range. current hour: ${hour}");
-        }*/
+        if (sendNotification) {
+          //check if the current time is within the allowed range for sending notifications
+          int hour = DateTime.now().hour;
+          int weekday = DateTime.now().weekday;
+          if ((hour > 20 &&
+                  hour <= 23 &&
+                  (weekday == 4 ||
+                      weekday == 5 ||
+                      weekday == 6 ||
+                      weekday == 7)) ||
+              (hour > 0 &&
+                  hour <= 2 &&
+                  (weekday == 5 ||
+                      weekday == 6 ||
+                      weekday == 7 ||
+                      weekday == 1))) {
+            LatLng? userLocation = await _getUserPosition();
+            if (userLocation != null) {
+              final locations = getDefaultLocations();
+              LocationModel? shortestLocation = null;
+              double shortestDistance = double.infinity;
+              for (LocationModel location in locations) {
+                double temp = calculateDistanceMeters(
+                    userLocation.latitude,
+                    userLocation.longitude,
+                    location.position.latitude,
+                    location.position.longitude);
+                if (temp < shortestDistance) {
+                  shortestDistance = temp;
+                  shortestLocation = location;
+                }
+              }
+              if (shortestLocation != null) {
+                if (shortestDistance <= 50) {
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  prefs.setString(
+                      Constants.notifiedBarMarkerId, shortestLocation.markerId);
+                  prefs.setDouble(Constants.notifiedBarLatitude,
+                      shortestLocation.position.latitude);
+                  prefs.setDouble(Constants.notifiedBarLongitude,
+                      shortestLocation.position.longitude);
+                  prefs.setString(Constants.notifiedBarInfoWindowTitle,
+                      shortestLocation.infoWindowTitle);
+                  prefs.setString(
+                      Constants.notifiedBarAddress, shortestLocation.address);
+                  prefs.setString(
+                      Constants.notifiedBarType, shortestLocation.type);
+                  NotificationService().showNotification(
+                      1,
+                      "Near ${shortestLocation.markerId}? What's the wait?",
+                      "Click to report wait the time",
+                      1);
+                }
+              }
+            } else {
+              print("location: null");
+            }
+          } else {
+            print("time out of range. current hour: ${hour}");
+          }
+        }
         break;
     }
     return Future.value(true);
