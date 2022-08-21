@@ -80,25 +80,47 @@ class SearchPage extends StatelessWidget {
     print("three");
   }
 
+  Widget barLocationColumn(LocationModel location, LatLng? userLocation) {
+    return Column(
+      children: [
+        Align(
+            alignment: Alignment.centerLeft,
+            child: Text(location.markerId, style: TextStyle(fontSize: 25))),
+        if (userLocation?.longitude != null && userLocation?.latitude != null)
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                  "${calculateDistanceMiles(userLocation?.latitude, userLocation?.longitude, location.position.latitude, location.position.longitude)} miles away"))
+        else
+          Align(
+              alignment: Alignment.centerLeft,
+              child: Text(location.address, style: TextStyle(fontSize: 15))),
+      ],
+    );
+  }
+
   Widget clickableLocation(
       LocationModel location, LatLng? userLocation, BuildContext context) {
     print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
-    return GestureDetector(
-      child: Column(
+    return Container(
+      //margin: const EdgeInsets.all(15.0),
+      //padding: const EdgeInsets.all(3.0),
+      width: MediaQuery.of(context).size.width,
+      decoration:
+          BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
+      child: Row(
         children: [
-          Center(
-            child: Text(location.markerId, style: TextStyle(fontSize: 25)),
-          ),
-          Center(child: Text(location.address, style: TextStyle(fontSize: 15))),
-          if (userLocation?.longitude != null && userLocation?.latitude != null)
-            Text(
-                "${calculateDistanceMiles(userLocation?.latitude, userLocation?.longitude, location.position.latitude, location.position.longitude)} miles away"),
+          Container(
+              width: MediaQuery.of(context).size.width * .75,
+              child: GestureDetector(
+                child: barLocationColumn(location, userLocation),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BarPage(location: location)));
+                },
+              )),
         ],
       ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BarPage(location: location)));
-      },
     );
   }
 
@@ -129,6 +151,20 @@ class SearchPage extends StatelessWidget {
     }
   }
 
+  Widget clickableLocationsList(List<LocationModel> locations,
+      LocationUtil userLocation, BuildContext context) {
+    return SingleChildScrollView(
+        child: Column(children: [
+      //GetLocationWidget(),
+      Column(
+        children: <Widget>[
+          for (var location in locations)
+            clickableLocation(location, userLocation.getUserLocation(), context)
+        ],
+      )
+    ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (launchBarPage) {
@@ -139,24 +175,13 @@ class SearchPage extends StatelessWidget {
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
     return Container(
-        /*Column(
-      children: <Widget>[
-        for (var location in locations)
-          clickableLocation(location, userLocation.getUserLocation(), context)
-      ],
-    )*/
         child: FutureBuilder<void>(
             future: _getUserLocation(),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
               return Column(children: [
-                //GetLocationWidget(),
-                Column(
-                  children: <Widget>[
-                    for (var location in locations)
-                      clickableLocation(
-                          location, userLocation.getUserLocation(), context)
-                  ],
-                )
+                new SingleChildScrollView(
+                    child: clickableLocationsList(
+                        locations, userLocation, context))
               ]);
             }));
   }
