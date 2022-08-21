@@ -9,10 +9,11 @@ import 'package:location/location.dart';
 import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../blocs/wait_time_report/wait_time_report_bloc.dart';
 
-Widget waitTimeDisplay(int time) {
+Widget waitTimeDisplay(int time, {double fontSize = 15}) {
   return Text(
     "${time} min",
     style: TextStyle(
+        fontSize: fontSize,
         color: Color((time <= 10)
             ? Constants.waitTimeTextGreen
             : (time > 10 && time <= 30)

@@ -47,3 +47,32 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
     emit(WaitTimeState(address: "test", waitTime: median));
   }
 }
+
+//for synchronous operations
+Future<WaitTimeState> getWaitTime(GetWaitTime event) async {
+  final DatabaseRepository _databaseRepository = DatabaseRepositoryImpl();
+  List<WaitTimeModel> waitTimes =
+      await _databaseRepository.getWaitTimes(event.address);
+  List<int> newWaitTimes = <int>[];
+  for (var model in waitTimes) {
+    print(
+        "wait times: ${DateTime.now().toUtc().difference(model.timestamp).inMinutes}");
+    if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
+        Constants.waitTimeReset) {
+      //if (DateTime.now().toUtc().hour - model.timestamp.hour < 2) {
+      newWaitTimes.add(model.waitTime);
+    }
+  }
+  if (newWaitTimes.length == 0) {
+    return WaitTimeState(address: event.address);
+  }
+  int median = 0;
+  newWaitTimes.sort();
+  int middle = newWaitTimes.length ~/ 2;
+  if (newWaitTimes.length % 2 == 1) {
+    median = newWaitTimes[middle];
+  } else {
+    median = ((newWaitTimes[middle - 1] + newWaitTimes[middle]) / 2.0).round();
+  }
+  return WaitTimeState(address: "test", waitTime: median);
+}

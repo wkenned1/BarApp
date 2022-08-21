@@ -5,8 +5,10 @@ import 'package:bar_app/main.dart';
 import 'package:bar_app/ui/bar_page.dart';
 import 'package:bar_app/ui/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../models/location_model.dart';
 import '../resources/util/get_distance.dart';
@@ -104,6 +106,9 @@ class SearchPage extends StatelessWidget {
   Widget clickableLocation(
       LocationModel location, LatLng? userLocation, BuildContext context) {
     print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
+    context.read<WaitTimeBloc>().add(GetWaitTime(
+          address: location.address,
+        ));
     return Container(
         //margin: const EdgeInsets.all(15.0),
         //padding: const EdgeInsets.all(3.0),
@@ -122,6 +127,23 @@ class SearchPage extends StatelessWidget {
                         builder: (context) => BarPage(location: location)));
                   },
                 )),
+            FutureBuilder<WaitTimeState>(
+              future: getWaitTime(GetWaitTime(
+                address: location.address,
+              )),
+              builder: (BuildContext context,
+                  AsyncSnapshot<WaitTimeState> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data?.waitTime != null) {
+                    if (snapshot.data!.waitTime! >= 0) {
+                      return waitTimeDisplay(snapshot.data!.waitTime!,
+                          fontSize: 20);
+                    }
+                  }
+                }
+                return Text("none", style: TextStyle(fontSize: 20));
+              },
+            )
           ],
         ));
   }
