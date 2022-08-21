@@ -115,36 +115,37 @@ class SearchPage extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration:
             BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
-        child: Row(
-          children: [
-            Image.asset("assets/images/beer_can.png", width: 40, height: 40),
-            Container(
+        child: GestureDetector(
+          child: Row(
+            children: [
+              Image.asset("assets/images/beer_can.png", width: 40, height: 40),
+              Container(
                 width: MediaQuery.of(context).size.width * .75,
-                child: GestureDetector(
-                  child: barLocationColumn(location, userLocation),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => BarPage(location: location)));
-                  },
+                child: barLocationColumn(location, userLocation),
+              ),
+              FutureBuilder<WaitTimeState>(
+                future: getWaitTime(GetWaitTime(
+                  address: location.address,
                 )),
-            FutureBuilder<WaitTimeState>(
-              future: getWaitTime(GetWaitTime(
-                address: location.address,
-              )),
-              builder: (BuildContext context,
-                  AsyncSnapshot<WaitTimeState> snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data?.waitTime != null) {
-                    if (snapshot.data!.waitTime! >= 0) {
-                      return waitTimeDisplay(snapshot.data!.waitTime!,
-                          fontSize: 20);
+                builder: (BuildContext context,
+                    AsyncSnapshot<WaitTimeState> snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data?.waitTime != null) {
+                      if (snapshot.data!.waitTime! >= 0) {
+                        return waitTimeDisplay(snapshot.data!.waitTime!,
+                            fontSize: 20);
+                      }
                     }
                   }
-                }
-                return Text("none", style: TextStyle(fontSize: 20));
-              },
-            )
-          ],
+                  return Text("none", style: TextStyle(fontSize: 20));
+                },
+              )
+            ],
+          ),
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => BarPage(location: location)));
+          },
         ));
   }
 
@@ -189,6 +190,40 @@ class SearchPage extends StatelessWidget {
     ]));
   }
 
+  Widget clickableSections(String sectionTitle, BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 2),
+          color: Colors.grey),
+      child: GestureDetector(
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(10, 4, 5, 4),
+          child: Row(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * .85,
+                child: Align(
+                  child: Text(
+                    sectionTitle,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  alignment: Alignment.centerLeft,
+                ),
+              ),
+              Align(
+                child: Image.asset("assets/images/arrow_icon.png",
+                    width: 30, height: 30),
+                alignment: Alignment.centerRight,
+              ),
+            ],
+          ),
+        ),
+        onTap: () {},
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (launchBarPage) {
@@ -203,6 +238,7 @@ class SearchPage extends StatelessWidget {
             future: _getUserLocation(),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
               return Column(children: [
+                clickableSections("Bars", context),
                 new SingleChildScrollView(
                     child: clickableLocationsList(
                         locations, userLocation, context))
