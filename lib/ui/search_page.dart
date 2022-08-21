@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:bar_app/main.dart';
@@ -16,6 +17,7 @@ import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:workmanager/workmanager.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class SearchPage extends StatelessWidget {
   bool launchBarPage = false;
@@ -103,25 +105,25 @@ class SearchPage extends StatelessWidget {
       LocationModel location, LatLng? userLocation, BuildContext context) {
     print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
     return Container(
-      //margin: const EdgeInsets.all(15.0),
-      //padding: const EdgeInsets.all(3.0),
-      width: MediaQuery.of(context).size.width,
-      decoration:
-          BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
-      child: Row(
-        children: [
-          Container(
-              width: MediaQuery.of(context).size.width * .75,
-              child: GestureDetector(
-                child: barLocationColumn(location, userLocation),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BarPage(location: location)));
-                },
-              )),
-        ],
-      ),
-    );
+        //margin: const EdgeInsets.all(15.0),
+        //padding: const EdgeInsets.all(3.0),
+        width: MediaQuery.of(context).size.width,
+        decoration:
+            BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
+        child: Row(
+          children: [
+            Image.asset("assets/images/beer_can.png", width: 40, height: 40),
+            Container(
+                width: MediaQuery.of(context).size.width * .75,
+                child: GestureDetector(
+                  child: barLocationColumn(location, userLocation),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => BarPage(location: location)));
+                  },
+                )),
+          ],
+        ));
   }
 
   Future<void> pushBarPage(BuildContext context) async {
