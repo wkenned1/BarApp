@@ -118,48 +118,33 @@ class SearchPage extends StatelessWidget {
     }
   }
 
-  Widget collapsibleSection(String sectionTitle, ClickableLocationsList body) {
-    return ExpansionTile(
-      maintainState: true,
-      //backgroundColor: Colors.grey,
-      title: Text(sectionTitle),
-      children: [body],
-    );
-    /*Column(
-      children: [
-        ExpansionPanelList(
-          children: [
-            ExpansionPanel(
-              headerBuilder: (BuildContext context, bool isExpanded) {
-                return ClickableSectionsStatelessWidget(
-                    sectionTitle: sectionTitle, sectionOpen: isExpanded);
-              },
-              body: body,
-              isExpanded: true,
-            )
-          ],
-        )
-      ],
-    );*/
-  }
-
   @override
   Widget build(BuildContext context) {
     if (launchBarPage) {
       launchBarPage = false;
       pushBarPage(context);
     }
-    List<LocationModel> locations = getDefaultLocations();
+    List<LocationModel> barLocations = getDefaultBars();
+    List<LocationModel> clubLocations = getDefaultClubs();
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
     return Container(
         child: FutureBuilder<void>(
             future: _getUserLocation(),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return new ClickableSectionsWidget(
-                  sectionTitle: "Bars",
-                  body: ClickableLocationsList(
-                      locations: locations, userLocation: userLocation));
+              return SingleChildScrollView(
+                  child: Column(
+                children: [
+                  new ClickableSectionsWidget(
+                      sectionTitle: "Bars",
+                      body: ClickableLocationsList(
+                          locations: barLocations, userLocation: userLocation)),
+                  new ClickableSectionsWidget(
+                      sectionTitle: "Clubs",
+                      body: ClickableLocationsList(
+                          locations: clubLocations, userLocation: userLocation))
+                ],
+              ));
             }));
   }
 }

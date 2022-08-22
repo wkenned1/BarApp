@@ -57,7 +57,7 @@ class ClickableLocationsList extends StatelessWidget {
             children: [
               Image.asset("assets/images/beer_can.png", width: 40, height: 40),
               Container(
-                width: MediaQuery.of(context).size.width * .75,
+                width: MediaQuery.of(context).size.width * .70,
                 child: barLocationColumn(location, userLocation),
               ),
               FutureBuilder<WaitTimeState>(
