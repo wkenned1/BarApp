@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bar_app/main.dart';
 import 'package:bar_app/ui/bar_page.dart';
 import 'package:bar_app/ui/home_page.dart';
+import 'package:bar_app/ui/widgets/clickable_location_widget.dart';
 import 'package:bar_app/ui/widgets/clickable_sections_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class SearchPage extends StatelessWidget {
   bool launchBarPage = false;
+
   SearchPage({Key? key}) : super(key: key) {
     //should set launchBarPage to true once
     if (appLaunchDetails != null) {
@@ -32,11 +34,13 @@ class SearchPage extends StatelessWidget {
       }
     }
   }
+
   late bool _serviceEnabled;
 
   late PermissionStatus _permissionGranted;
   LocationData? _userLocation;
 
+  //check location permissions and get user location
   Future<void> _getUserLocation() async {
     print("FINDING LOCATION");
     Location location = Location();
@@ -69,6 +73,7 @@ class SearchPage extends StatelessWidget {
         "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
   }
 
+  //start background process for sending notifications and tracking location
   Future<void> initBackgroundTracking() async {
     print("one");
     Workmanager manager = Workmanager();
@@ -85,71 +90,7 @@ class SearchPage extends StatelessWidget {
     print("three");
   }
 
-  Widget barLocationColumn(LocationModel location, LatLng? userLocation) {
-    return Column(
-      children: [
-        Align(
-            alignment: Alignment.centerLeft,
-            child: Text(location.markerId, style: TextStyle(fontSize: 25))),
-        if (userLocation?.longitude != null && userLocation?.latitude != null)
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                  "${calculateDistanceMiles(userLocation?.latitude, userLocation?.longitude, location.position.latitude, location.position.longitude)} miles away"))
-        else
-          Align(
-              alignment: Alignment.centerLeft,
-              child: Text(location.address, style: TextStyle(fontSize: 15))),
-      ],
-    );
-  }
-
-  Widget clickableLocation(
-      LocationModel location, LatLng? userLocation, BuildContext context) {
-    print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
-    context.read<WaitTimeBloc>().add(GetWaitTime(
-          address: location.address,
-        ));
-    return Container(
-        //margin: const EdgeInsets.all(15.0),
-        //padding: const EdgeInsets.all(3.0),
-        width: MediaQuery.of(context).size.width,
-        decoration:
-            BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
-        child: GestureDetector(
-          child: Row(
-            children: [
-              Image.asset("assets/images/beer_can.png", width: 40, height: 40),
-              Container(
-                width: MediaQuery.of(context).size.width * .75,
-                child: barLocationColumn(location, userLocation),
-              ),
-              FutureBuilder<WaitTimeState>(
-                future: getWaitTime(GetWaitTime(
-                  address: location.address,
-                )),
-                builder: (BuildContext context,
-                    AsyncSnapshot<WaitTimeState> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data?.waitTime != null) {
-                      if (snapshot.data!.waitTime! >= 0) {
-                        return waitTimeDisplay(snapshot.data!.waitTime!,
-                            fontSize: 20);
-                      }
-                    }
-                  }
-                  return Text("none", style: TextStyle(fontSize: 20));
-                },
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BarPage(location: location)));
-          },
-        ));
-  }
-
+  //navigate to bar page
   Future<void> pushBarPage(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? markerId = prefs.getString(Constants.notifiedBarMarkerId);
@@ -177,52 +118,29 @@ class SearchPage extends StatelessWidget {
     }
   }
 
-  Widget clickableLocationsList(List<LocationModel> locations,
-      LocationUtil userLocation, BuildContext context) {
-    return SingleChildScrollView(
-        child: Column(children: [
-      //GetLocationWidget(),
-      Column(
-        children: <Widget>[
-          for (var location in locations)
-            clickableLocation(location, userLocation.getUserLocation(), context)
-        ],
-      )
-    ]));
-  }
-
-  Widget clickableSections(String sectionTitle, BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 2),
-          color: Colors.grey),
-      child: GestureDetector(
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(10, 4, 5, 4),
-          child: Row(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * .85,
-                child: Align(
-                  child: Text(
-                    sectionTitle,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  alignment: Alignment.centerLeft,
-                ),
-              ),
-              Align(
-                child: Image.asset("assets/images/arrow_icon.png",
-                    width: 30, height: 30),
-                alignment: Alignment.centerRight,
-              ),
-            ],
-          ),
-        ),
-        onTap: () {},
-      ),
+  Widget collapsibleSection(String sectionTitle, ClickableLocationsList body) {
+    return ExpansionTile(
+      maintainState: true,
+      //backgroundColor: Colors.grey,
+      title: Text(sectionTitle),
+      children: [body],
     );
+    /*Column(
+      children: [
+        ExpansionPanelList(
+          children: [
+            ExpansionPanel(
+              headerBuilder: (BuildContext context, bool isExpanded) {
+                return ClickableSectionsStatelessWidget(
+                    sectionTitle: sectionTitle, sectionOpen: isExpanded);
+              },
+              body: body,
+              isExpanded: true,
+            )
+          ],
+        )
+      ],
+    );*/
   }
 
   @override
@@ -241,9 +159,15 @@ class SearchPage extends StatelessWidget {
               return Column(children: [
                 new ClickableSectionsWidget(sectionTitle: "Bars"),
                 new SingleChildScrollView(
-                    child: clickableLocationsList(
-                        locations, userLocation, context))
+                    child: ClickableLocationsList(
+                        locations: locations, userLocation: userLocation))
               ]);
             }));
   }
 }
+
+/*return collapsibleSection(
+                  "Bars",
+                  ClickableLocationsList(
+                      locations: locations, userLocation: userLocation));
+            }));*/
