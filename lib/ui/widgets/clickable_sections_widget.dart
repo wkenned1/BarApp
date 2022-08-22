@@ -82,6 +82,7 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
           ),
         ),
         Visibility(
+            maintainState: true,
             visible: sectionOpen,
             child: new SingleChildScrollView(
                 child: SingleChildScrollView(child: body)))
