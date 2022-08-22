@@ -156,18 +156,10 @@ class SearchPage extends StatelessWidget {
         child: FutureBuilder<void>(
             future: _getUserLocation(),
             builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Column(children: [
-                new ClickableSectionsWidget(sectionTitle: "Bars"),
-                new SingleChildScrollView(
-                    child: ClickableLocationsList(
-                        locations: locations, userLocation: userLocation))
-              ]);
+              return new ClickableSectionsWidget(
+                  sectionTitle: "Bars",
+                  body: ClickableLocationsList(
+                      locations: locations, userLocation: userLocation));
             }));
   }
 }
-
-/*return collapsibleSection(
-                  "Bars",
-                  ClickableLocationsList(
-                      locations: locations, userLocation: userLocation));
-            }));*/
