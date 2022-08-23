@@ -83,7 +83,12 @@ class _MyHomePageState extends State<HomePage> {
 
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
     return [
-      BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+      BottomNavigationBarItem(
+          icon: Image.asset("assets/images/martini_glass_icon.png",
+              color: (bottomSelectedIndex == 0) ? Colors.blue : Colors.black,
+              width: 24,
+              height: 24),
+          label: "Search"),
       BottomNavigationBarItem(
         icon: Icon(Icons.map_outlined),
         label: "Map",
