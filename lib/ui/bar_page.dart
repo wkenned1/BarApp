@@ -53,132 +53,162 @@ class _BarPageState extends State<BarPage> {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Column(children: [
+        body: Center(
+            child: Column(children: [
           Text(
             "${location.markerId}",
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
           ),
           BlocBuilder<WaitTimeBloc, WaitTimeState>(builder: (context, state) {
             final time = state.waitTime ?? -1;
 
             return time >= 0
-                ? waitTimeDisplay(time)
-                : Text("No wait time available");
+                ? waitTimeDisplay(time, fontSize: 30)
+                : Text("No wait time available",
+                    style: TextStyle(fontSize: 30));
             // return widget here based on BlocA's state
           }),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Back")),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
           Column(
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    index = 0;
-                    setState(() => pressAttention = 0);
-                  },
-                  child: Text("0 min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 0 ? Colors.grey : Colors.blue,
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    index = 1;
-                    setState(() => pressAttention = 1);
-                  },
-                  child: Text("5 min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 1 ? Colors.grey : Colors.blue,
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    index = 2;
-                    setState(() => pressAttention = 2);
-                  },
-                  child: Text("10 min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 2 ? Colors.grey : Colors.blue,
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    index = 3;
-                    setState(() => pressAttention = 3);
-                  },
-                  child: Text("20 min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 3 ? Colors.grey : Colors.blue,
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    index = 4;
-                    setState(() => pressAttention = 4);
-                  },
-                  child: Text("30 min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 4 ? Colors.grey : Colors.blue,
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    index = 5;
-                    setState(() => pressAttention = 5);
-                  },
-                  child: Text("45 min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 5 ? Colors.grey : Colors.blue,
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    index = 6;
-                    setState(() => pressAttention = 6);
-                  },
-                  child: Text("60+ min"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        pressAttention != 6 ? Colors.grey : Colors.blue,
-                  )),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 0;
+                        setState(() => pressAttention = 0);
+                      },
+                      child: Text("0 min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 0 ? Colors.grey : Colors.blue,
+                      ))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 1;
+                        setState(() => pressAttention = 1);
+                      },
+                      child: Text("5 min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 1 ? Colors.grey : Colors.blue,
+                      ))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 2;
+                        setState(() => pressAttention = 2);
+                      },
+                      child: Text("10 min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 2 ? Colors.grey : Colors.blue,
+                      ))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 3;
+                        setState(() => pressAttention = 3);
+                      },
+                      child: Text("20 min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 3 ? Colors.grey : Colors.blue,
+                      ))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 4;
+                        setState(() => pressAttention = 4);
+                      },
+                      child: Text("30 min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 4 ? Colors.grey : Colors.blue,
+                      ))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 5;
+                        setState(() => pressAttention = 5);
+                      },
+                      child: Text("45 min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 5 ? Colors.grey : Colors.blue,
+                      ))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+              Container(
+                  width: 200,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        index = 6;
+                        setState(() => pressAttention = 6);
+                      },
+                      child: Text("60+ min", style: TextStyle(fontSize: 30)),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            pressAttention != 6 ? Colors.grey : Colors.blue,
+                      ))),
             ],
           ),
-          ElevatedButton(
-              onPressed: () {
-                int submission = -1;
-                switch (index) {
-                  case 0:
-                    submission = 0;
-                    break;
-                  case 1:
-                    submission = 5;
-                    break;
-                  case 2:
-                    submission = 10;
-                    break;
-                  case 3:
-                    submission = 20;
-                    break;
-                  case 4:
-                    submission = 30;
-                    break;
-                  case 5:
-                    submission = 45;
-                    break;
-                  case 6:
-                    submission = 60;
-                    break;
-                }
-                setState(() => pressAttention = -1);
-                if (submission >= 0) {
-                  context.read<WaitTimeReportBloc>().add(WaitTimeReportEvent(
-                      address: location.address,
-                      waitTime: /*int.parse(myController.text)*/ submission));
-                }
-              },
-              child: Text("Submit"))
-        ]));
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
+          Container(
+              width: 200,
+              height: 50,
+              child: ElevatedButton(
+                  onPressed: () {
+                    int submission = -1;
+                    switch (index) {
+                      case 0:
+                        submission = 0;
+                        break;
+                      case 1:
+                        submission = 5;
+                        break;
+                      case 2:
+                        submission = 10;
+                        break;
+                      case 3:
+                        submission = 20;
+                        break;
+                      case 4:
+                        submission = 30;
+                        break;
+                      case 5:
+                        submission = 45;
+                        break;
+                      case 6:
+                        submission = 60;
+                        break;
+                    }
+                    //setState(() => pressAttention = -1);
+                    if (submission >= 0) {
+                      context.read<WaitTimeReportBloc>().add(WaitTimeReportEvent(
+                          address: location.address,
+                          waitTime: /*int.parse(myController.text)*/ submission));
+                    }
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("Submit", style: TextStyle(fontSize: 30))))
+        ])));
   }
 }
