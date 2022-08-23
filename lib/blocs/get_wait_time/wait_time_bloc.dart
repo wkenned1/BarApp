@@ -49,6 +49,7 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
 }
 
 //for synchronous operations
+//TODO: add restrictions for reporting based on time and day (same as restrictions for sending notifications)
 Future<WaitTimeState> getWaitTime(GetWaitTime event) async {
   final DatabaseRepository _databaseRepository = DatabaseRepositoryImpl();
   List<WaitTimeModel> waitTimes =

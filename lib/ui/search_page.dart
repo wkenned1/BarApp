@@ -129,6 +129,7 @@ class SearchPage extends StatelessWidget {
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
     return RefreshIndicator(
+      //TODO: find a cleaner way to refresh the page
       onRefresh: () async {
         (context as Element).reassemble();
       },
