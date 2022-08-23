@@ -128,23 +128,30 @@ class SearchPage extends StatelessWidget {
     List<LocationModel> clubLocations = getDefaultClubs();
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
-    return Container(
-        child: FutureBuilder<void>(
-            future: _getUserLocation(),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return SingleChildScrollView(
-                  child: Column(
-                children: [
-                  new ClickableSectionsWidget(
-                      sectionTitle: "Bars",
-                      body: ClickableLocationsList(
-                          locations: barLocations, userLocation: userLocation)),
-                  new ClickableSectionsWidget(
-                      sectionTitle: "Clubs",
-                      body: ClickableLocationsList(
-                          locations: clubLocations, userLocation: userLocation))
-                ],
-              ));
-            }));
+    return RefreshIndicator(
+      onRefresh: () async {
+        (context as Element).reassemble();
+      },
+      child: Container(
+          child: FutureBuilder<void>(
+              future: _getUserLocation(),
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                return SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    new ClickableSectionsWidget(
+                        sectionTitle: "Bars",
+                        body: ClickableLocationsList(
+                            locations: barLocations,
+                            userLocation: userLocation)),
+                    new ClickableSectionsWidget(
+                        sectionTitle: "Clubs",
+                        body: ClickableLocationsList(
+                            locations: clubLocations,
+                            userLocation: userLocation))
+                  ],
+                ));
+              })),
+    );
   }
 }
