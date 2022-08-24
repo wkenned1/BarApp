@@ -12,6 +12,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
+import '../globals.dart';
 import '../models/location_model.dart';
 import '../resources/util/get_distance.dart';
 import '../resources/util/get_location.dart';
@@ -124,8 +125,8 @@ class SearchPage extends StatelessWidget {
       launchBarPage = false;
       pushBarPage(context);
     }
-    List<LocationModel> barLocations = getDefaultBars();
-    List<LocationModel> clubLocations = getDefaultClubs();
+    List<LocationModel> barLocations = Locations.defaultBars;
+    List<LocationModel> clubLocations = Locations.defaultClubs;
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
     return RefreshIndicator(

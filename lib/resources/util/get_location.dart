@@ -8,6 +8,7 @@ import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../../globals.dart';
 import '../../models/location_model.dart';
 import '../../ui/map_test.dart';
 import '../services/notification_service.dart';
@@ -55,7 +56,8 @@ void callbackDispatcher() {
                       weekday == 1))) {
             LatLng? userLocation = await _getUserPosition();
             if (userLocation != null) {
-              final locations = getDefaultLocations();
+              final locations = new List.from(Locations.defaultBars)
+                ..addAll(Locations.defaultClubs);
               LocationModel? shortestLocation = null;
               double shortestDistance = double.infinity;
               for (LocationModel location in locations) {
