@@ -1,12 +1,18 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:bar_app/main.dart';
 import 'package:bar_app/ui/bar_page.dart';
 import 'package:bar_app/ui/home_page.dart';
+import 'package:bar_app/ui/widgets/clickable_location_widget.dart';
+import 'package:bar_app/ui/widgets/clickable_sections_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
+import '../globals.dart';
 import '../models/location_model.dart';
 import '../resources/util/get_distance.dart';
 import '../resources/util/get_location.dart';
@@ -16,9 +22,11 @@ import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:workmanager/workmanager.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 class SearchPage extends StatelessWidget {
   bool launchBarPage = false;
+
   SearchPage({Key? key}) : super(key: key) {
     //should set launchBarPage to true once
     if (appLaunchDetails != null) {
@@ -27,11 +35,13 @@ class SearchPage extends StatelessWidget {
       }
     }
   }
+
   late bool _serviceEnabled;
 
   late PermissionStatus _permissionGranted;
   LocationData? _userLocation;
 
+  //check location permissions and get user location
   Future<void> _getUserLocation() async {
     print("FINDING LOCATION");
     Location location = Location();
@@ -64,6 +74,7 @@ class SearchPage extends StatelessWidget {
         "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
   }
 
+  //start background process for sending notifications and tracking location
   Future<void> initBackgroundTracking() async {
     print("one");
     Workmanager manager = Workmanager();
@@ -80,28 +91,7 @@ class SearchPage extends StatelessWidget {
     print("three");
   }
 
-  Widget clickableLocation(
-      LocationModel location, LatLng? userLocation, BuildContext context) {
-    print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
-    return GestureDetector(
-      child: Column(
-        children: [
-          Center(
-            child: Text(location.markerId, style: TextStyle(fontSize: 25)),
-          ),
-          Center(child: Text(location.address, style: TextStyle(fontSize: 15))),
-          if (userLocation?.longitude != null && userLocation?.latitude != null)
-            Text(
-                "${calculateDistanceMiles(userLocation?.latitude, userLocation?.longitude, location.position.latitude, location.position.longitude)} miles away"),
-        ],
-      ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BarPage(location: location)));
-      },
-    );
-  }
-
+  //navigate to bar page
   Future<void> pushBarPage(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? markerId = prefs.getString(Constants.notifiedBarMarkerId);
@@ -135,29 +125,35 @@ class SearchPage extends StatelessWidget {
       launchBarPage = false;
       pushBarPage(context);
     }
-    List<LocationModel> locations = getDefaultLocations();
+    List<LocationModel> barLocations = Locations.defaultBars;
+    List<LocationModel> clubLocations = Locations.defaultClubs;
     //await _getUserLocation();
     LocationUtil userLocation = LocationUtil();
-    return Container(
-        /*Column(
-      children: <Widget>[
-        for (var location in locations)
-          clickableLocation(location, userLocation.getUserLocation(), context)
-      ],
-    )*/
-        child: FutureBuilder<void>(
-            future: _getUserLocation(),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Column(children: [
-                //GetLocationWidget(),
-                Column(
-                  children: <Widget>[
-                    for (var location in locations)
-                      clickableLocation(
-                          location, userLocation.getUserLocation(), context)
+    return RefreshIndicator(
+      //TODO: find a cleaner way to refresh the page
+      onRefresh: () async {
+        (context as Element).reassemble();
+      },
+      child: Container(
+          child: FutureBuilder<void>(
+              future: _getUserLocation(),
+              builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                return SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    new ClickableSectionsWidget(
+                        sectionTitle: "Bars",
+                        body: ClickableLocationsList(
+                            locations: barLocations,
+                            userLocation: userLocation)),
+                    new ClickableSectionsWidget(
+                        sectionTitle: "Clubs",
+                        body: ClickableLocationsList(
+                            locations: clubLocations,
+                            userLocation: userLocation))
                   ],
-                )
-              ]);
-            }));
+                ));
+              })),
+    );
   }
 }

@@ -22,6 +22,8 @@ import 'app_bloc_observer.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
+import 'globals.dart';
+
 late final NotificationAppLaunchDetails? appLaunchDetails;
 
 void main() async {
@@ -29,6 +31,18 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print("before");
+  final locations = await DatabaseService().getLocations();
+  print("after");
+  Locations.defaultBars = [];
+  Locations.defaultClubs = [];
+  for (var loc in locations) {
+    if (loc.type == "bar") {
+      Locations.defaultBars.add(loc);
+    } else if (loc.type == "night_club") {
+      Locations.defaultClubs.add(loc);
+    }
+  }
   tz.initializeTimeZones();
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();

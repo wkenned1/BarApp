@@ -1,48 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../globals.dart';
 import '../models/location_model.dart';
-
-List<LocationModel> getDefaultLocations() {
-  return <LocationModel>[
-    LocationModel(
-        markerId: "Bijou",
-        position: LatLng(42.351238, -71.064209),
-        infoWindowTitle: "Bijou",
-        address: "51 Stuart St, Boston, MA 02116",
-        type: "bar"),
-    LocationModel(
-        markerId: "Fenway Johnie's",
-        position: LatLng(42.346111, -71.099281),
-        infoWindowTitle: "Fenway Johnie's",
-        address: "96 Brookline Ave, Boston, MA 02215",
-        type: "bar"),
-    LocationModel(
-        markerId: "Loretta's Last Call",
-        position: LatLng(42.347328, -71.094490),
-        infoWindowTitle: "Loretta's Last Call",
-        address: "1 Lansdowne St, Boston, MA 02215",
-        type: "bar"),
-    LocationModel(
-        markerId: "Game On!",
-        position: LatLng(42.347031, -71.098389),
-        infoWindowTitle: "Game On!",
-        address: "82 Lansdowne St, Boston, MA 02215",
-        type: "bar"),
-    LocationModel(
-        markerId: "OHE",
-        position: LatLng(41.187030, -73.130230),
-        infoWindowTitle: "OHE",
-        address: "52 Gainsborough St, Boston, MA 02115",
-        type: "bar"),
-    LocationModel(
-        markerId: "Lansdowne Pub",
-        position: LatLng(42.347359, -71.095078),
-        infoWindowTitle: "Lansdowne Pub",
-        address: "9 Lansdowne St, Boston, MA 02215",
-        type: "bar"),
-  ];
-}
 
 class MapSample extends StatefulWidget {
   @override
@@ -70,7 +30,8 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
       "assets/images/bar_icon.png",
     );
 
-    List<LocationModel> locations = getDefaultLocations();
+    List<LocationModel> locations = new List.from(Locations.defaultBars)
+      ..addAll(Locations.defaultClubs);
 
     for (LocationModel location in locations) {
       markers.add(Marker(
