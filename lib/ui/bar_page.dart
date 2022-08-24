@@ -37,6 +37,31 @@ class _BarPageState extends State<BarPage> {
 
   int pressAttention = -1;
 
+  Widget _buildPopupDialog(int hour, int day, BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Not so fast!'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text((day < 4)
+              ? "It's a weekday bozo, there's no line out here."
+              : (hour > 2 && hour < 6)
+                  ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."
+                  : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int waitTime = -1;
@@ -176,37 +201,59 @@ class _BarPageState extends State<BarPage> {
               height: 50,
               child: ElevatedButton(
                   onPressed: () {
-                    int submission = -1;
-                    switch (index) {
-                      case 0:
-                        submission = 0;
-                        break;
-                      case 1:
-                        submission = 5;
-                        break;
-                      case 2:
-                        submission = 10;
-                        break;
-                      case 3:
-                        submission = 20;
-                        break;
-                      case 4:
-                        submission = 30;
-                        break;
-                      case 5:
-                        submission = 45;
-                        break;
-                      case 6:
-                        submission = 60;
-                        break;
+                    int hour = DateTime.now().hour;
+                    int weekday = DateTime.now().weekday;
+                    if ((hour > 20 &&
+                            hour <= 23 &&
+                            (weekday == 4 ||
+                                weekday == 5 ||
+                                weekday == 6 ||
+                                weekday == 7)) ||
+                        (hour > 0 &&
+                            hour <= 2 &&
+                            (weekday == 5 ||
+                                weekday == 6 ||
+                                weekday == 7 ||
+                                weekday == 1))) {
+                      int submission = -1;
+                      switch (index) {
+                        case 0:
+                          submission = 0;
+                          break;
+                        case 1:
+                          submission = 5;
+                          break;
+                        case 2:
+                          submission = 10;
+                          break;
+                        case 3:
+                          submission = 20;
+                          break;
+                        case 4:
+                          submission = 30;
+                          break;
+                        case 5:
+                          submission = 45;
+                          break;
+                        case 6:
+                          submission = 60;
+                          break;
+                      }
+                      //setState(() => pressAttention = -1);
+                      if (submission >= 0) {
+                        context.read<WaitTimeReportBloc>().add(
+                            WaitTimeReportEvent(
+                                address: location.address,
+                                waitTime: submission));
+                      }
+                      Navigator.of(context).pop();
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) =>
+                            _buildPopupDialog(hour, weekday, context),
+                      );
                     }
-                    //setState(() => pressAttention = -1);
-                    if (submission >= 0) {
-                      context.read<WaitTimeReportBloc>().add(WaitTimeReportEvent(
-                          address: location.address,
-                          waitTime: /*int.parse(myController.text)*/ submission));
-                    }
-                    Navigator.of(context).pop();
                   },
                   child: Text("Submit", style: TextStyle(fontSize: 30))))
         ])));
