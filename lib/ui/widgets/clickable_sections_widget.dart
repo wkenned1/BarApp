@@ -20,7 +20,7 @@ class ClickableSectionsWidget extends StatefulWidget {
 
 class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
   final String sectionTitle;
-  bool sectionOpen = false;
+  bool sectionOpen = true;
   double turns = 0.0;
   final ClickableLocationsList body;
 
