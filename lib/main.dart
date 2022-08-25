@@ -31,9 +31,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print("before");
   final locations = await DatabaseService().getLocations();
-  print("after");
   Locations.defaultBars = [];
   Locations.defaultClubs = [];
   for (var loc in locations) {

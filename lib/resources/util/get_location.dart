@@ -28,14 +28,10 @@ void callbackDispatcher() {
         bool sendNotification = false;
         if (ts != null) {
           final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts);
-          print(
-              "time difference: ${prev_ts.difference(DateTime.now()).inHours}");
           if (prev_ts.difference(DateTime.now()).inHours > 7) {
-            print("enough time passed");
             sendNotification = true;
           }
         } else {
-          print("timestamp was null");
           sendNotification = true;
         }
         if (sendNotification) {
@@ -94,12 +90,8 @@ void callbackDispatcher() {
                       1);
                 }
               }
-            } else {
-              print("location: null");
-            }
-          } else {
-            print("time out of range. current hour: ${hour}");
-          }
+            } else {}
+          } else {}
         }
         break;
     }
@@ -113,7 +105,6 @@ Future<LatLng?> _getUserLocation() async {
   LocationData? _userLocation;
 
   Location location = Location();
-  print("getting loc 1");
   // Check if location service is enable
   _serviceEnabled = await location.serviceEnabled();
   if (!_serviceEnabled) {
@@ -122,7 +113,6 @@ Future<LatLng?> _getUserLocation() async {
       return null;
     }
   }
-  print("getting loc 2");
   // Check if permission is granted
   _permissionGranted = await location.hasPermission();
   if (_permissionGranted == PermissionStatus.denied) {
@@ -131,12 +121,9 @@ Future<LatLng?> _getUserLocation() async {
       return null;
     }
   }
-  print("getting loc 3");
   final _locationData = await location.getLocation();
   LocationUtil util = LocationUtil();
   util.setUserLocation(_locationData);
-  print(
-      "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
   if (util.getUserLocation() == null) {
     return null;
   }
@@ -150,14 +137,11 @@ Future<LatLng?> _getUserLocation() async {
 
 Future<LatLng?> _getUserPosition() async {
   try {
-    print("getting position 1");
     Geo.Position userLocation = await Geo.Geolocator.getCurrentPosition(
         forceAndroidLocationManager: true,
         desiredAccuracy: Geo.LocationAccuracy.high);
-    print("getting position 2");
     return LatLng(userLocation.latitude, userLocation.longitude);
   } catch (e) {
-    print("GEOLOCATOR ERROR: ${e.toString()}");
     return null;
   }
 }

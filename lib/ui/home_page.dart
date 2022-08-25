@@ -24,7 +24,6 @@ class _GetLocationState extends State<GetLocationWidget> {
   LocationData? _userLocation;
 
   Future<void> _getUserLocation() async {
-    print("FINDING LOCATION");
     Location location = Location();
 
     // Check if location service is enable
@@ -48,8 +47,6 @@ class _GetLocationState extends State<GetLocationWidget> {
     final _locationData = await location.getLocation();
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
-    print(
-        "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
     setState(() {
       _userLocation = _locationData;
     });

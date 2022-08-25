@@ -238,6 +238,8 @@ class _BarPageState extends State<BarPage> {
                         case 6:
                           submission = 60;
                           break;
+                        default:
+                          break;
                       }
                       //setState(() => pressAttention = -1);
                       if (submission >= 0) {

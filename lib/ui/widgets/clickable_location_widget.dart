@@ -42,7 +42,6 @@ class ClickableLocationsList extends StatelessWidget {
   //when clicked takes the user to a page to report wait times
   Widget clickableLocation(
       LocationModel location, LatLng? userLocation, BuildContext context) {
-    print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
         ));

@@ -90,7 +90,6 @@ class DatabaseService {
           infoWindowTitle: obj["infoWindowTitle"] as String,
           address: obj["address"] as String,
           type: obj["type"] as String);
-      print("Name: ${model.markerId}");
       ret.add(model);
     }
     return ret;
