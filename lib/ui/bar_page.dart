@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:bar_app/constants.dart';
-import 'package:bar_app/models/location_model.dart';
+import 'package:Linez/constants.dart';
+import 'package:Linez/models/location_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';

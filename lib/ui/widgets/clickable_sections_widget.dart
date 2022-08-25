@@ -1,4 +1,4 @@
-import 'package:bar_app/resources/util/location_util.dart';
+import 'package:Linez/resources/util/location_util.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'dart:math' as math;

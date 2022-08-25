@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:bar_app/constants.dart';
-import 'package:bar_app/resources/util/get_distance.dart';
+import 'package:Linez/constants.dart';
+import 'package:Linez/resources/util/get_distance.dart';
 import 'package:geolocator/geolocator.dart' as Geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';

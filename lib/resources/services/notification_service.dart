@@ -1,4 +1,4 @@
-import 'package:bar_app/ui/bar_page.dart';
+import 'package:Linez/ui/bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

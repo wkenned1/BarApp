@@ -1,6 +1,6 @@
-import 'package:bar_app/resources/util/location_util.dart';
-import 'package:bar_app/ui/map_test.dart';
-import 'package:bar_app/ui/search_page.dart';
+import 'package:Linez/resources/util/location_util.dart';
+import 'package:Linez/ui/map_test.dart';
+import 'package:Linez/ui/search_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:location/location.dart';

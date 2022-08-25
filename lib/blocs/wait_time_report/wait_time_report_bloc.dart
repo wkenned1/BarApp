@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bar_app/constants.dart';
+import 'package:Linez/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';

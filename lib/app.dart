@@ -1,5 +1,5 @@
-import 'package:bar_app/resources/services/notification_service.dart';
-import 'package:bar_app/ui/home_view.dart';
+import 'package:Linez/resources/services/notification_service.dart';
+import 'package:Linez/ui/home_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
