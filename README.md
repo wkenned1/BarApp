@@ -1,4 +1,4 @@
-# bar_app
+# Linez
 
 A new Flutter project.
 

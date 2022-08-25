@@ -1,4 +1,4 @@
-package com.example.bar_app
+package com.example.Linez
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:bar_app/models/wait_time_location_model.dart';
-import 'package:bar_app/models/wait_time_model.dart';
+import 'package:Linez/models/wait_time_location_model.dart';
+import 'package:Linez/models/wait_time_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -90,7 +90,6 @@ class DatabaseService {
           infoWindowTitle: obj["infoWindowTitle"] as String,
           address: obj["address"] as String,
           type: obj["type"] as String);
-      print("Name: ${model.markerId}");
       ret.add(model);
     }
     return ret;

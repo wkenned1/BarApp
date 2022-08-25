@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'dart:math';
 
-import 'package:bar_app/main.dart';
-import 'package:bar_app/ui/bar_page.dart';
-import 'package:bar_app/ui/home_page.dart';
-import 'package:bar_app/ui/widgets/clickable_location_widget.dart';
-import 'package:bar_app/ui/widgets/clickable_sections_widget.dart';
+import 'package:Linez/main.dart';
+import 'package:Linez/ui/bar_page.dart';
+import 'package:Linez/ui/home_page.dart';
+import 'package:Linez/ui/widgets/clickable_location_widget.dart';
+import 'package:Linez/ui/widgets/clickable_sections_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -43,7 +43,6 @@ class SearchPage extends StatelessWidget {
 
   //check location permissions and get user location
   Future<void> _getUserLocation() async {
-    print("FINDING LOCATION");
     Location location = Location();
 
     // Check if location service is enable
@@ -69,26 +68,20 @@ class SearchPage extends StatelessWidget {
     util.setUserLocation(_locationData);
 
     initBackgroundTracking();
-
-    print(
-        "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
   }
 
   //start background process for sending notifications and tracking location
   Future<void> initBackgroundTracking() async {
-    print("one");
     Workmanager manager = Workmanager();
     manager.initialize(
       callbackDispatcher,
       isInDebugMode: true,
     );
-    print("two");
     manager.registerPeriodicTask(
       "1",
       fetchBackground,
       frequency: Duration(minutes: 30),
     );
-    print("three");
   }
 
   //navigate to bar page

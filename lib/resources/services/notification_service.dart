@@ -1,4 +1,4 @@
-import 'package:bar_app/ui/bar_page.dart';
+import 'package:Linez/ui/bar_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -29,7 +29,6 @@ class NotificationService {
 
   void selectNotification(String? payload) async {
     //Handle notification tapped logic here
-    print("Notification clicked");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? markerId = prefs.getString(Constants.notifiedBarMarkerId);
     double? latitude = prefs.getDouble(Constants.notifiedBarLatitude);
@@ -57,7 +56,6 @@ class NotificationService {
   }
 
   Future<void> initNotification(BuildContext context) async {
-    print("initializing notification");
     NotificationService.context = context;
     final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('mipmap/ic_launcher');
@@ -73,10 +71,8 @@ class NotificationService {
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsIOS);
-    print("init1");
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: selectNotification);
-    print("init2");
   }
 
   Future<void> showNotificationInApp(

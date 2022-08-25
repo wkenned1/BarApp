@@ -1,8 +1,8 @@
-import 'package:bar_app/resources/repositories/authentication_repository_impl.dart';
-import 'package:bar_app/resources/repositories/database_repository_impl.dart';
-import 'package:bar_app/resources/services/database_service.dart';
-import 'package:bar_app/resources/services/notification_service.dart';
-import 'package:bar_app/ui/sign_up_view.dart';
+import 'package:Linez/resources/repositories/authentication_repository_impl.dart';
+import 'package:Linez/resources/repositories/database_repository_impl.dart';
+import 'package:Linez/resources/services/database_service.dart';
+import 'package:Linez/resources/services/notification_service.dart';
+import 'package:Linez/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,9 +31,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  print("before");
   final locations = await DatabaseService().getLocations();
-  print("after");
   Locations.defaultBars = [];
   Locations.defaultClubs = [];
   for (var loc in locations) {

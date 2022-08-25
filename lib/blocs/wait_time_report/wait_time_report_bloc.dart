@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bar_app/constants.dart';
+import 'package:Linez/constants.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,7 +30,6 @@ class WaitTimeReportBloc
         final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
         if (prev_ts.difference(DateTime.now().toUtc()).inMinutes <
             Constants.waitTimeReset) {
-          print("submitted too soon");
           emit(WaitTimeReportState(
               submitSuccessful: false,
               loading: false,
@@ -44,7 +43,6 @@ class WaitTimeReportBloc
       prefs.setInt(event.address, timestamp);
       emit(WaitTimeReportState(submitSuccessful: true, loading: false));
     } catch (e) {
-      print("Wait time report error: " + e.toString());
       emit(WaitTimeReportState(
           submitSuccessful: false, loading: false, errorMessage: e.toString()));
     }

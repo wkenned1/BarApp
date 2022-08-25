@@ -1,4 +1,4 @@
-import 'package:bar_app/models/wait_time_model.dart';
+import 'package:Linez/models/wait_time_model.dart';
 
 import '../../models/user_model.dart';
 import '../services/database_service.dart';

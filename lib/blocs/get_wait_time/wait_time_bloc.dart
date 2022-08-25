@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bar_app/models/wait_time_model.dart';
+import 'package:Linez/models/wait_time_model.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -23,8 +23,6 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
         await _databaseRepository.getWaitTimes(event.address);
     List<int> newWaitTimes = <int>[];
     for (var model in waitTimes) {
-      print(
-          "wait times: ${DateTime.now().toUtc().difference(model.timestamp).inMinutes}");
       if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
           Constants.waitTimeReset) {
         //if (DateTime.now().toUtc().hour - model.timestamp.hour < 2) {
@@ -56,8 +54,6 @@ Future<WaitTimeState> getWaitTime(GetWaitTime event) async {
       await _databaseRepository.getWaitTimes(event.address);
   List<int> newWaitTimes = <int>[];
   for (var model in waitTimes) {
-    print(
-        "wait times: ${DateTime.now().toUtc().difference(model.timestamp).inMinutes}");
     if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
         Constants.waitTimeReset) {
       //if (DateTime.now().toUtc().hour - model.timestamp.hour < 2) {

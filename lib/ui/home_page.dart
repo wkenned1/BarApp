@@ -1,6 +1,6 @@
-import 'package:bar_app/resources/util/location_util.dart';
-import 'package:bar_app/ui/map_test.dart';
-import 'package:bar_app/ui/search_page.dart';
+import 'package:Linez/resources/util/location_util.dart';
+import 'package:Linez/ui/map_test.dart';
+import 'package:Linez/ui/search_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:location/location.dart';
@@ -24,7 +24,6 @@ class _GetLocationState extends State<GetLocationWidget> {
   LocationData? _userLocation;
 
   Future<void> _getUserLocation() async {
-    print("FINDING LOCATION");
     Location location = Location();
 
     // Check if location service is enable
@@ -48,8 +47,6 @@ class _GetLocationState extends State<GetLocationWidget> {
     final _locationData = await location.getLocation();
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
-    print(
-        "RESULT: ${util.getUserLocation()?.latitude}, ${util.getUserLocation()?.longitude}");
     setState(() {
       _userLocation = _locationData;
     });
@@ -90,7 +87,10 @@ class _MyHomePageState extends State<HomePage> {
               height: 24),
           label: "Search"),
       BottomNavigationBarItem(
-        icon: Icon(Icons.map_outlined),
+        icon: Image.asset("assets/images/map_icon.png",
+            color: (bottomSelectedIndex == 1) ? Colors.blue : Colors.black,
+            width: 24,
+            height: 24),
         label: "Map",
       ),
     ];

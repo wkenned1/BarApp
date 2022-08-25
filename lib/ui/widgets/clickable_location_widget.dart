@@ -1,4 +1,4 @@
-import 'package:bar_app/models/location_model.dart';
+import 'package:Linez/models/location_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +42,6 @@ class ClickableLocationsList extends StatelessWidget {
   //when clicked takes the user to a page to report wait times
   Widget clickableLocation(
       LocationModel location, LatLng? userLocation, BuildContext context) {
-    print("LOC ${userLocation?.longitude}, ${userLocation?.latitude}");
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
         ));

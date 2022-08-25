@@ -1,4 +1,4 @@
-import 'package:bar_app/resources/util/location_util.dart';
+import 'package:Linez/resources/util/location_util.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'dart:math' as math;
@@ -20,7 +20,7 @@ class ClickableSectionsWidget extends StatefulWidget {
 
 class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
   final String sectionTitle;
-  bool sectionOpen = false;
+  bool sectionOpen = true;
   double turns = 0.0;
   final ClickableLocationsList body;
 
