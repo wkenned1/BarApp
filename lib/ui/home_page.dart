@@ -90,7 +90,10 @@ class _MyHomePageState extends State<HomePage> {
               height: 24),
           label: "Search"),
       BottomNavigationBarItem(
-        icon: Icon(Icons.map_outlined),
+        icon: Image.asset("assets/images/map_icon.png",
+            color: (bottomSelectedIndex == 1) ? Colors.blue : Colors.black,
+            width: 24,
+            height: 24),
         label: "Map",
       ),
     ];
