@@ -47,7 +47,7 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
               child: Row(
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * .85,
+                    width: MediaQuery.of(context).size.width * .80,
                     child: Align(
                       child: Text(
                         sectionTitle,
