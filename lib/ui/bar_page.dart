@@ -106,7 +106,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("0 min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 0 ? Colors.grey : Colors.blue,
                       ))),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
@@ -120,7 +120,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("5 min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 1 ? Colors.grey : Colors.blue,
                       ))),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
@@ -134,7 +134,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("10 min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 2 ? Colors.grey : Colors.blue,
                       ))),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
@@ -148,7 +148,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("20 min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 3 ? Colors.grey : Colors.blue,
                       ))),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
@@ -162,7 +162,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("30 min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 4 ? Colors.grey : Colors.blue,
                       ))),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
@@ -176,7 +176,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("45 min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 5 ? Colors.grey : Colors.blue,
                       ))),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
@@ -190,7 +190,7 @@ class _BarPageState extends State<BarPage> {
                       },
                       child: Text("60+ min", style: TextStyle(fontSize: 30)),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor:
+                        primary:
                             pressAttention != 6 ? Colors.grey : Colors.blue,
                       ))),
             ],

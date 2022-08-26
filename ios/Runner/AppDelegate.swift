@@ -1,8 +1,8 @@
 import UIKit
 import Flutter
-#include "AppDelegate.h"
-#include "GeneratedPluginRegistrant.h"
-#import "GoogleMaps/GoogleMaps.h"
+import GoogleMaps
+//#include "AppDelegate.h"
+//#include "GeneratedPluginRegistrant.h"
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
