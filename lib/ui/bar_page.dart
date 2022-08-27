@@ -96,6 +96,27 @@ class _BarPageState extends State<BarPage> {
     );
   }
 
+  Widget _buildLocationErrorDialog(bool locEnabled, BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Not so fast!'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(locEnabled ? "You have to be close to the bar to report a wait time." : "You must enable location tracking before reporting a wait time."),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int waitTime = -1;
@@ -267,6 +288,7 @@ class _BarPageState extends State<BarPage> {
                                 context.read<WaitTimeReportBloc>().add(
                                     WaitTimeReportEvent(
                                         address: location.address,
+                                        location: location.position,
                                         waitTime: submission));
                               }
                               //Navigator.of(context).pop();
@@ -300,6 +322,18 @@ class _BarPageState extends State<BarPage> {
                               context: context,
                               builder: (BuildContext context) =>
                                   _buildTimeErrorDialog(hour, weekday, context));
+                        }
+                        else if (state.errorMessage == Constants.waitTimeReportLocationError) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildLocationErrorDialog(true, context));
+                        }
+                        else if (state.errorMessage == Constants.waitTimeReportNoLocationError) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildLocationErrorDialog(false, context));
                         }
                       }
                     },

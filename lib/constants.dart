@@ -22,4 +22,9 @@ class Constants {
   //error codes
   static const waitTimeReportIntervalError = "INTERVAL";
   static const waitTimeReportTimeError = "TIME";
+  static const waitTimeReportLocationError = "LOCATION";
+  static const waitTimeReportNoLocationError = "NOLOCATION";
+
+  //business logic
+  static const distanceToBarRequirement = 50;
 }

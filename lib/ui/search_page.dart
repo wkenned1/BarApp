@@ -136,6 +136,12 @@ class SearchPage extends StatelessWidget {
           child: FutureBuilder<void>(
               future: _getUserLocation(),
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+                if(userLocation.getUserLocation() == null){
+                  print("LOC NULL");
+                }
+                else {
+                  print("USER LOCATION: ${userLocation.getUserLocation()!.latitude}, ${userLocation.getUserLocation()!.latitude}");
+                }
                 return SingleChildScrollView(
                     child: Column(
                   children: [
