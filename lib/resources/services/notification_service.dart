@@ -22,6 +22,18 @@ class NotificationService {
     return _notificationService;
   }
 
+  void requestIOSPermissions(
+      FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) {
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>()
+        ?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+  }
+
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -122,7 +134,9 @@ class NotificationService {
     );
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int timestamp = DateTime.now().millisecondsSinceEpoch;
+
     prefs.setInt(Constants.notificationLastSentTime, timestamp);
+    print("TIMESTAMP: ${prefs.getInt(Constants.notificationLastSentTime)}");
   }
 
   Future<void> cancelAllNotifications() async {

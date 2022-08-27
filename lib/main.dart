@@ -64,6 +64,7 @@ void main() async {
       FlutterLocalNotificationsPlugin();
   appLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  NotificationService().requestIOSPermissions(flutterLocalNotificationsPlugin);
 
   //background process for sending notifications while the app is open
   Timer timerObj;
@@ -71,16 +72,20 @@ void main() async {
     final prefs = await SharedPreferences.getInstance();
     int? ts = prefs.getInt(Constants.notificationLastSentTime);
     bool sendNotification = false;
+    print("TIMESTAMP2: ${prefs.getInt(Constants.notificationLastSentTime)}");
     if (ts != null) {
       final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts);
+      print("time 1");
+      print("DT: ${prev_ts.toString()}");
       if (prev_ts.difference(DateTime.now()).inHours > 7) {
+        print("time 2");
         sendNotification = true;
       }
     } else {
       sendNotification = true;
     }
     print("working1");
-    sendNotification = true;
+
     if (sendNotification) {
       //check if the current time is within the allowed range for sending notifications
       int hour = DateTime.now().hour;
