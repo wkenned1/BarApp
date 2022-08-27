@@ -204,7 +204,8 @@ class _BarPageState extends State<BarPage> {
                           onPressed: () {
                             int hour = DateTime.now().hour;
                             int weekday = DateTime.now().weekday;
-                            if ((hour > 20 &&
+                            print("Weekday: ${weekday}, Hour: ${hour}");
+                            if ((hour >= 20 &&
                                 hour <= 23 &&
                                 (weekday == 4 ||
                                     weekday == 5 ||

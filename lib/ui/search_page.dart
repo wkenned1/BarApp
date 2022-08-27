@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -14,6 +15,7 @@ import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
+import '../resources/services/notification_service.dart';
 import '../resources/util/get_distance.dart';
 import '../resources/util/get_location.dart';
 import '../resources/util/location_util.dart';
@@ -43,8 +45,9 @@ class SearchPage extends StatelessWidget {
 
   //check location permissions and get user location
   Future<void> _getUserLocation() async {
+    print("location 1");
     Location location = Location();
-
+    print("location 2");
     // Check if location service is enable
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -53,7 +56,7 @@ class SearchPage extends StatelessWidget {
         return;
       }
     }
-
+    print("location 3");
     // Check if permission is granted
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
@@ -62,8 +65,9 @@ class SearchPage extends StatelessWidget {
         return;
       }
     }
-
+    print("location 4");
     final _locationData = await location.getLocation();
+    print("!!!!!!!!!! Location: ${_locationData.latitude}, ${_locationData.longitude}");
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
 
@@ -114,6 +118,7 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("build");
     if (launchBarPage) {
       launchBarPage = false;
       pushBarPage(context);
@@ -150,3 +155,4 @@ class SearchPage extends StatelessWidget {
     );
   }
 }
+

@@ -1,18 +1,23 @@
+import 'dart:async';
+
 import 'package:Linez/resources/repositories/authentication_repository_impl.dart';
 import 'package:Linez/resources/repositories/database_repository_impl.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:Linez/resources/services/notification_service.dart';
+import 'package:Linez/resources/util/get_distance.dart';
 import 'package:Linez/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
 import 'blocs/get_wait_time/wait_time_bloc.dart';
 import 'blocs/wait_time_report/wait_time_report_bloc.dart';
+import 'constants.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +28,21 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
 import 'globals.dart';
+import 'models/location_model.dart';
+import 'package:geolocator/geolocator.dart' as Geo;
 
 late final NotificationAppLaunchDetails? appLaunchDetails;
+
+Future<LatLng?> _getUserPosition() async {
+  try {
+    Geo.Position userLocation = await Geo.Geolocator.getCurrentPosition(
+        forceAndroidLocationManager: true,
+        desiredAccuracy: Geo.LocationAccuracy.high);
+    return LatLng(userLocation.latitude, userLocation.longitude);
+  } catch (e) {
+    return null;
+  }
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +64,91 @@ void main() async {
       FlutterLocalNotificationsPlugin();
   appLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+  //background process for sending notifications while the app is open
+  Timer timerObj;
+  timerObj = Timer.periodic(Duration(seconds: 15), (timer) async {
+    final prefs = await SharedPreferences.getInstance();
+    int? ts = prefs.getInt(Constants.notificationLastSentTime);
+    bool sendNotification = false;
+    if (ts != null) {
+      final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts);
+      if (prev_ts.difference(DateTime.now()).inHours > 7) {
+        sendNotification = true;
+      }
+    } else {
+      sendNotification = true;
+    }
+    print("working1");
+    sendNotification = true;
+    if (sendNotification) {
+      //check if the current time is within the allowed range for sending notifications
+      int hour = DateTime.now().hour;
+      int weekday = DateTime.now().weekday;
+      if ((hour >= 20 &&
+          hour <= 23 &&
+          (weekday == 4 ||
+              weekday == 5 ||
+              weekday == 6 ||
+              weekday == 7)) ||
+          (hour > 0 &&
+              hour <= 2 &&
+              (weekday == 5 ||
+                  weekday == 6 ||
+                  weekday == 7 ||
+                  weekday == 1))) {
+        print("working12");
+        LatLng? userLocation = await _getUserPosition();
+        print("working2");
+        if (userLocation != null) {
+          print("working3");
+          final locations = new List.from(Locations.defaultBars)
+            ..addAll(Locations.defaultClubs);
+          LocationModel? shortestLocation = null;
+          double shortestDistance = double.infinity;
+          for (LocationModel location in locations) {
+            double temp = calculateDistanceMeters(
+                userLocation.latitude,
+                userLocation.longitude,
+                location.position.latitude,
+                location.position.longitude);
+            if (temp < shortestDistance) {
+              shortestDistance = temp;
+              shortestLocation = location;
+            }
+          }
+          if (shortestLocation != null) {
+            print("working4");
+            if (shortestDistance <= 50) {
+              print("working5");
+              SharedPreferences prefs =
+              await SharedPreferences.getInstance();
+              prefs.setString(
+                  Constants.notifiedBarMarkerId, shortestLocation.markerId);
+              prefs.setDouble(Constants.notifiedBarLatitude,
+                  shortestLocation.position.latitude);
+              prefs.setDouble(Constants.notifiedBarLongitude,
+                  shortestLocation.position.longitude);
+              prefs.setString(Constants.notifiedBarInfoWindowTitle,
+                  shortestLocation.infoWindowTitle);
+              prefs.setString(
+                  Constants.notifiedBarAddress, shortestLocation.address);
+              prefs.setString(
+                  Constants.notifiedBarType, shortestLocation.type);
+              print("notification1");
+              NotificationService().showNotification(
+                  1,
+                  "Near ${shortestLocation.markerId}? What's the wait?",
+                  "Click to report wait the time",
+                  1);
+              print("notification2");
+            }
+          }
+        } else {
+        }
+      } else {}
+    }
+  });
 
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(
@@ -177,7 +280,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .headline4,
             ),
           ],
         ),
