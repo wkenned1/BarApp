@@ -6,6 +6,7 @@ import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
 import 'bar_page.dart';
+import 'dart:io' show Platform;
 
 class TriangleClipper extends CustomClipper<Path> {
   @override
@@ -44,9 +45,15 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   }
 
   addMarkers() async {
+    String icon_path = "assets/images/bar_icon.png";
+    print("platform");
+    if (Platform.isIOS) {
+      print("platform ios");
+      icon_path = "assets/images/bar_icon_small.png";
+    }
     BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
-      "assets/images/bar_icon.png",
+      icon_path,
     );
 
     List<LocationModel> locations = new List.from(Locations.defaultBars)
