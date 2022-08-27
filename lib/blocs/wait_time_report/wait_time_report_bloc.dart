@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:Linez/constants.dart';
 import 'package:bloc/bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../resources/repositories/database_repository_impl.dart';
+import '../../resources/util/get_distance.dart';
+import '../../resources/util/get_location.dart';
 import '../get_wait_time/wait_time_bloc.dart';
 
 part 'wait_time_report_event.dart';
@@ -23,28 +27,86 @@ class WaitTimeReportBloc
   _reportWaitTime(
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      int? ts = prefs.getInt(event.address);
-      if (ts != null) {
-        final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
-        if (prev_ts.difference(DateTime.now().toUtc()).inMinutes <
-            Constants.waitTimeReset) {
+    int hour = DateTime.now().hour;
+    int weekday = DateTime.now().weekday;
+    print("Weekday: ${weekday}, Hour: ${hour}");
+    //check if day and time is correct
+    if ((hour >= 20 &&
+        hour <= 23 &&
+        (weekday == 4 ||
+            weekday == 5 ||
+            weekday == 6 ||
+            weekday == 7)) ||
+        (hour > 0 &&
+            hour <= 2 &&
+            (weekday == 5 ||
+                weekday == 6 ||
+                weekday == 7 ||
+                weekday == 1))) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        int? ts = prefs.getInt(event.address);
+        //check if user reported this bar previously
+        if (ts != null) {
+          final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
+          if (prev_ts
+              .difference(DateTime.now().toUtc())
+              .inMinutes <
+              Constants.waitTimeReset) {
+            print("ERROR");
+            emit(WaitTimeReportState(
+                submitSuccessful: false,
+                loading: false,
+                errorMessage:
+                Constants.waitTimeReportIntervalError));
+            return;
+          }
+        }
+
+        //checking location requirements
+        LatLng? userLoc = await getUserLocation();
+        if(userLoc == null){
           emit(WaitTimeReportState(
               submitSuccessful: false,
               loading: false,
               errorMessage:
-                  "You can only submit one wait time every ${Constants.waitTimeReset} minutes"));
+              Constants.waitTimeReportNoLocationError));
           return;
         }
+        double distance = calculateDistanceMeters(
+            userLoc.latitude,
+            userLoc.longitude,
+            event.location.latitude,
+            event.location.longitude);
+        //if user is too far away from bar
+        print("distance: ${distance}");
+        if(distance > Constants.distanceToBarRequirement){
+          emit(WaitTimeReportState(
+              submitSuccessful: false,
+              loading: false,
+              errorMessage:
+              Constants.waitTimeReportLocationError));
+          return;
+        }
+
+        await _databaseRepository.addWaitTime(event.address, event.waitTime);
+        int timestamp = DateTime
+            .now()
+            .toUtc()
+            .millisecondsSinceEpoch;
+        prefs.setInt(event.address, timestamp);
+        print("WORKED");
+        emit(WaitTimeReportState(submitSuccessful: true, loading: false));
+      } catch (e) {
+        print("ERROR 2");
+        emit(WaitTimeReportState(
+            submitSuccessful: false,
+            loading: false,
+            errorMessage: e.toString()));
       }
-      await _databaseRepository.addWaitTime(event.address, event.waitTime);
-      int timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
-      prefs.setInt(event.address, timestamp);
-      emit(WaitTimeReportState(submitSuccessful: true, loading: false));
-    } catch (e) {
-      emit(WaitTimeReportState(
-          submitSuccessful: false, loading: false, errorMessage: e.toString()));
+    }
+    else {
+      emit(WaitTimeReportState(submitSuccessful: false, errorMessage: Constants.waitTimeReportTimeError, loading: false));
     }
   }
 }

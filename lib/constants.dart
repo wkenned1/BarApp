@@ -18,4 +18,13 @@ class Constants {
   static const notifiedBarAddress = "notifiedBarAddress";
   static const notifiedBarType = "notifiedBarType";
   static const notificationLastSentTime = "notificationLastSentTime";
+
+  //error codes
+  static const waitTimeReportIntervalError = "INTERVAL";
+  static const waitTimeReportTimeError = "TIME";
+  static const waitTimeReportLocationError = "LOCATION";
+  static const waitTimeReportNoLocationError = "NOLOCATION";
+
+  //business logic
+  static const distanceToBarRequirement = 50;
 }

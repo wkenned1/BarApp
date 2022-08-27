@@ -68,12 +68,11 @@ class ClickableLocationsList extends StatelessWidget {
                   if (snapshot.hasData) {
                     if (snapshot.data?.waitTime != null) {
                       if (snapshot.data!.waitTime! >= 0) {
-                        return waitTimeDisplay(snapshot.data!.waitTime!,
-                            fontSize: 20);
+                        return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
                       }
                     }
                   }
-                  return Text("none", style: TextStyle(fontSize: 20));
+                  return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
                 },
               )
             ],

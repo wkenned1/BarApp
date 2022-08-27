@@ -38,7 +38,7 @@ void callbackDispatcher() {
           //check if the current time is within the allowed range for sending notifications
           int hour = DateTime.now().hour;
           int weekday = DateTime.now().weekday;
-          if ((hour > 20 &&
+          if ((hour >= 20 &&
                   hour <= 23 &&
                   (weekday == 4 ||
                       weekday == 5 ||
@@ -68,7 +68,7 @@ void callbackDispatcher() {
                 }
               }
               if (shortestLocation != null) {
-                if (shortestDistance <= 50) {
+                if (shortestDistance <= Constants.distanceToBarRequirement) {
                   SharedPreferences prefs =
                       await SharedPreferences.getInstance();
                   prefs.setString(
@@ -99,7 +99,7 @@ void callbackDispatcher() {
   });
 }
 
-Future<LatLng?> _getUserLocation() async {
+Future<LatLng?> getUserLocation() async {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   LocationData? _userLocation;
