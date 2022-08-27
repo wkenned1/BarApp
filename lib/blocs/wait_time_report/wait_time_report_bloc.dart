@@ -47,12 +47,12 @@ class WaitTimeReportBloc
               .difference(DateTime.now().toUtc())
               .inMinutes <
               Constants.waitTimeReset) {
+            print("ERROR");
             emit(WaitTimeReportState(
                 submitSuccessful: false,
                 loading: false,
                 errorMessage:
-                "You can only submit one wait time every ${Constants
-                    .waitTimeReset} minutes"));
+                Constants.waitTimeReportIntervalError));
             return;
           }
         }
@@ -62,8 +62,10 @@ class WaitTimeReportBloc
             .toUtc()
             .millisecondsSinceEpoch;
         prefs.setInt(event.address, timestamp);
+        print("WORKED");
         emit(WaitTimeReportState(submitSuccessful: true, loading: false));
       } catch (e) {
+        print("ERROR 2");
         emit(WaitTimeReportState(
             submitSuccessful: false,
             loading: false,
@@ -71,7 +73,7 @@ class WaitTimeReportBloc
       }
     }
     else {
-      emit(WaitTimeReportState(submitSuccessful: false, errorMessage: "wrong time or day", loading: false));
+      emit(WaitTimeReportState(submitSuccessful: false, errorMessage: Constants.waitTimeReportTimeError, loading: false));
     }
   }
 }

@@ -50,7 +50,7 @@ class _BarPageState extends State<BarPage> {
 
   int pressAttention = -1;
 
-  Widget _buildPopupDialog(int hour, int day, BuildContext context) {
+  Widget _buildTimeErrorDialog(int hour, int day, BuildContext context) {
     return new AlertDialog(
       title: const Text('Not so fast!'),
       content: new Column(
@@ -62,6 +62,27 @@ class _BarPageState extends State<BarPage> {
               : (hour > 2 && hour < 6)
                   ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."
                   : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildIntervalErrorDialog(BuildContext context) {
+    return new AlertDialog(
+      title: const Text('Not so fast!'),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text("You can only report the same bar every two hours."),
         ],
       ),
       actions: <Widget>[
@@ -255,18 +276,31 @@ class _BarPageState extends State<BarPage> {
                     listeners: [
                       BlocListener<WaitTimeReportBloc, WaitTimeReportState>(
                     listener: (context, state) {
-                      if (state.errorMessage != null) {
+                      if (state.errorMessage == null) {
                         if(state.submitSuccessful){
                           Navigator.of(context).pop();
                         }
                       }
                       else {
-                        int hour = DateTime.now().hour;
-                        int weekday = DateTime.now().weekday;
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) =>
-                            _buildPopupDialog(hour, weekday, context));
+                        print("STATE ERROR: ${state.errorMessage}");
+                        print("STATE Opt1: ${Constants.waitTimeReportIntervalError}");
+                        print("STATE Opt2: ${Constants.waitTimeReportTimeError}");
+                        print(state.errorMessage == Constants.waitTimeReportIntervalError);
+                        if(state.errorMessage == Constants.waitTimeReportIntervalError){
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildIntervalErrorDialog(context));
+
+                        }
+                        else if (state.errorMessage == Constants.waitTimeReportTimeError) {
+                          int hour = DateTime.now().hour;
+                          int weekday = DateTime.now().weekday;
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildTimeErrorDialog(hour, weekday, context));
+                        }
                       }
                     },
                   ),
