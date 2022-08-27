@@ -22,6 +22,19 @@ Widget waitTimeDisplay(int time, {double fontSize = 15}) {
   );
 }
 
+Widget waitTimeDisplayAdjustable(int time, double width) {
+  return Text(
+    "${time} min",
+    style: TextStyle(
+        fontSize: width*.05,
+        color: Color((time <= 10)
+            ? Constants.waitTimeTextGreen
+            : (time > 10 && time <= 30)
+            ? Constants.waitTimeTextOrange
+            : Constants.waitTimeTextRed)),
+  );
+}
+
 class BarPage extends StatefulWidget {
   final LocationModel location;
   BarPage({Key? key, required this.location}) : super(key: key);

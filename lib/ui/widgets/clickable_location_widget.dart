@@ -56,7 +56,7 @@ class ClickableLocationsList extends StatelessWidget {
             children: [
               Image.asset("assets/images/beer_can.png", width: 40, height: 40),
               Container(
-                width: MediaQuery.of(context).size.width * .65,
+                width: MediaQuery.of(context).size.width * .70,
                 child: barLocationColumn(location, userLocation),
               ),
               FutureBuilder<WaitTimeState>(
@@ -68,12 +68,11 @@ class ClickableLocationsList extends StatelessWidget {
                   if (snapshot.hasData) {
                     if (snapshot.data?.waitTime != null) {
                       if (snapshot.data!.waitTime! >= 0) {
-                        return waitTimeDisplay(snapshot.data!.waitTime!,
-                            fontSize: 20);
+                        return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
                       }
                     }
                   }
-                  return Text("none", style: TextStyle(fontSize: 20));
+                  return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
                 },
               )
             ],
