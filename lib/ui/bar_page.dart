@@ -138,7 +138,7 @@ class _BarPageState extends State<BarPage> {
                 child: Column(children: [
                   Text(
                     "${location.markerId}",
-                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width*.1, fontWeight: FontWeight.bold),
                   ),
                   BlocBuilder<WaitTimeBloc, WaitTimeState>(builder: (context, state) {
                     final time = state.waitTime ?? -1;
