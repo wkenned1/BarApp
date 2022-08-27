@@ -31,7 +31,7 @@ class WaitTimeReportBloc
     int weekday = DateTime.now().weekday;
     print("Weekday: ${weekday}, Hour: ${hour}");
     //check if day and time is correct
-    if (true || (hour >= 20 &&
+    if ((hour >= 20 &&
         hour <= 23 &&
         (weekday == 4 ||
             weekday == 5 ||
