@@ -215,21 +215,6 @@ class _BarPageState extends State<BarPage> {
                       height: 50,
                       child: ElevatedButton(
                           onPressed: () {
-                            int hour = DateTime.now().hour;
-                            int weekday = DateTime.now().weekday;
-                            print("Weekday: ${weekday}, Hour: ${hour}");
-                            if ((hour >= 20 &&
-                                hour <= 23 &&
-                                (weekday == 4 ||
-                                    weekday == 5 ||
-                                    weekday == 6 ||
-                                    weekday == 7)) ||
-                                (hour > 0 &&
-                                    hour <= 2 &&
-                                    (weekday == 5 ||
-                                        weekday == 6 ||
-                                        weekday == 7 ||
-                                        weekday == 1))) {
                               int submission = -1;
                               switch (index) {
                                 case 0:
@@ -263,17 +248,32 @@ class _BarPageState extends State<BarPage> {
                                         address: location.address,
                                         waitTime: submission));
                               }
-                              Navigator.of(context).pop();
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    _buildPopupDialog(hour, weekday, context),
-                              );
-                            }
-                          },
-                          child: Text("Submit", style: TextStyle(fontSize: 30))))
-                ])
+                              //Navigator.of(context).pop();
+                            },
+                          child: Text("Submit", style: TextStyle(fontSize: 30)))),
+                MultiBlocListener(
+                    listeners: [
+                      BlocListener<WaitTimeReportBloc, WaitTimeReportState>(
+                    listener: (context, state) {
+                      if (state.errorMessage != null) {
+                        if(state.submitSuccessful){
+                          Navigator.of(context).pop();
+                        }
+                      }
+                      else {
+                        int hour = DateTime.now().hour;
+                        int weekday = DateTime.now().weekday;
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                            _buildPopupDialog(hour, weekday, context));
+                      }
+                    },
+                  ),
+                ],
+                child: Container(),
+                )],
+                )
             )
             ));
   }

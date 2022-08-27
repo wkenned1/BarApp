@@ -23,28 +23,55 @@ class WaitTimeReportBloc
   _reportWaitTime(
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      int? ts = prefs.getInt(event.address);
-      if (ts != null) {
-        final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
-        if (prev_ts.difference(DateTime.now().toUtc()).inMinutes <
-            Constants.waitTimeReset) {
-          emit(WaitTimeReportState(
-              submitSuccessful: false,
-              loading: false,
-              errorMessage:
-                  "You can only submit one wait time every ${Constants.waitTimeReset} minutes"));
-          return;
+    int hour = DateTime.now().hour;
+    int weekday = DateTime.now().weekday;
+    print("Weekday: ${weekday}, Hour: ${hour}");
+    if ((hour >= 20 &&
+        hour <= 23 &&
+        (weekday == 4 ||
+            weekday == 5 ||
+            weekday == 6 ||
+            weekday == 7)) ||
+        (hour > 0 &&
+            hour <= 2 &&
+            (weekday == 5 ||
+                weekday == 6 ||
+                weekday == 7 ||
+                weekday == 1))) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        int? ts = prefs.getInt(event.address);
+        if (ts != null) {
+          final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
+          if (prev_ts
+              .difference(DateTime.now().toUtc())
+              .inMinutes <
+              Constants.waitTimeReset) {
+            emit(WaitTimeReportState(
+                submitSuccessful: false,
+                loading: false,
+                errorMessage:
+                "You can only submit one wait time every ${Constants
+                    .waitTimeReset} minutes"));
+            return;
+          }
         }
+        await _databaseRepository.addWaitTime(event.address, event.waitTime);
+        int timestamp = DateTime
+            .now()
+            .toUtc()
+            .millisecondsSinceEpoch;
+        prefs.setInt(event.address, timestamp);
+        emit(WaitTimeReportState(submitSuccessful: true, loading: false));
+      } catch (e) {
+        emit(WaitTimeReportState(
+            submitSuccessful: false,
+            loading: false,
+            errorMessage: e.toString()));
       }
-      await _databaseRepository.addWaitTime(event.address, event.waitTime);
-      int timestamp = DateTime.now().toUtc().millisecondsSinceEpoch;
-      prefs.setInt(event.address, timestamp);
-      emit(WaitTimeReportState(submitSuccessful: true, loading: false));
-    } catch (e) {
-      emit(WaitTimeReportState(
-          submitSuccessful: false, loading: false, errorMessage: e.toString()));
+    }
+    else {
+      emit(WaitTimeReportState(submitSuccessful: false, errorMessage: "wrong time or day", loading: false));
     }
   }
 }
