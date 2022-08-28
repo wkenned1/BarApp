@@ -140,38 +140,46 @@ class _MyHomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     NotificationService().initNotification(context);
+    double profileIconSize = MediaQuery.of(context).size.width/10;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Linez"),
+        centerTitle: true,
+        title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
         automaticallyImplyLeading: false,
         actions: <Widget>[
-          FlatButton(
-            textColor: Colors.white,
-            onPressed: () {
-              FirebaseAuth auth = FirebaseAuth.instance;
-              var user = auth.currentUser;
-              if(user != null) {
-                if(user!.uid != null){
-                  print(user!.uid);
-                  Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage()));
+          Padding(
+            padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/3, 0),
+            child: GestureDetector(
+              onTap: () {
+                FirebaseAuth auth = FirebaseAuth.instance;
+                var user = auth.currentUser;
+                if(user != null) {
+                  if(user!.uid != null){
+                    print(user!.uid);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePage()));
+                  }
+                  else {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => PhoneAuthPage()));
+                  }
                 }
                 else {
                   Navigator.of(context).push(
                       MaterialPageRoute(
                           builder: (context) => PhoneAuthPage()));
                 }
-              }
-              else {
-                Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => PhoneAuthPage()));
-              }
-            },
-            child: Text("Login"),
-            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
-          ),
+              }, // Image tapped
+              child: Image.asset(
+                'assets/images/profile_icon.png', // Fixes border issues
+                width: profileIconSize,
+                height: profileIconSize,
+                color: Colors.white,
+              ),
+            ),
+          )
         ],
       ),
       body: buildPageView(),

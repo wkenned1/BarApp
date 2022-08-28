@@ -8,7 +8,8 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
         key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
-          title: Text("Linez"),
+          centerTitle: true,
+          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
           automaticallyImplyLeading: false,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),
