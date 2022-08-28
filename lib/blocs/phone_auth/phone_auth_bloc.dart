@@ -19,26 +19,32 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
   }
 
   Future<void> _verifyPhone(PhoneVerifyEvent event, Emitter<PhoneAuthState> emit) async {
+    bool codeSent = false;
+    bool timeout = false;
+    String? errorCode = null;
+    bool verificationCompleted = false;
+
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: event.mobile,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        emit(PhoneAuthVerify(successful: true, codeSent: false, codeAutoRetrievalTimeout: false));
+        verificationCompleted = true;
       },
       verificationFailed: (FirebaseAuthException e) {
         if (e.code == Constants.invalidPhoneNumber) {
-          emit(PhoneAuthVerify(successful: false, codeSent: false, errorMessage: Constants.invalidPhoneNumber, codeAutoRetrievalTimeout: false));
+          errorCode = Constants.invalidPhoneNumber;
         }
         else {
-          emit(PhoneAuthVerify(successful: false, codeSent: false, errorMessage: Constants.genericError, codeAutoRetrievalTimeout: false));
+          errorCode = Constants.genericError;
         }
       },
       codeSent: (String verificationId, int? resendToken) {
-        emit(PhoneAuthVerify(successful: false, codeSent: true, codeAutoRetrievalTimeout: false));
+        codeSent = true;
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-        emit(PhoneAuthVerify(successful: false, codeSent: false, codeAutoRetrievalTimeout: true));
+        timeout = true;
       },
     );
+    emit(PhoneAuthVerify(successful: verificationCompleted, codeSent: codeSent, codeAutoRetrievalTimeout: timeout, errorMessage: errorCode));
   }
 
   _signIn(PhoneSignInEvent event, Emitter<PhoneAuthState> emit) async {
