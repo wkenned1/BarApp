@@ -1,7 +1,9 @@
 import 'package:Linez/resources/util/location_util.dart';
 import 'package:Linez/ui/map_test.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
+import 'package:Linez/ui/profile_page.dart';
 import 'package:Linez/ui/search_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:location/location.dart';
@@ -146,10 +148,26 @@ class _MyHomePageState extends State<HomePage> {
           FlatButton(
             textColor: Colors.white,
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => PhoneAuthPage()),
-              );
+              FirebaseAuth auth = FirebaseAuth.instance;
+              var user = auth.currentUser;
+              if(user != null) {
+                if(user!.uid != null){
+                  print(user!.uid);
+                  Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => ProfilePage()));
+                }
+                else {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => PhoneAuthPage()));
+                }
+              }
+              else {
+                Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => PhoneAuthPage()));
+              }
             },
             child: Text("Login"),
             shape: CircleBorder(side: BorderSide(color: Colors.transparent)),

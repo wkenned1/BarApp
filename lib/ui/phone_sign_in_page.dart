@@ -6,8 +6,6 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../blocs/phone_auth/phone_auth_bloc.dart';
 
-
-
 class PhoneAuthPage extends StatefulWidget {
 
   @override
