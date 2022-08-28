@@ -1,5 +1,6 @@
 import 'package:Linez/resources/util/location_util.dart';
 import 'package:Linez/ui/map_test.dart';
+import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/search_page.dart';
 import 'package:flutter/material.dart';
 
@@ -141,6 +142,19 @@ class _MyHomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text("Linez"),
         automaticallyImplyLeading: false,
+        actions: <Widget>[
+          FlatButton(
+            textColor: Colors.white,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => PhoneAuthPage()),
+              );
+            },
+            child: Text("Login"),
+            shape: CircleBorder(side: BorderSide(color: Colors.transparent)),
+          ),
+        ],
       ),
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(

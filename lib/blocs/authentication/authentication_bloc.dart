@@ -38,4 +38,18 @@ class AuthenticationBloc
       }
     });
   }
+
+  /*_verifyPhoneNumber(String mobile) {
+      bool verified = false;
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: mobile,
+        verificationCompleted: (PhoneAuthCredential credential) {
+          verified = true;
+        },
+        verificationFailed: (FirebaseAuthException e) {},
+        codeSent: (String verificationId, int? resendToken) {},
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+  }*/
+
 }

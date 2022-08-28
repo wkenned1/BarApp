@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:Linez/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:Linez/resources/repositories/authentication_repository_impl.dart';
 import 'package:Linez/resources/repositories/database_repository_impl.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:Linez/resources/services/notification_service.dart';
 import 'package:Linez/resources/util/get_distance.dart';
+import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -175,6 +177,9 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => WaitTimeReportBloc(DatabaseRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => PhoneAuthBloc()
         )
       ],
       child: MyApp(),

@@ -25,6 +25,9 @@ class Constants {
   static const waitTimeReportLocationError = "LOCATION";
   static const waitTimeReportNoLocationError = "NOLOCATION";
 
+  static const invalidPhoneNumber = "invalid-phone-number";
+  static const genericError = "generic-error";
+
   //business logic
   static const distanceToBarRequirement = 50;
 }

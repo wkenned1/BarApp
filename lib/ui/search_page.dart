@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:Linez/main.dart';
 import 'package:Linez/ui/bar_page.dart';
 import 'package:Linez/ui/home_page.dart';
+import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/widgets/clickable_location_widget.dart';
 import 'package:Linez/ui/widgets/clickable_sections_widget.dart';
 import 'package:flutter/material.dart';
@@ -118,6 +119,7 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     print("build");
     if (launchBarPage) {
       launchBarPage = false;
