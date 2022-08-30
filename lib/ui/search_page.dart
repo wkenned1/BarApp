@@ -121,7 +121,7 @@ class SearchPage extends StatelessWidget {
 
   Future<void> _initFunction() async {
     //get location
-    _getUserLocation();
+    await _getUserLocation();
 
     //get user info
     print("CKECHING PROFILE");
@@ -129,6 +129,7 @@ class SearchPage extends StatelessWidget {
     if(profile != null) {
       print("PROFILE FOUND");
       UserData.userTickets = profile.tickets;
+      UserData.winner = profile.winner;
     }
   }
 

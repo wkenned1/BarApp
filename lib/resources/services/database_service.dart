@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:Linez/models/profile_model.dart';
@@ -8,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../../models/location_model.dart';
 import '../../models/user_model.dart';
@@ -126,5 +129,44 @@ class DatabaseService {
       ret.add(model);
     }
     return ret;
+  }
+
+  Future<bool> sendWinnerAddress(String address) async {
+    print("debug 1");
+    var client = new http.Client();
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    print("debug 2");
+    if(user != null) {
+      if (user!.uid != null) {
+        String token = await user.getIdToken();
+        print(token);
+        print("debug 3");
+        try{
+          print("debug 4");
+          var response = await client.post(
+              Uri.parse("https://us-central1-barapp-5fbe5.cloudfunctions.net/user/sendWinnerAddress/${user!.uid}"),
+              headers: {'Authorization': 'Bearer $token',},
+              body : {
+                'address': address,
+              }
+          );
+          print("debug 5");
+          if(response.statusCode == 200 || response.statusCode == 201){
+            print("debug 6");
+            Map<String, dynamic> temp = jsonDecode(response.body);
+            if(temp["addressConfirmed"] as bool){
+              print("WINNER: TRUE");
+              return true;
+            }
+          }
+          print("debug 7");
+        } on Exception catch (err){
+          print("Error : $err");
+        }
+      }
+    }
+    print("WINNER: FALSE");
+    return false;
   }
 }

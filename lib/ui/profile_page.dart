@@ -1,9 +1,11 @@
+import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../globals.dart';
 
 class ProfilePage extends StatelessWidget {
+  final _addressTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,17 @@ class ProfilePage extends StatelessWidget {
         body: Container(
           child: Column(children: [
             Text("Profile Page"),
-            Text("Tickets: ${UserData.userTickets}")
+            Text("Tickets: ${UserData.userTickets}"),
+            Text("Winner: ${UserData.winner}"),
+            if(UserData.winner) Column(
+              children: [
+                TextFormField(
+                controller: _addressTextController,
+                decoration: InputDecoration(labelText: "Address"),),
+                ElevatedButton(onPressed: () {
+                  DatabaseService().sendWinnerAddress(_addressTextController.text);
+                }, child: Text("submit"))
+              ]),
           ],)
         )
     );
