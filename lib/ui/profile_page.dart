@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../globals.dart';
+
 class ProfilePage extends StatelessWidget {
 
   @override
@@ -17,7 +19,10 @@ class ProfilePage extends StatelessWidget {
           ),
         ),
         body: Container(
-          child: Text("Profile Page"),
+          child: Column(children: [
+            Text("Profile Page"),
+            Text("Tickets: ${UserData.userTickets}")
+          ],)
         )
     );
   }

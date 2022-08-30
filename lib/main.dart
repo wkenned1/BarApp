@@ -33,6 +33,9 @@ import 'globals.dart';
 import 'models/location_model.dart';
 import 'package:geolocator/geolocator.dart' as Geo;
 
+import 'models/profile_model.dart';
+import 'package:Linez/resources/services/database_service.dart';
+
 late final NotificationAppLaunchDetails? appLaunchDetails;
 
 Future<LatLng?> _getUserPosition() async {
@@ -48,9 +51,11 @@ Future<LatLng?> _getUserPosition() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //initialize firebase app
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //get locations from database
   final locations = await DatabaseService().getLocations();
   Locations.defaultBars = [];
   Locations.defaultClubs = [];
@@ -88,6 +93,7 @@ void main() async {
     }
     print("working1");
 
+    //check if the app was opened by notification
     if (sendNotification) {
       //check if the current time is within the allowed range for sending notifications
       int hour = DateTime.now().hour;

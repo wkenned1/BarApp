@@ -1,3 +1,5 @@
+import 'package:Linez/globals.dart';
+import 'package:Linez/resources/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../blocs/phone_auth/phone_auth_bloc.dart';
+import '../models/profile_model.dart';
 
 class PhoneAuthPage extends StatefulWidget {
 
@@ -27,9 +30,18 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     PhoneAuthCredential credential =
     PhoneAuthProvider.credential(verificationId: verificationID, smsCode: otp.text);
 
-    await auth.signInWithCredential(credential).then((value){
+    await auth.signInWithCredential(credential).then((value) async {
       print("You are logged in successfully");
-      Navigator.of(context).pop();
+      ProfileModel? model = await DatabaseService().getUserProfile();
+      if(model == null){
+        await DatabaseService().addUserProfile(ProfileModel(tickets: 0));
+        UserData.userTickets = 0;
+        Navigator.of(context).pop();
+      }
+      else {
+        UserData.userTickets = model.tickets;
+        Navigator.of(context).pop();
+      }
     });
   }
 

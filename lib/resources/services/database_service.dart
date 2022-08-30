@@ -1,9 +1,11 @@
 import 'dart:ffi';
 
+import 'package:Linez/models/profile_model.dart';
 import 'package:Linez/models/wait_time_location_model.dart';
 import 'package:Linez/models/wait_time_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +17,37 @@ class DatabaseService {
 
   addUserData(UserModel userData) async {
     await _db.collection("Users").doc(userData.uid).set(userData.toMap());
+  }
+
+  addUserProfile(ProfileModel profile) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null) {
+      if (user!.uid != null) {
+        await _db.collection("Users").doc(user!.uid).set(profile.toMap());
+      }
+      else {
+
+      }
+    }
+  }
+
+  Future<ProfileModel?> getUserProfile() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null) {
+      if (user!.uid != null) {
+        DocumentSnapshot<Map<String, dynamic>> doc =
+        await _db.collection("Users").doc(user!.uid).get();
+        if(doc.exists){
+          return ProfileModel.fromDocumentSnapshot(doc);
+        }
+        else {
+          return null;
+        }
+      }
+    }
+    return null;
   }
 
   addWaitTime(String address, int waitTime) async {

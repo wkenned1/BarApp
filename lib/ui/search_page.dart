@@ -16,6 +16,8 @@ import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
+import '../models/profile_model.dart';
+import '../resources/services/database_service.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_distance.dart';
 import '../resources/util/get_location.dart';
@@ -117,6 +119,19 @@ class SearchPage extends StatelessWidget {
     }
   }
 
+  Future<void> _initFunction() async {
+    //get location
+    _getUserLocation();
+
+    //get user info
+    print("CKECHING PROFILE");
+    ProfileModel? profile = await DatabaseService().getUserProfile();
+    if(profile != null) {
+      print("PROFILE FOUND");
+      UserData.userTickets = profile.tickets;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -136,7 +151,7 @@ class SearchPage extends StatelessWidget {
       },
       child: Container(
           child: FutureBuilder<void>(
-              future: _getUserLocation(),
+              future: _initFunction()/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 if(userLocation.getUserLocation() == null){
                   print("LOC NULL");
