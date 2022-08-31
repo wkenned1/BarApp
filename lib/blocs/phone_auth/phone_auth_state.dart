@@ -18,3 +18,10 @@ class PhoneSignIn extends PhoneAuthState {
   final UserCredential? userCredential;
   PhoneSignIn({this.confirmationResult, this.userCredential});
 }
+
+class AuthDelete extends PhoneAuthState {
+  final bool successful;
+  final String? errorMessage;
+
+  AuthDelete({required this.successful, this.errorMessage});
+}

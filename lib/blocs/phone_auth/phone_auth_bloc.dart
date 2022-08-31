@@ -16,6 +16,7 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     on<PhoneVerifyEvent>(_verifyPhone);
     on<PhoneSignInEvent>(_signIn);
     on<PhoneSignInConfirmEvent>(_confirm);
+    on<AuthDeleteEvent>(_delete);
   }
 
   Future<void> _verifyPhone(PhoneVerifyEvent event, Emitter<PhoneAuthState> emit) async {
@@ -67,15 +68,17 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     }
   }
 
-  _delete() async {
+  _delete(AuthDeleteEvent event, Emitter<PhoneAuthState> emit) async {
     var user = auth.currentUser;
 
     if(user != null){
       try {
         await user.delete();
+        emit(AuthDelete(successful: true));
       }
       catch(e){
         print(e.toString());
+        emit(AuthDelete(successful: false, errorMessage: e.toString()));
       }
     }
   }

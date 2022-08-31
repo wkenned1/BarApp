@@ -303,7 +303,6 @@ class _BarPageState extends State<BarPage> {
                     listener: (context, state) {
                       if (state.errorMessage == null) {
                         if(state.submitSuccessful){
-                          UserData.userTickets += 1;
                           DatabaseService().incrementTickets();
                           Navigator.of(context).pop();
                         }

@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:Linez/globals.dart';
 import 'package:Linez/models/profile_model.dart';
+import 'package:Linez/models/user_feedback_model.dart';
 import 'package:Linez/models/wait_time_location_model.dart';
 import 'package:Linez/models/wait_time_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -182,7 +184,24 @@ class DatabaseService {
           await _db.collection("Users").doc(user!.uid).set({
             'tickets': tickets + 1
           },SetOptions(merge: true));
+          ProfileModel? profile = await this.getUserProfile();
+          if(profile != null) {
+            UserData.userTickets = profile.tickets;
+          }
         }
+      }
+    }
+  }
+
+  Future<void> sendFeedback(String message) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null) {
+      if (user!.uid != null) {
+        await _db.collection("UserFeedback").doc().set(UserFeedbackModel(message: message, timestamp: DateTime.now().toUtc(), uid: user!.uid).toMap());
+      }
+      else {
+
       }
     }
   }

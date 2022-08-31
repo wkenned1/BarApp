@@ -21,3 +21,7 @@ class PhoneSignInConfirmEvent extends PhoneAuthEvent {
   final String code;
   final ConfirmationResult confirmationResult;
 }
+
+class AuthDeleteEvent extends PhoneAuthEvent {
+  AuthDeleteEvent();
+}
