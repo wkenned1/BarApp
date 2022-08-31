@@ -145,7 +145,7 @@ class _MyHomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/3, 0),
@@ -182,6 +182,29 @@ class _MyHomePageState extends State<HomePage> {
           )
         ],
       ),
+      drawer: Drawer(
+              child: ListView(
+                children: <Widget>[
+                  GestureDetector(
+                    child: ListTile(
+                      title: Text("Send us feedback", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                      trailing: Icon(Icons.arrow_forward),
+                    ),
+                    onTap: (){
+
+                    },
+                  ),
+                  GestureDetector(child: ListTile(
+                    title: Text("Coming soon", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    trailing: Icon(Icons.arrow_forward),
+                  ),
+                    onTap: (){
+
+                    },
+                  )
+                ],
+              ),
+        ),
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: bottomSelectedIndex,
