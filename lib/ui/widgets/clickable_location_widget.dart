@@ -45,13 +45,12 @@ class ClickableLocationsList extends StatelessWidget {
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
         ));
-    return Container(
+    return GestureDetector(child: Container(
         //margin: const EdgeInsets.all(15.0),
         //padding: const EdgeInsets.all(3.0),
         width: MediaQuery.of(context).size.width,
         decoration:
             BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
-        child: GestureDetector(
           child: Row(
             children: [
               Image.asset("assets/images/beer_can.png", width: 40, height: 40),
@@ -77,11 +76,12 @@ class ClickableLocationsList extends StatelessWidget {
               )
             ],
           ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BarPage(location: location)));
-          },
-        ));
+        ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BarPage(location: location)));
+      },
+    );
   }
 
   @override
