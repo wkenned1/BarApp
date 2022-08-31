@@ -169,4 +169,21 @@ class DatabaseService {
     print("WINNER: FALSE");
     return false;
   }
+
+  Future<void> incrementTickets() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null) {
+      if (user!.uid != null) {
+        DocumentSnapshot<Map<String, dynamic>> doc =
+        await _db.collection("Users").doc(user!.uid).get();
+        if(doc.exists){
+          int tickets = ProfileModel.fromDocumentSnapshot(doc).tickets;
+          await _db.collection("Users").doc(user!.uid).set({
+            'tickets': tickets + 1
+          },SetOptions(merge: true));
+        }
+      }
+    }
+  }
 }

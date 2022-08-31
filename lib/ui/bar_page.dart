@@ -1,7 +1,9 @@
 import 'dart:ffi';
 
 import 'package:Linez/constants.dart';
+import 'package:Linez/globals.dart';
 import 'package:Linez/models/location_model.dart';
+import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
@@ -301,6 +303,8 @@ class _BarPageState extends State<BarPage> {
                     listener: (context, state) {
                       if (state.errorMessage == null) {
                         if(state.submitSuccessful){
+                          UserData.userTickets += 1;
+                          DatabaseService().incrementTickets();
                           Navigator.of(context).pop();
                         }
                       }
