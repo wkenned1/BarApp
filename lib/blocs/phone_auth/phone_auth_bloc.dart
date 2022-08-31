@@ -82,5 +82,20 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
       }
     }
   }
+
+  _logout(AuthLogoutEvent event, Emitter<PhoneAuthState> emit) async {
+    var user = auth.currentUser;
+
+    if(user != null){
+      try {
+        await auth.signOut();
+        emit(AuthLogout(successful: true));
+    // signed out
+    } catch (e){
+        emit(AuthLogout(successful: false, errorMessage: e.toString()));
+      }
+    // an error
+    }
+  }
 }
 

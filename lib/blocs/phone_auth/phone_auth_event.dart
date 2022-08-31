@@ -25,3 +25,7 @@ class PhoneSignInConfirmEvent extends PhoneAuthEvent {
 class AuthDeleteEvent extends PhoneAuthEvent {
   AuthDeleteEvent();
 }
+
+class AuthLogoutEvent extends PhoneAuthEvent {
+  AuthLogoutEvent();
+}
