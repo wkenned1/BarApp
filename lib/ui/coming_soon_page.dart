@@ -1,3 +1,4 @@
+import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -29,27 +30,37 @@ class ComingSoonPage extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: Container(
-          child: Column(
-            children: [
-              Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0),
-                child:  Center(
-                    child: Text("Coming soon...", style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .08),)),),
-        Column(
-              children: <Widget>[
-              new ListTile(
-                  leading: new MyBullet(),
-              title: new Text('My first line'),
-              ),
-              new ListTile(
-              leading: new MyBullet(),
-              title: new Text('My second line'),
-              )
+        body: FutureBuilder<List<String>>(
+        future: DatabaseService().getComingSoon(),
+    builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+          return Container(
+            child: Column(
+              children: [
+                Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0),
+                  child:  Center(
+                      child: Text("Coming soon...", style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .08),)),),
+                if(snapshot.hasData)
+                  Column(
+                  children: <Widget>[
+                    for(String item in snapshot.data!)
+                      new ListTile(
+                        leading: new MyBullet(),
+                        title: new Text(item),
+                      ),
+                    /*new ListTile(
+                      leading: new MyBullet(),
+                      title: new Text('My first line'),
+                    ),
+                    new ListTile(
+                      leading: new MyBullet(),
+                      title: new Text('My second line'),
+                    )*/
+                  ],
+                )
               ],
-              )
-            ],
-          ),
-        )
+            ),
+          );
+    })
     );
   }
 }

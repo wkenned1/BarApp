@@ -235,4 +235,14 @@ class DatabaseService {
     }
     return false;
   }
+
+  Future<List<String>> getComingSoon() async {
+    List<String> ret = [];
+    DocumentSnapshot<Map<String, dynamic>> doc =
+    await _db.collection("ComingSoon").doc("ComingSoon").get();
+    if(doc.exists){
+      ret = (doc["items"] as List)?.map((item) => item as String)?.toList() ?? [];
+    }
+    return ret;
+  }
 }
