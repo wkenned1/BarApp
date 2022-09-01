@@ -1,8 +1,10 @@
 import 'package:Linez/resources/util/location_util.dart';
+import 'package:Linez/ui/coming_soon_page.dart';
 import 'package:Linez/ui/map_test.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/profile_page.dart';
 import 'package:Linez/ui/search_page.dart';
+import 'package:Linez/ui/user_feedback_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -191,7 +193,8 @@ class _MyHomePageState extends State<HomePage> {
                       trailing: Icon(Icons.arrow_forward),
                     ),
                     onTap: (){
-
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => UserFeedbackPage()));
                     },
                   ),
                   GestureDetector(child: ListTile(
@@ -199,9 +202,18 @@ class _MyHomePageState extends State<HomePage> {
                     trailing: Icon(Icons.arrow_forward),
                   ),
                     onTap: (){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ComingSoonPage()));
+                    },
+                  ),
+                  GestureDetector(child: ListTile(
+                    title: Text("Logout", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    trailing: Icon(Icons.arrow_forward),
+                  ),
+                    onTap: (){
 
                     },
-                  )
+                  ),
                 ],
               ),
         ),

@@ -25,6 +25,16 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   Future<List<WaitTimeModel>> getWaitTimes(String address) {
     return service.getWaitTimes(address);
   }
+
+  @override
+  Future<bool> sendFeedback(String message) {
+    return service.sendFeedback(message);
+  }
+
+  @override
+  void incrementTickets({bool fromFeedback = false}) {
+    service.incrementTickets(fromFeedback: fromFeedback);
+  }
 }
 
 abstract class DatabaseRepository {
@@ -32,4 +42,6 @@ abstract class DatabaseRepository {
   Future<List<UserModel>> retrieveUserData();
   Future<void> addWaitTime(String address, int waitTime);
   Future<List<WaitTimeModel>> getWaitTimes(String address);
+  Future<bool> sendFeedback(String message);
+  void incrementTickets({bool fromFeedback = false});
 }

@@ -8,4 +8,5 @@ class Locations {
 class UserData {
   static int userTickets = -1;
   static bool winner = false;
+  static bool feedbackTicketReceived = false;
 }

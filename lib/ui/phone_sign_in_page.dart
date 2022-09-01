@@ -34,7 +34,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       print("You are logged in successfully");
       ProfileModel? model = await DatabaseService().getUserProfile();
       if(model == null){
-        await DatabaseService().addUserProfile(ProfileModel(tickets: 0, winner: false));
+        await DatabaseService().addUserProfile(ProfileModel(tickets: 0, winner: false, feedbackTicketReceived: false));
         UserData.userTickets = 0;
         Navigator.of(context).pop();
       }

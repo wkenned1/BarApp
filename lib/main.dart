@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:Linez/blocs/phone_auth/phone_auth_bloc.dart';
+import 'package:Linez/blocs/user_feedback/user_feedback_bloc.dart';
 import 'package:Linez/resources/repositories/authentication_repository_impl.dart';
 import 'package:Linez/resources/repositories/database_repository_impl.dart';
 import 'package:Linez/resources/services/database_service.dart';
@@ -186,6 +187,9 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => PhoneAuthBloc()
+        ),
+        BlocProvider(
+            create: (context) => UserFeedbackBloc(DatabaseRepositoryImpl())
         )
       ],
       child: MyApp(),

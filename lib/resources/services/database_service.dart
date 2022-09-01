@@ -172,7 +172,7 @@ class DatabaseService {
     return false;
   }
 
-  Future<void> incrementTickets() async {
+  Future<void> incrementTickets({bool fromFeedback = false}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     if(user != null) {
@@ -181,9 +181,17 @@ class DatabaseService {
         await _db.collection("Users").doc(user!.uid).get();
         if(doc.exists){
           int tickets = ProfileModel.fromDocumentSnapshot(doc).tickets;
-          await _db.collection("Users").doc(user!.uid).set({
-            'tickets': tickets + 1
-          },SetOptions(merge: true));
+          if(fromFeedback){
+            await _db.collection("Users").doc(user!.uid).set({
+              'tickets': tickets + 1,
+              'feedbackTicketReceived': true
+            },SetOptions(merge: true));
+          }
+          else {
+            await _db.collection("Users").doc(user!.uid).set({
+              'tickets': tickets + 1
+            },SetOptions(merge: true));
+          }
           ProfileModel? profile = await this.getUserProfile();
           if(profile != null) {
             UserData.userTickets = profile.tickets;
@@ -193,16 +201,20 @@ class DatabaseService {
     }
   }
 
-  Future<void> sendFeedback(String message) async {
+  Future<bool> sendFeedback(String message) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     if(user != null) {
       if (user!.uid != null) {
-        await _db.collection("UserFeedback").doc().set(UserFeedbackModel(message: message, timestamp: DateTime.now().toUtc(), uid: user!.uid).toMap());
-      }
-      else {
-
+        try{
+          await _db.collection("UserFeedback").doc().set(UserFeedbackModel(message: message, timestamp: DateTime.now().toUtc(), uid: user!.uid).toMap());
+          return true;
+        }
+        catch(e){
+          return false;
+        }
       }
     }
+    return false;
   }
 }

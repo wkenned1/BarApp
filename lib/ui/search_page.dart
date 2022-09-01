@@ -130,6 +130,7 @@ class SearchPage extends StatelessWidget {
       print("PROFILE FOUND");
       UserData.userTickets = profile.tickets;
       UserData.winner = profile.winner;
+      UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
     }
   }
 
