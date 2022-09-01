@@ -33,6 +33,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     await auth.signInWithCredential(credential).then((value) async {
       print("You are logged in successfully");
       ProfileModel? model = await DatabaseService().getUserProfile();
+      context.read<PhoneAuthBloc>().add(AuthConfirmLoginEvent());
       if(model == null){
         await DatabaseService().addUserProfile(ProfileModel(tickets: 0, winner: false, feedbackTicketReceived: false, winnerMessage: ""));
         UserData.userTickets = 0;
@@ -40,6 +41,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       }
       else {
         UserData.userTickets = model.tickets;
+        UserData.winner = model.winner;
+        UserData.winnerMessage = model.winnerMessage;
+        UserData.feedbackTicketReceived = model.feedbackTicketReceived;
         Navigator.of(context).pop();
       }
     });

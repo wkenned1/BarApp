@@ -29,3 +29,7 @@ class AuthDeleteEvent extends PhoneAuthEvent {
 class AuthLogoutEvent extends PhoneAuthEvent {
   AuthLogoutEvent();
 }
+
+class AuthConfirmLoginEvent extends PhoneAuthEvent {
+  AuthConfirmLoginEvent();
+}

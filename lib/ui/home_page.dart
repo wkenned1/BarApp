@@ -1,3 +1,4 @@
+import 'package:Linez/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:Linez/resources/util/location_util.dart';
 import 'package:Linez/ui/coming_soon_page.dart';
 import 'package:Linez/ui/map_test.dart';
@@ -7,6 +8,7 @@ import 'package:Linez/ui/search_page.dart';
 import 'package:Linez/ui/user_feedback_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
@@ -15,6 +17,7 @@ import 'package:workmanager/workmanager.dart';
 
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
+import 'logout_page.dart';
 
 class GetLocationWidget extends StatefulWidget {
   const GetLocationWidget({Key? key}) : super(key: key);
@@ -141,6 +144,7 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PhoneAuthBloc>().add(AuthConfirmLoginEvent());
     NotificationService().initNotification(context);
     double profileIconSize = MediaQuery.of(context).size.width/10;
     return Scaffold(
@@ -206,14 +210,31 @@ class _MyHomePageState extends State<HomePage> {
                           builder: (context) => ComingSoonPage()));
                     },
                   ),
-                  GestureDetector(child: ListTile(
-                    title: Text("Logout", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
-                    trailing: Icon(Icons.arrow_forward),
-                  ),
-                    onTap: (){
-
-                    },
-                  ),
+                  BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
+                      builder: (context, state) {
+                      if(state is AuthLoginConfirmed){
+                        return GestureDetector(child: ListTile(
+                          title: Text("Logout", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                          trailing: Icon(Icons.arrow_forward),
+                        ),
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => LogoutPage()));
+                          },
+                        );
+                      }
+                      else {
+                        return GestureDetector(child: ListTile(
+                          title: Text("Login with phone", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                          trailing: Icon(Icons.arrow_forward),
+                        ),
+                          onTap: (){
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => PhoneAuthPage()));
+                          },
+                        );
+                      }
+                    }),
                 ],
               ),
         ),

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 import '../../constants.dart';
+import '../../globals.dart';
 
 part 'phone_auth_event.dart';
 part 'phone_auth_state.dart';
@@ -17,6 +18,8 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     on<PhoneSignInEvent>(_signIn);
     on<PhoneSignInConfirmEvent>(_confirm);
     on<AuthDeleteEvent>(_delete);
+    on<AuthConfirmLoginEvent>(_confirmLogin);
+    on<AuthLogoutEvent>(_logout);
   }
 
   Future<void> _verifyPhone(PhoneVerifyEvent event, Emitter<PhoneAuthState> emit) async {
@@ -89,12 +92,24 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
     if(user != null){
       try {
         await auth.signOut();
-        emit(AuthLogout(successful: true));
+        UserData.userTickets = -1;
+        UserData.winner = false;
+        UserData.feedbackTicketReceived = false;
+        UserData.winnerMessage = "";
+        emit(AuthLogout());
     // signed out
     } catch (e){
-        emit(AuthLogout(successful: false, errorMessage: e.toString()));
+
       }
     // an error
+    }
+  }
+
+  _confirmLogin(AuthConfirmLoginEvent event, Emitter<PhoneAuthState> emit) async {
+    var user = auth.currentUser;
+
+    if(user != null){
+      emit(AuthLoginConfirmed());
     }
   }
 }

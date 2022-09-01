@@ -27,7 +27,7 @@ class AuthDelete extends PhoneAuthState {
 }
 
 class AuthLogout extends PhoneAuthState {
-  final bool successful;
-  final String? errorMessage;
-  AuthLogout({required this.successful, this.errorMessage});
+}
+
+class AuthLoginConfirmed extends PhoneAuthState {
 }
