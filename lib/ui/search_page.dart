@@ -77,6 +77,29 @@ class SearchPage extends StatelessWidget {
     initBackgroundTracking();
   }
 
+  //show popup on search page if the user won the givaway
+  Widget _buildWinnerDialog(BuildContext context) {
+    DatabaseService().disableWinnerPopup();
+    return new AlertDialog(
+      title: const Text("Congrats! You won this month's giveaway!"),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(UserData.winnerMessage),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   //start background process for sending notifications and tracking location
   Future<void> initBackgroundTracking() async {
     Workmanager manager = Workmanager();
@@ -131,12 +154,12 @@ class SearchPage extends StatelessWidget {
       UserData.userTickets = profile.tickets;
       UserData.winner = profile.winner;
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
+      UserData.winnerMessage = profile.winnerMessage;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     print("build");
     if (launchBarPage) {
       launchBarPage = false;
@@ -155,11 +178,14 @@ class SearchPage extends StatelessWidget {
           child: FutureBuilder<void>(
               future: _initFunction()/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if(userLocation.getUserLocation() == null){
-                  print("LOC NULL");
-                }
-                else {
-                  print("USER LOCATION: ${userLocation.getUserLocation()!.latitude}, ${userLocation.getUserLocation()!.latitude}");
+                if(UserData.winner && UserData.winnerMessage != Constants.winnerMessageAfterPopup){
+                  Future.delayed(Duration.zero, () =>
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _buildWinnerDialog(context))
+                  );
+
                 }
                 return SingleChildScrollView(
                     child: Column(

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
 import 'package:Linez/models/profile_model.dart';
 import 'package:Linez/models/user_feedback_model.dart';
@@ -170,6 +171,23 @@ class DatabaseService {
     }
     print("WINNER: FALSE");
     return false;
+  }
+
+  Future<void> disableWinnerPopup() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null) {
+      if (user!.uid != null) {
+        DocumentSnapshot<Map<String, dynamic>> doc =
+        await _db.collection("Users").doc(user!.uid).get();
+        if (doc.exists) {
+          await _db.collection("Users").doc(user!.uid).set({
+            'winnerMessage': Constants.winnerMessageAfterPopup
+          },SetOptions(merge: true));
+          UserData.winnerMessage = Constants.winnerMessageAfterPopup;
+        }
+      }
+    }
   }
 
   Future<void> incrementTickets({bool fromFeedback = false}) async {

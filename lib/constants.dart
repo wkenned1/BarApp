@@ -30,4 +30,7 @@ class Constants {
 
   //business logic
   static const distanceToBarRequirement = 50;
+
+  //user related
+  static const winnerMessageAfterPopup = "PopupShown";
 }
