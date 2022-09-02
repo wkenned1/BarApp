@@ -6,7 +6,7 @@ import '../blocs/phone_auth/phone_auth_bloc.dart';
 
 class LogoutPage extends StatelessWidget {
 
-  //show popup on search page if the user won the givaway
+  //show popup on search page if the user wants to delete an account
   Widget _buildDeleteDialog(BuildContext context) {
     return new AlertDialog(
       title: const Text("Are you sure?"),

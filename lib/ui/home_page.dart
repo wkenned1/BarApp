@@ -69,6 +69,61 @@ class _GetLocationState extends State<GetLocationWidget> {
   }
 }
 
+//show popup when ticket icon is clicked
+Widget _buildTicketDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text("Giveaway"),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
+        Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+        Center(child: Container(child:
+        Row(children: [
+          ElevatedButton(style: ElevatedButton.styleFrom(primary: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PhoneAuthPage()),
+            );
+          }, child: Text("SignUp")),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
+          ElevatedButton(style: ElevatedButton.styleFrom(primary: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pop();
+          }, child: Text("No")),
+        ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        ),),
+      ],
+    ),
+  );
+}
+
+//show popup when ticket icon is clicked
+Widget _buildTicketSignedInDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text("Giveaway"),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
+        Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+        Center(child: Container(child:
+        Row(children: [
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
+          ElevatedButton(style: ElevatedButton.styleFrom(primary: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pop();
+          }, child: Text("No")),
+        ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        ),),
+      ],
+    ),
+  );
+}
+
 class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
 
@@ -165,7 +220,15 @@ class _MyHomePageState extends State<HomePage> {
                   builder: (context, state) {
                     if(state is ProfileUpdatedState){
                       return
-                        GestureDetector(child:
+                        GestureDetector(
+                          onTap: (){
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildTicketSignedInDialog(context));
+                          },
+                            child:
+                        Container(child:
                         Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
                             child: Container(child: Row(children: [
@@ -178,10 +241,38 @@ class _MyHomePageState extends State<HomePage> {
                               Padding(
                                 padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                               Text("${state.profile.tickets}", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
-                            ],),)));
+                            ],),))));
                     }
                     else {
-                      return GestureDetector(child:
+                      return GestureDetector(
+                        onTap: (){
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildTicketDialog(context));
+                        },
+                        child:
+                      Container(child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
+                        child: Container(child: Row(children: [
+                          Image.asset(
+                            'assets/images/ticket_icon.png', // Fixes border issues
+                            width: profileIconSize/2,
+                            height: profileIconSize/2,
+                            color: Colors.white,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                          Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
+                        ],),),
+                      ))
+                      );
+                    }
+                  });
+                }
+                else {
+                  return GestureDetector(child:
+                      Container(child:
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
                         child: Container(child: Row(children: [
@@ -195,69 +286,16 @@ class _MyHomePageState extends State<HomePage> {
                             padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                           Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
                         ],),),
-                      ),
-                        onTap: (){
-                          //TODO show info window about giveaways
-                        },
-                      );
-                    }
-                  });
-                }
-                else {
-                  return GestureDetector(child:
-                  Padding(
-                      padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                      child: Container(child: Row(children: [
-                        Image.asset(
-                          'assets/images/ticket_icon.png', // Fixes border issues
-                          width: profileIconSize/2,
-                          height: profileIconSize/2,
-                          color: Colors.white,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                        Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
-                      ],),),
-                  ),
-                  onTap: (){
-                    //TODO show info window about giveaways
-                  },
+                      ),),
+                    onTap: (){
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _buildTicketDialog(context));
+                    },
                   );
                 }
               }),
-          /*Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/3, 0),
-            child: GestureDetector(
-              onTap: () {
-                FirebaseAuth auth = FirebaseAuth.instance;
-                var user = auth.currentUser;
-                if(user != null) {
-                  if(user!.uid != null){
-                    print(user!.uid);
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage()));
-                  }
-                  else {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => PhoneAuthPage()));
-                  }
-                }
-                else {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => PhoneAuthPage()));
-                }
-              }, // Image tapped
-              child: Image.asset(
-                'assets/images/profile_icon.png', // Fixes border issues
-                width: profileIconSize,
-                height: profileIconSize,
-                color: Colors.white,
-              ),
-            ),
-          )*/
         ],
       ),
       drawer: Drawer(

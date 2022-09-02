@@ -91,7 +91,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         body: Container(
           child: Column(
             children: [
-              Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0), child: Text("Sign In", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .08))),
+              Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0), child: Text("Sign In", style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .08))),
               Container(
                 padding: const EdgeInsets.all(8),
                 height: 80,
