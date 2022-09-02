@@ -16,6 +16,7 @@ import 'package:notification_permissions/notification_permissions.dart'
 import 'package:workmanager/workmanager.dart';
 
 import '../blocs/profile/profile_bloc.dart';
+import '../constants.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
 import 'logout_page.dart';
@@ -91,15 +92,15 @@ class _MyHomePageState extends State<HomePage> {
     return [
       BottomNavigationBarItem(
           icon: Image.asset("assets/images/martini_glass_icon.png",
-              color: (bottomSelectedIndex == 0) ? Colors.blue : Colors.black,
-              width: 24,
-              height: 24),
+              color: Colors.white,
+              width: (bottomSelectedIndex == 0) ? 35 : 25,
+              height: (bottomSelectedIndex == 0) ? 35 : 25),
           label: "Search"),
       BottomNavigationBarItem(
         icon: Image.asset("assets/images/map_icon.png",
-            color: (bottomSelectedIndex == 1) ? Colors.blue : Colors.black,
-            width: 24,
-            height: 24),
+            color: Colors.white,
+            width: (bottomSelectedIndex == 1) ? 35 : 25,
+            height: (bottomSelectedIndex == 1) ? 35 : 25),
         label: "Map",
       ),
     ];
@@ -150,6 +151,7 @@ class _MyHomePageState extends State<HomePage> {
     double profileIconSize = MediaQuery.of(context).size.width/10;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
         title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
         //automaticallyImplyLeading: false,
@@ -310,11 +312,15 @@ class _MyHomePageState extends State<HomePage> {
         ),
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Color(Constants.linezBlue),
         currentIndex: bottomSelectedIndex,
         onTap: (index) {
           bottomTapped(index);
         },
+        selectedLabelStyle: TextStyle(color: Colors.white),
         items: buildBottomNavBarItems(),
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.white,
       ),
     );
   }

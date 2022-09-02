@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
+import '../constants.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
 import 'bar_page.dart';
@@ -60,6 +61,25 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
       ..addAll(Locations.defaultClubs);
 
     for (LocationModel location in locations) {
+      late BitmapDescriptor? customIconBitMap = null;
+
+      if (Platform.isIOS) {
+        if(Constants.customSmallIconsMap.containsKey(location.markerId)){
+          customIconBitMap = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(),
+            Constants.customSmallIconsMap[location.markerId]!,
+          );
+        }
+      }
+      else {
+        if(Constants.customIconsMap.containsKey(location.markerId)){
+          customIconBitMap = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(),
+            Constants.customIconsMap[location.markerId]!,
+          );
+        }
+      }
+
       markers.add(Marker(
           //add start location marker
           markerId: MarkerId(location.markerId),
@@ -69,7 +89,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             title: location.infoWindowTitle,
           ),*/
           //TODO: replace harcoded bit marker with function
-          icon: markerbitmap,
+          icon: (customIconBitMap == null) ? markerbitmap : customIconBitMap,
           onTap: () {
             _customInfoWindowController.addInfoWindow!(
               Container(
