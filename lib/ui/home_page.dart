@@ -15,6 +15,7 @@ import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:workmanager/workmanager.dart';
 
+import '../blocs/profile/profile_bloc.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
 import 'logout_page.dart';
@@ -153,7 +154,76 @@ class _MyHomePageState extends State<HomePage> {
         title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
         //automaticallyImplyLeading: false,
         actions: <Widget>[
-          Padding(
+          BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
+              builder: (context, state) {
+                if(state is AuthLoginConfirmed){
+                  context.read<ProfileBloc>().add(GetProfileEvent());
+                  return
+                  BlocBuilder<ProfileBloc, ProfileState>(
+                  builder: (context, state) {
+                    if(state is ProfileUpdatedState){
+                      return
+                        GestureDetector(child:
+                        Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
+                            child: Container(child: Row(children: [
+                              Image.asset(
+                                'assets/images/ticket_icon.png', // Fixes border issues
+                                width: profileIconSize/2,
+                                height: profileIconSize/2,
+                                color: Colors.white,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                              Text("${state.profile.tickets}", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
+                            ],),)));
+                    }
+                    else {
+                      return GestureDetector(child:
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
+                        child: Container(child: Row(children: [
+                          Image.asset(
+                            'assets/images/ticket_icon.png', // Fixes border issues
+                            width: profileIconSize/2,
+                            height: profileIconSize/2,
+                            color: Colors.white,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                          Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
+                        ],),),
+                      ),
+                        onTap: (){
+                          //TODO show info window about giveaways
+                        },
+                      );
+                    }
+                  });
+                }
+                else {
+                  return GestureDetector(child:
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
+                      child: Container(child: Row(children: [
+                        Image.asset(
+                          'assets/images/ticket_icon.png', // Fixes border issues
+                          width: profileIconSize/2,
+                          height: profileIconSize/2,
+                          color: Colors.white,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                        Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
+                      ],),),
+                  ),
+                  onTap: (){
+                    //TODO show info window about giveaways
+                  },
+                  );
+                }
+              }),
+          /*Padding(
             padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/3, 0),
             child: GestureDetector(
               onTap: () {
@@ -185,7 +255,7 @@ class _MyHomePageState extends State<HomePage> {
                 color: Colors.white,
               ),
             ),
-          )
+          )*/
         ],
       ),
       drawer: Drawer(

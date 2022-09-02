@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:Linez/blocs/profile/profile_bloc.dart';
 import 'package:Linez/main.dart';
 import 'package:Linez/ui/bar_page.dart';
 import 'package:Linez/ui/home_page.dart';
@@ -142,13 +143,13 @@ class SearchPage extends StatelessWidget {
     }
   }
 
-  Future<void> _initFunction() async {
+  Future<void> _initFunction(BuildContext context) async {
     //get location
     await _getUserLocation();
 
     //get user info
     print("CKECHING PROFILE");
-    ProfileModel? profile = await DatabaseService().getUserProfile();
+    /*ProfileModel? profile = await DatabaseService().getUserProfile();
     if(profile != null) {
       print("PROFILE FOUND");
       UserData.userTickets = profile.tickets;
@@ -156,7 +157,8 @@ class SearchPage extends StatelessWidget {
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
       UserData.winnerMessage = profile.winnerMessage;
       UserData.reportedLocations = profile.reportedLocations;
-    }
+    }*/
+    context.read<ProfileBloc>().add(GetProfileEvent());
   }
 
   @override
@@ -177,7 +179,7 @@ class SearchPage extends StatelessWidget {
       },
       child: Container(
           child: FutureBuilder<void>(
-              future: _initFunction()/*_getUserLocation()*/,
+              future: _initFunction(context)/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 if(UserData.winner && UserData.winnerMessage != Constants.winnerMessageAfterPopup){
                   Future.delayed(Duration.zero, () =>
