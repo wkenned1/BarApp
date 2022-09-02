@@ -31,3 +31,4 @@ class AuthLogout extends PhoneAuthState {
 
 class AuthLoginConfirmed extends PhoneAuthState {
 }
+

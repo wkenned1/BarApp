@@ -6,6 +6,8 @@ import '../blocs/phone_auth/phone_auth_bloc.dart';
 
 class LogoutPage extends StatelessWidget {
 
+  //final GlobalKey<ScaffoldState> formKey = GlobalKey<ScaffoldState>();
+
   //show popup on search page if the user wants to delete an account
   Widget _buildDeleteDialog(BuildContext context) {
     return new AlertDialog(
@@ -32,21 +34,13 @@ class LogoutPage extends StatelessWidget {
           ),),
         ],
       ),
-      /*actions: <Widget>[
-        new ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('Close'),
-        ),
-      ],*/
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: GlobalKey<ScaffoldState>(),
+        //key: formKey,
         appBar: AppBar(
           title: Text("Linez"),
           automaticallyImplyLeading: false,

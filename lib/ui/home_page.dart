@@ -6,6 +6,7 @@ import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/profile_page.dart';
 import 'package:Linez/ui/search_page.dart';
 import 'package:Linez/ui/user_feedback_page.dart';
+import 'package:Linez/ui/widgets/countdown_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ import 'package:workmanager/workmanager.dart';
 
 import '../blocs/profile/profile_bloc.dart';
 import '../constants.dart';
+import '../globals.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
 import 'logout_page.dart';
@@ -101,6 +103,15 @@ Widget _buildTicketDialog(BuildContext context) {
 
 //show popup when ticket icon is clicked
 Widget _buildTicketSignedInDialog(BuildContext context) {
+  bool showCountdown = false;
+  print("building");
+  if(AppInfo.giveawayDate != null) {
+    print("NOT NULL");
+    if(AppInfo.giveawayDate!.isAfter(DateTime.now().toUtc())) {
+      print("CORRECT");
+      showCountdown = true;
+    }
+  }
   return new AlertDialog(
     title: const Text("Giveaway"),
     content: new Column(
@@ -110,11 +121,47 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
         Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
-        Row(children: [
-          Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
-          ElevatedButton(style: ElevatedButton.styleFrom(primary: Color(Constants.linezBlue)), onPressed: (){
-            Navigator.of(context).pop();
-          }, child: Text("No")),
+        Row(
+          children: [
+          Column(children: [
+            Text("Time left"),
+            Container(
+                decoration: new BoxDecoration (
+                    color: Colors.green
+                ),
+              height: 30,
+              width: 120,
+              child: new Center(child:
+              (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900
+
+              ),) :
+                CountdownWidget(giveaway: AppInfo.giveawayDate!)
+              )
+            )
+          ],),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
+          Column(children: [
+            Text("Your tickets"),
+            Container(
+              height: 30,
+              width: 60,
+              child: new Center(child:
+              Text (
+                  "#${UserData.userTickets}",
+                  style: new TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900
+                  )
+              ),),
+              decoration: new BoxDecoration (
+                  color: Color(Constants.linezBlue)
+              ),
+            )
+          ],),
         ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),

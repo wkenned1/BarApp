@@ -145,9 +145,12 @@ class SearchPage extends StatelessWidget {
   }
 
   Future<void> _initFunction(BuildContext context) async {
+    print("init");
     //get location
+    print("init1");
+    AppInfo.giveawayDate = await DatabaseService().getGiveawayTime();
+    print("init2");
     await _getUserLocation();
-
     //get user info
     print("CKECHING PROFILE");
     /*ProfileModel? profile = await DatabaseService().getUserProfile();

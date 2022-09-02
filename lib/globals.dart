@@ -5,6 +5,10 @@ class Locations {
   static List<LocationModel> defaultClubs = [];
 }
 
+class AppInfo {
+  static DateTime? giveawayDate;
+}
+
 class UserData {
   static int userTickets = -1;
   static bool winner = false;
