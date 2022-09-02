@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:Linez/blocs/profile/profile_bloc.dart';
+import 'package:Linez/blocs/user_location/user_location_bloc.dart';
 import 'package:Linez/main.dart';
 import 'package:Linez/ui/bar_page.dart';
 import 'package:Linez/ui/home_page.dart';
@@ -168,6 +169,9 @@ class SearchPage extends StatelessWidget {
       launchBarPage = false;
       pushBarPage(context);
     }
+    //get location
+    context.read<UserLocationBloc>().add(GetLocationEvent());
+
     List<LocationModel> barLocations = Locations.defaultBars;
     List<LocationModel> clubLocations = Locations.defaultClubs;
     //await _getUserLocation();
