@@ -29,7 +29,7 @@ class Constants {
   static const genericError = "generic-error";
 
   //business logic
-  static const distanceToBarRequirement = 50;
+  static const distanceToBarRequirement = 100;
 
   //user related
   static const winnerMessageAfterPopup = "PopupShown";
