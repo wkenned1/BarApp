@@ -261,8 +261,20 @@ class _MyHomePageState extends State<HomePage> {
         ],
       ),
       drawer: Drawer(
-              child: ListView(
+              child:
+              ListView(
                 children: <Widget>[
+                  const SizedBox(
+                  height: 64.0,
+                    child: DrawerHeader(
+                        margin: EdgeInsets.all(0.0),
+                        padding: EdgeInsets.all(0.0),
+                        decoration: BoxDecoration(
+                          color: Color(Constants.linezBlue),
+                        ),
+                        child: Center(child: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),))
+                    ),
+                  ),
                   GestureDetector(
                     child: ListTile(
                       title: Text("Send us feedback", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
