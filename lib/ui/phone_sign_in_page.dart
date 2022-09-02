@@ -36,7 +36,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       ProfileModel? model = await DatabaseService().getUserProfile();
       context.read<PhoneAuthBloc>().add(AuthConfirmLoginEvent());
       if(model == null){
-        await DatabaseService().addUserProfile(ProfileModel(tickets: 0, winner: false, feedbackTicketReceived: false, winnerMessage: ""));
+        await DatabaseService().addUserProfile(ProfileModel(tickets: 0, winner: false, feedbackTicketReceived: false, winnerMessage: "", reportedLocations: []));
         UserData.userTickets = 0;
         Navigator.of(context).pop();
       }
@@ -45,6 +45,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         UserData.winner = model.winner;
         UserData.winnerMessage = model.winnerMessage;
         UserData.feedbackTicketReceived = model.feedbackTicketReceived;
+        UserData.reportedLocations = model.reportedLocations;
         Navigator.of(context).pop();
       }
     });

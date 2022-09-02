@@ -10,4 +10,5 @@ class UserData {
   static bool winner = false;
   static bool feedbackTicketReceived = false;
   static String winnerMessage = "";
+  static List<String> reportedLocations = [];
 }

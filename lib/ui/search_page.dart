@@ -155,6 +155,7 @@ class SearchPage extends StatelessWidget {
       UserData.winner = profile.winner;
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
       UserData.winnerMessage = profile.winnerMessage;
+      UserData.reportedLocations = profile.reportedLocations;
     }
   }
 

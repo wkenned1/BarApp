@@ -259,4 +259,36 @@ class DatabaseService {
       }
     }
   }
+
+  Future<void> addReportedLocation(String address) async {
+    print("deb1");
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    print("deb2");
+    if(user != null) {
+      if (user!.uid != null) {
+        try{
+          print("deb3");
+          DocumentSnapshot<Map<String, dynamic>> doc =
+          await _db.collection("Users").doc(user!.uid).get();
+          print("deb4");
+          if (doc.exists) {
+            print("deb5");
+            List<String>? locations = (doc["reportedLocations"] as List)?.map((item) => item as String)?.toList();
+            if(locations != null) {
+              print("deb6");
+              locations.add(address);
+              await _db.collection("Users").doc(user!.uid).set({
+                'reportedLocations': locations
+              },SetOptions(merge: true));
+              print("deb7");
+              UserData.winnerMessage = Constants.winnerMessageAfterPopup;
+            }
+          }
+        }
+        catch(e){
+        }
+      }
+    }
+  }
 }

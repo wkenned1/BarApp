@@ -40,6 +40,11 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   Future<void> deleteProfile() async {
     await service.deleteProfile();
   }
+
+  @override
+  Future<void> addReportedLocation(String address) async {
+    await service.addReportedLocation(address);
+  }
 }
 
 abstract class DatabaseRepository {
@@ -50,4 +55,5 @@ abstract class DatabaseRepository {
   Future<bool> sendFeedback(String message);
   void incrementTickets({bool fromFeedback = false});
   Future<void> deleteProfile();
+  Future<void> addReportedLocation(String address);
 }
