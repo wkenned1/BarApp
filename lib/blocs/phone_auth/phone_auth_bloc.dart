@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 
 import '../../constants.dart';
 import '../../globals.dart';
+import '../../resources/repositories/database_repository_impl.dart';
 
 part 'phone_auth_event.dart';
 part 'phone_auth_state.dart';
@@ -13,7 +14,9 @@ part 'phone_auth_state.dart';
 class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  PhoneAuthBloc() : super(PhoneAuthInitial()) {
+  final DatabaseRepository _databaseRepository;
+
+  PhoneAuthBloc(this._databaseRepository) : super(PhoneAuthInitial()) {
     on<PhoneVerifyEvent>(_verifyPhone);
     on<PhoneSignInEvent>(_signIn);
     on<PhoneSignInConfirmEvent>(_confirm);
@@ -72,6 +75,7 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
   }
 
   _delete(AuthDeleteEvent event, Emitter<PhoneAuthState> emit) async {
+    await _databaseRepository.deleteProfile();
     var user = auth.currentUser;
 
     if(user != null){

@@ -186,7 +186,7 @@ void main() async {
           create: (context) => WaitTimeReportBloc(DatabaseRepositoryImpl()),
         ),
         BlocProvider(
-          create: (context) => PhoneAuthBloc()
+          create: (context) => PhoneAuthBloc(DatabaseRepositoryImpl())
         ),
         BlocProvider(
             create: (context) => UserFeedbackBloc(DatabaseRepositoryImpl())

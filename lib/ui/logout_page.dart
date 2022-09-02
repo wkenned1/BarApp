@@ -20,6 +20,7 @@ class LogoutPage extends StatelessWidget {
             Row(children: [
               ElevatedButton(onPressed: (){
                 context.read<PhoneAuthBloc>().add(AuthDeleteEvent());
+                Navigator.of(context).pop();
                 }, child: Text("Yes")),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
               ElevatedButton(onPressed: (){

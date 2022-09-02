@@ -245,4 +245,18 @@ class DatabaseService {
     }
     return ret;
   }
+
+  Future<void> deleteProfile() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null) {
+      if (user!.uid != null) {
+        try{
+          await _db.collection("Users").doc(user!.uid).delete();
+        }
+        catch(e){
+        }
+      }
+    }
+  }
 }
