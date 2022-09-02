@@ -54,7 +54,10 @@ class ClickableLocationsList extends StatelessWidget {
       BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
       child: Row(
         children: [
-          Image.asset("assets/images/beer_can.png", width: 40, height: 40),
+          if(location.type == "bar")
+            Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
+          else
+            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
           /*Container(
             width: MediaQuery.of(context).size.width * .70,
             child: barLocationColumn(location, userLocation),

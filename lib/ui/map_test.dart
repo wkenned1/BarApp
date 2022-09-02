@@ -46,19 +46,27 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   }
 
   addMarkers() async {
-    String icon_path = "assets/images/bar_icon.png";
+    String bar_icon_path = "assets/images/bar_icon.png";
+    String club_icon_path = "assets/images/club_icon.png";
     print("platform");
     if (Platform.isIOS) {
       print("platform ios");
-      icon_path = "assets/images/bar_icon_small.png";
+      bar_icon_path = "assets/images/bar_icon_small.png";
+      club_icon_path = "assets/images/club_icon_small.png";
     }
-    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(),
-      icon_path,
-    );
 
     List<LocationModel> locations = new List.from(Locations.defaultBars)
       ..addAll(Locations.defaultClubs);
+
+    BitmapDescriptor barMarkerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      bar_icon_path,
+    );
+
+    BitmapDescriptor clubMarkerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      club_icon_path,
+    );
 
     for (LocationModel location in locations) {
       late BitmapDescriptor? customIconBitMap = null;
@@ -89,7 +97,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             title: location.infoWindowTitle,
           ),*/
           //TODO: replace harcoded bit marker with function
-          icon: (customIconBitMap == null) ? markerbitmap : customIconBitMap,
+          icon: (customIconBitMap == null) ? ((location.type == "bar") ? barMarkerbitmap: clubMarkerbitmap) : customIconBitMap,
           onTap: () {
             _customInfoWindowController.addInfoWindow!(
               Container(
