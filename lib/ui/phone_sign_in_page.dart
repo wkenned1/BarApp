@@ -21,6 +21,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   final otp = TextEditingController();
   String verificationID = "";
   bool otpVisibility = false;
+  bool ageConfirmed = false;
 
   FirebaseAuth auth = FirebaseAuth.instance;
   String phoneNumber = "";
@@ -89,7 +90,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         body: Container(
           child: Column(
             children: [
-              Text("Enter phone number"),
+              Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0), child: Text("Sign In", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .08))),
               Container(
                 padding: const EdgeInsets.all(8),
                 height: 80,
@@ -109,15 +110,34 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     print(phone.completeNumber);
                   },
                 ),),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    Padding(child: Text("I am 21 years or older", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06),), padding: EdgeInsets.fromLTRB(0, 0, 5,0),),
+                      Transform.scale(
+                        scale: 1.5,
+                        child: Checkbox(
+                        value: ageConfirmed,
+                        onChanged: (bool? event) {
+                          print(ageConfirmed);
+                          setState(() {
+                            ageConfirmed = !ageConfirmed;
+                          });
+                        }
+                    )
+                      )
+                  ],
+                ),
               ElevatedButton(onPressed: () {
-                /*context.read<PhoneAuthBloc>().add(PhoneVerifyEvent(
-                    mobile: phoneNumber));*/
-                print("SEND: ${phoneNumber}");
-                verifyPhone(context);
+                if(ageConfirmed) {
+                  print("SEND: ${phoneNumber}");
+                  verifyPhone(context);
+                }
               }, child: Text("Submit")),
-              if(otpVisibility) Column(
+              if(otpVisibility)
+                Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0), child: Column(
                 children: [
-                  Text("code"),
+                  Text("Enter verification code", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06)),
                   TextFormField(
                     controller: otp,
                     keyboardType: TextInputType.number,
@@ -126,7 +146,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     signIn(context);
                   }, child: Text("submit"))
                 ],
-              )
+              ),),
               /*MultiBlocListener(
                 listeners: [
                   BlocListener<PhoneAuthBloc, PhoneAuthState>(listener: (context, state) {
