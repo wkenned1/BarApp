@@ -34,7 +34,7 @@ class _CountdownWidgetState extends State<CountdownWidget> {
     // TODO: implement build
     return (DateTime.now().toUtc().isAfter(giveaway)) ? Text("00:00:00:00", style: TextStyle(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: MediaQuery.of(context).size.width * .04,
         fontWeight: FontWeight.w900
 
     ),) :

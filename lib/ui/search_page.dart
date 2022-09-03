@@ -10,6 +10,7 @@ import 'package:Linez/ui/home_page.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/widgets/clickable_location_widget.dart';
 import 'package:Linez/ui/widgets/clickable_sections_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -167,6 +168,9 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.instance.getToken().then((token) {
+      print('TOKEN: $token');
+    });
     print("build");
     if (launchBarPage) {
       launchBarPage = false;

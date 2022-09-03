@@ -129,12 +129,12 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
                 decoration: new BoxDecoration (
                     color: Colors.green
                 ),
-              height: 30,
-              width: 120,
+              height: MediaQuery.of(context).size.width/13,
+              width: MediaQuery.of(context).size.width/2.5,
               child: new Center(child:
               (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: MediaQuery.of(context).size.width * .04,
                     fontWeight: FontWeight.w900
 
               ),) :
@@ -146,14 +146,14 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
           Column(children: [
             Text("Your tickets"),
             Container(
-              height: 30,
-              width: 60,
+              height: MediaQuery.of(context).size.width/13,
+              width: MediaQuery.of(context).size.width/7,
               child: new Center(child:
               Text (
                   "#${UserData.userTickets}",
                   style: new TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: MediaQuery.of(context).size.width * .04,
                       fontWeight: FontWeight.w900
                   )
               ),),

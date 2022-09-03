@@ -614,12 +614,19 @@ PODS:
   - Firebase/Firestore (9.4.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 9.4.0)
+  - Firebase/Messaging (9.4.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 9.4.0)
   - firebase_auth (3.7.0):
     - Firebase/Auth (= 9.4.0)
     - firebase_core
     - Flutter
   - firebase_core (1.21.1):
     - Firebase/CoreOnly (= 9.4.0)
+    - Flutter
+  - firebase_messaging (13.0.0):
+    - Firebase/Messaging (= 9.4.0)
+    - firebase_core
     - Flutter
   - FirebaseAuth (9.4.0):
     - FirebaseCore (~> 9.0)
@@ -650,6 +657,20 @@ PODS:
     - FirebaseCore (~> 9.0)
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseInstallations (9.5.0):
+    - FirebaseCore (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (9.4.0):
+    - FirebaseCore (~> 9.0)
+    - FirebaseInstallations (~> 9.0)
+    - GoogleDataTransport (< 10.0.0, >= 9.1.4)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Reachability (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
   - flutter_local_notifications (0.0.1):
@@ -682,6 +703,8 @@ PODS:
     - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.7.0)"
   - GoogleUtilities/Reachability (7.7.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.7.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
@@ -761,6 +784,7 @@ DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/ios`)
@@ -780,6 +804,8 @@ SPEC REPOS:
     - FirebaseCoreDiagnostics
     - FirebaseCoreInternal
     - FirebaseFirestore
+    - FirebaseInstallations
+    - FirebaseMessaging
     - GoogleDataTransport
     - GoogleMaps
     - GoogleUtilities
@@ -798,6 +824,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
   flutter_local_notifications:
@@ -822,12 +850,15 @@ SPEC CHECKSUMS:
   Firebase: 7703fc4022824b6d6db1bf7bea58d13b8e17ec46
   firebase_auth: 74cfbf7be1e3e7fdaac9e7f117cefd89155251a9
   firebase_core: 8e500850dd138c269d197c8dfca3ae886fa3b6f2
+  firebase_messaging: 97401c71ed93be5334441e911a953e37c2dbc3c3
   FirebaseAuth: ae5d4402e1516497357d909162b091b3ca2a2e9c
   FirebaseCore: 9a2b10270a854731c4d4d8a97d0aa8380ec3458d
   FirebaseCoreDiagnostics: 17cbf4e72b1dbd64bfdc33d4b1f07bce4f16f1d8
   FirebaseCoreInternal: 50a8e39cae8abf72d5145d07ea34c3244f70862b
   FirebaseFirestore: 945196dd78f4e92de6fc47b38569a1e7088af81f
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  FirebaseInstallations: 41f811b530c41dd90973d0174381cdb3fcb5e839
+  FirebaseMessaging: 4e220eddd356181469ba2ec5f7d5fafbc2312841
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   geolocator_apple: cc556e6844d508c95df1e87e3ea6fa4e58c50401
   google_maps_flutter_ios: 66201f392bf62d500f07670a30488a247b9bb5b9
