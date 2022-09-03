@@ -109,10 +109,10 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                           child: Text(
                         location.infoWindowTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                       )),
                       decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Color(Constants.linezBlue),
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(8),
                             topLeft: Radius.circular(8),

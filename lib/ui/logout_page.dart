@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/phone_auth/phone_auth_bloc.dart';
+import '../constants.dart';
 
 class LogoutPage extends StatelessWidget {
 
@@ -23,11 +24,15 @@ class LogoutPage extends StatelessWidget {
               ElevatedButton(onPressed: (){
                 context.read<PhoneAuthBloc>().add(AuthDeleteEvent());
                 Navigator.of(context).pop();
-                }, child: Text("Yes")),
+                }, child: Text("Yes"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))
+              ),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
               ElevatedButton(onPressed: (){
               Navigator.of(context).pop();
-              }, child: Text("No")),
+              }, child: Text("No"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))
+              ),
               ],
               mainAxisAlignment: MainAxisAlignment.center,
             ),
@@ -59,11 +64,15 @@ class LogoutPage extends StatelessWidget {
             Row(children: [
               ElevatedButton(onPressed: (){
                 context.read<PhoneAuthBloc>().add(AuthLogoutEvent());
-              }, child: Text("Yes")),
+              }, child: Text("Yes"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))
+              ),
               Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
               ElevatedButton(onPressed: (){
                 Navigator.of(context).pop();
-              }, child: Text("No")),
+              }, child: Text("No"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))
+              ),
             ], mainAxisAlignment: MainAxisAlignment.center,
             ),
             )),

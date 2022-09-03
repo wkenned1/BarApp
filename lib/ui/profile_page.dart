@@ -2,6 +2,7 @@ import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../globals.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -32,7 +33,8 @@ class ProfilePage extends StatelessWidget {
                 decoration: InputDecoration(labelText: "Address"),),
                 ElevatedButton(onPressed: () {
                   DatabaseService().sendWinnerAddress(_addressTextController.text);
-                }, child: Text("submit"))
+                }, child: Text("submit"),
+    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)))
               ]),
           ],)
         )

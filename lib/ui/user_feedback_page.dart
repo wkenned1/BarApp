@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
+import '../constants.dart';
 
 class UserFeedbackPage extends StatelessWidget {
 
@@ -49,6 +50,7 @@ class UserFeedbackPage extends StatelessWidget {
               ),),
               Center(
                 child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)),
                   child: Text("Submit"),
                   onPressed: (){
                     if(_feedbackController.text.length > 0) {

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../blocs/phone_auth/phone_auth_bloc.dart';
+import '../constants.dart';
 import '../models/profile_model.dart';
 
 class PhoneAuthPage extends StatefulWidget {
@@ -147,7 +148,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   print("SEND: ${phoneNumber}");
                   verifyPhone(context);
                 }
-              }, child: Text("Submit")),
+              }, child: Text("Submit"),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))),
               if(otpVisibility)
                 Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0), child: Column(
                   children: [
@@ -158,7 +160,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     ),
                     ElevatedButton(onPressed: () {
                       signIn(context);
-                    }, child: Text("submit"))
+                    }, child: Text("submit"),
+    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)))
                   ],
                 ),),
             ],

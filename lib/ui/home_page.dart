@@ -83,13 +83,13 @@ Widget _buildTicketDialog(BuildContext context) {
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
-          ElevatedButton(style: ElevatedButton.styleFrom(primary: Color(Constants.linezBlue)), onPressed: (){
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => PhoneAuthPage()),
             );
           }, child: Text("SignUp")),
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
-          ElevatedButton(style: ElevatedButton.styleFrom(primary: Color(Constants.linezBlue)), onPressed: (){
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();
           }, child: Text("No")),
         ],
