@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:Linez/blocs/phone_auth/phone_auth_bloc.dart';
+import 'package:Linez/blocs/user_feedback/user_feedback_bloc.dart';
 import 'package:Linez/resources/repositories/authentication_repository_impl.dart';
 import 'package:Linez/resources/repositories/database_repository_impl.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:Linez/resources/services/notification_service.dart';
 import 'package:Linez/resources/util/get_distance.dart';
+import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +19,8 @@ import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
 import 'blocs/get_wait_time/wait_time_bloc.dart';
+import 'blocs/profile/profile_bloc.dart';
+import 'blocs/user_location/user_location_bloc.dart';
 import 'blocs/wait_time_report/wait_time_report_bloc.dart';
 import 'constants.dart';
 import 'firebase_options.dart';
@@ -30,6 +35,9 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'globals.dart';
 import 'models/location_model.dart';
 import 'package:geolocator/geolocator.dart' as Geo;
+
+import 'models/profile_model.dart';
+import 'package:Linez/resources/services/database_service.dart';
 
 late final NotificationAppLaunchDetails? appLaunchDetails;
 
@@ -46,9 +54,11 @@ Future<LatLng?> _getUserPosition() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //initialize firebase app
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  //get locations from database
   final locations = await DatabaseService().getLocations();
   Locations.defaultBars = [];
   Locations.defaultClubs = [];
@@ -86,6 +96,7 @@ void main() async {
     }
     print("working1");
 
+    //check if the app was opened by notification
     if (sendNotification) {
       //check if the current time is within the allowed range for sending notifications
       int hour = DateTime.now().hour;
@@ -175,6 +186,18 @@ void main() async {
         ),
         BlocProvider(
           create: (context) => WaitTimeReportBloc(DatabaseRepositoryImpl()),
+        ),
+        BlocProvider(
+          create: (context) => PhoneAuthBloc(DatabaseRepositoryImpl())
+        ),
+        BlocProvider(
+            create: (context) => UserFeedbackBloc(DatabaseRepositoryImpl())
+        ),
+        BlocProvider(
+            create: (context) => ProfileBloc(DatabaseRepositoryImpl())
+        ),
+        BlocProvider(
+            create: (context) => UserLocationBloc()
         )
       ],
       child: MyApp(),

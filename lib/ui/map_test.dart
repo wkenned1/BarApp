@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
+import '../constants.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
 import 'bar_page.dart';
@@ -45,21 +46,48 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   }
 
   addMarkers() async {
-    String icon_path = "assets/images/bar_icon.png";
+    String bar_icon_path = "assets/images/bar_icon.png";
+    String club_icon_path = "assets/images/club_icon.png";
     print("platform");
     if (Platform.isIOS) {
       print("platform ios");
-      icon_path = "assets/images/bar_icon_small.png";
+      bar_icon_path = "assets/images/bar_icon_small.png";
+      club_icon_path = "assets/images/club_icon_small.png";
     }
-    BitmapDescriptor markerbitmap = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(),
-      icon_path,
-    );
 
     List<LocationModel> locations = new List.from(Locations.defaultBars)
       ..addAll(Locations.defaultClubs);
 
+    BitmapDescriptor barMarkerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      bar_icon_path,
+    );
+
+    BitmapDescriptor clubMarkerbitmap = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(),
+      club_icon_path,
+    );
+
     for (LocationModel location in locations) {
+      late BitmapDescriptor? customIconBitMap = null;
+
+      if (Platform.isIOS) {
+        if(Constants.customSmallIconsMap.containsKey(location.markerId)){
+          customIconBitMap = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(),
+            Constants.customSmallIconsMap[location.markerId]!,
+          );
+        }
+      }
+      else {
+        if(Constants.customIconsMap.containsKey(location.markerId)){
+          customIconBitMap = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(),
+            Constants.customIconsMap[location.markerId]!,
+          );
+        }
+      }
+
       markers.add(Marker(
           //add start location marker
           markerId: MarkerId(location.markerId),
@@ -69,7 +97,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             title: location.infoWindowTitle,
           ),*/
           //TODO: replace harcoded bit marker with function
-          icon: markerbitmap,
+          icon: (customIconBitMap == null) ? ((location.type == "bar") ? barMarkerbitmap: clubMarkerbitmap) : customIconBitMap,
           onTap: () {
             _customInfoWindowController.addInfoWindow!(
               Container(
@@ -81,10 +109,10 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                           child: Text(
                         location.infoWindowTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                       )),
                       decoration: BoxDecoration(
-                          color: Colors.blue,
+                          color: Color(Constants.linezBlue),
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(8),
                             topLeft: Radius.circular(8),

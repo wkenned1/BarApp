@@ -36,13 +36,13 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
+        GestureDetector(child: Container(
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               border: Border.all(color: Colors.black, width: 2),
               color: Colors.grey),
-          child: GestureDetector(
-            child: Padding(
+          child:
+    Padding(
               padding: EdgeInsets.fromLTRB(10, 4, 5, 4),
               child: Row(
                 children: [
@@ -68,18 +68,18 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
                 ],
               ),
             ),
-            onTap: () {
-              setState(() {
-                if (sectionOpen) {
-                  sectionOpen = false;
-                  turns = 0;
-                } else {
-                  sectionOpen = true;
-                  turns = 90;
-                }
-              });
-            },
           ),
+          onTap: () {
+            setState(() {
+              if (sectionOpen) {
+                sectionOpen = false;
+                turns = 0;
+              } else {
+                sectionOpen = true;
+                turns = 90;
+              }
+            });
+          },
         ),
         Visibility(maintainState: true, visible: sectionOpen, child: body)
       ],

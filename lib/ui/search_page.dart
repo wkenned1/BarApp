@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:Linez/blocs/profile/profile_bloc.dart';
+import 'package:Linez/blocs/user_location/user_location_bloc.dart';
 import 'package:Linez/main.dart';
 import 'package:Linez/ui/bar_page.dart';
 import 'package:Linez/ui/home_page.dart';
+import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/widgets/clickable_location_widget.dart';
 import 'package:Linez/ui/widgets/clickable_sections_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -15,6 +19,8 @@ import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
+import '../models/profile_model.dart';
+import '../resources/services/database_service.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_distance.dart';
 import '../resources/util/get_location.dart';
@@ -74,6 +80,29 @@ class SearchPage extends StatelessWidget {
     initBackgroundTracking();
   }
 
+  //show popup on search page if the user won the givaway
+  Widget _buildWinnerDialog(BuildContext context) {
+    DatabaseService().disableWinnerPopup();
+    return new AlertDialog(
+      title: const Text("Congrats! You won this month's giveaway!"),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(UserData.winnerMessage),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Close'),
+        ),
+      ],
+    );
+  }
+
   //start background process for sending notifications and tracking location
   Future<void> initBackgroundTracking() async {
     Workmanager manager = Workmanager();
@@ -116,13 +145,40 @@ class SearchPage extends StatelessWidget {
     }
   }
 
+  Future<void> _initFunction(BuildContext context) async {
+    print("init");
+    //get location
+    print("init1");
+    AppInfo.giveawayDate = await DatabaseService().getGiveawayTime();
+    print("init2");
+    await _getUserLocation();
+    //get user info
+    print("CKECHING PROFILE");
+    /*ProfileModel? profile = await DatabaseService().getUserProfile();
+    if(profile != null) {
+      print("PROFILE FOUND");
+      UserData.userTickets = profile.tickets;
+      UserData.winner = profile.winner;
+      UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
+      UserData.winnerMessage = profile.winnerMessage;
+      UserData.reportedLocations = profile.reportedLocations;
+    }*/
+    context.read<ProfileBloc>().add(GetProfileEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.instance.getToken().then((token) {
+      print('TOKEN: $token');
+    });
     print("build");
     if (launchBarPage) {
       launchBarPage = false;
       pushBarPage(context);
     }
+    //get location
+    context.read<UserLocationBloc>().add(GetLocationEvent());
+
     List<LocationModel> barLocations = Locations.defaultBars;
     List<LocationModel> clubLocations = Locations.defaultClubs;
     //await _getUserLocation();
@@ -134,13 +190,16 @@ class SearchPage extends StatelessWidget {
       },
       child: Container(
           child: FutureBuilder<void>(
-              future: _getUserLocation(),
+              future: _initFunction(context)/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if(userLocation.getUserLocation() == null){
-                  print("LOC NULL");
-                }
-                else {
-                  print("USER LOCATION: ${userLocation.getUserLocation()!.latitude}, ${userLocation.getUserLocation()!.latitude}");
+                if(UserData.winner && UserData.winnerMessage != Constants.winnerMessageAfterPopup){
+                  Future.delayed(Duration.zero, () =>
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _buildWinnerDialog(context))
+                  );
+
                 }
                 return SingleChildScrollView(
                     child: Column(

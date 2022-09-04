@@ -15,8 +15,9 @@ class SignUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Size size = MediaQuery.of(context).size;
-    context.read<AuthenticationBloc>().add(AuthenticationStarted());
-    return MultiBlocListener(
+
+    //context.read<AuthenticationBloc>().add(AuthenticationStarted());
+    return HomePage();/*MultiBlocListener(
         listeners: [
           BlocListener<FormBloc, FormAuthState>(listener: (context, state) {
             if (state.errorMessage.isNotEmpty) {
@@ -42,7 +43,7 @@ class SignUpView extends StatelessWidget {
             },
           ),
         ],
-        child: Scaffold(
+        child: Scaffold(*/
 
             /*backgroundColor: Color(0xFFFFFFFF),
             body: Center(
@@ -103,6 +104,6 @@ class SignUpView extends StatelessWidget {
                     ]),
               ),
             )*/
-            ));
+            //));
   }
 }

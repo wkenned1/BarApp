@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../blocs/get_wait_time/wait_time_bloc.dart';
+import '../../blocs/user_location/user_location_bloc.dart';
 import '../../resources/util/get_distance.dart';
 import '../../resources/util/location_util.dart';
 import '../bar_page.dart';
@@ -43,58 +44,76 @@ class ClickableLocationsList extends StatelessWidget {
   Widget clickableLocation(
       LocationModel location, LatLng? userLocation, BuildContext context) {
     context.read<WaitTimeBloc>().add(GetWaitTime(
-          address: location.address,
-        ));
-    return Container(
-        //margin: const EdgeInsets.all(15.0),
-        //padding: const EdgeInsets.all(3.0),
-        width: MediaQuery.of(context).size.width,
-        decoration:
-            BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
-        child: GestureDetector(
-          child: Row(
-            children: [
-              Image.asset("assets/images/beer_can.png", width: 40, height: 40),
-              Container(
-                width: MediaQuery.of(context).size.width * .70,
-                child: barLocationColumn(location, userLocation),
-              ),
-              FutureBuilder<WaitTimeState>(
-                future: getWaitTime(GetWaitTime(
-                  address: location.address,
-                )),
-                builder: (BuildContext context,
-                    AsyncSnapshot<WaitTimeState> snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data?.waitTime != null) {
-                      if (snapshot.data!.waitTime! >= 0) {
-                        return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
-                      }
-                    }
+      address: location.address,
+    ));
+    return GestureDetector(child: Container(
+      //margin: const EdgeInsets.all(15.0),
+      //padding: const EdgeInsets.all(3.0),
+      width: MediaQuery.of(context).size.width,
+      decoration:
+      BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
+      child: Row(
+        children: [
+          if(location.type == "bar")
+            Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
+          else
+            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
+          /*Container(
+            width: MediaQuery.of(context).size.width * .70,
+            child: barLocationColumn(location, userLocation),
+          ),*/
+          BlocBuilder<UserLocationBloc, UserLocationState>(
+              builder: (context, state) {
+                if (state is UserLocationUpdate) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width * .70,
+                    child: barLocationColumn(location, state.location),
+                  );
+                }
+                else {
+                  return Container(
+                    width: MediaQuery.of(context).size.width * .70,
+                    child: barLocationColumn(location, null),
+                  );
+                }
+              }),
+          FutureBuilder<WaitTimeState>(
+            future: getWaitTime(GetWaitTime(
+              address: location.address,
+            )),
+            builder: (BuildContext context,
+                AsyncSnapshot<WaitTimeState> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data?.waitTime != null) {
+                  if (snapshot.data!.waitTime! >= 0) {
+                    return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
                   }
-                  return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
-                },
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BarPage(location: location)));
-          },
-        ));
+                }
+              }
+              return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
+            },
+          )
+        ],
+      ),
+    ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BarPage(location: location)));
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Column(children: [
-      //GetLocationWidget(),
-      Column(
-        children: <Widget>[
-          for (var location in locations)
-            clickableLocation(location, userLocation.getUserLocation(), context)
-        ],
-      )
-    ]));
+          //GetLocationWidget(),
+          Column(
+            children: <Widget>[
+              for (var location in locations)
+                clickableLocation(location, userLocation.getUserLocation(), context)
+            ],
+          )
+        ]));
   }
 }

@@ -4,3 +4,15 @@ class Locations {
   static List<LocationModel> defaultBars = [];
   static List<LocationModel> defaultClubs = [];
 }
+
+class AppInfo {
+  static DateTime? giveawayDate;
+}
+
+class UserData {
+  static int userTickets = -1;
+  static bool winner = false;
+  static bool feedbackTicketReceived = false;
+  static String winnerMessage = "";
+  static List<String> reportedLocations = [];
+}

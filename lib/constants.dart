@@ -9,6 +9,7 @@ class Constants {
   static const waitTimeTextRed = 0xffff3311;
   static const waitTimeTextOrange = 0xfff99500;
   static const waitTimeTextGreen = 0xff2ac300;
+  static const linezBlue = 0xff4285f4;
 
   //shared preferences keys
   static const notifiedBarMarkerId = "notifiedBarMarkerId";
@@ -25,6 +26,27 @@ class Constants {
   static const waitTimeReportLocationError = "LOCATION";
   static const waitTimeReportNoLocationError = "NOLOCATION";
 
+  static const invalidPhoneNumber = "invalid-phone-number";
+  static const genericError = "generic-error";
+
   //business logic
-  static const distanceToBarRequirement = 50;
+  static const distanceToBarRequirement = 100;
+
+  //user related
+  static const winnerMessageAfterPopup = "PopupShown";
+
+  //location icons
+  static const customIconsMap = {
+    "OHE": "assets/images/ohe_icon.png", //OHE
+    "Lansdowne Pub": "assets/images/landsdowne_icon.png", //landsdowne
+    "Game On": "assets/images/game_on_icon.png", //game on
+    "Sissy K’s": "assets/images/sissy_ks_icon.png",//sissy k's
+  };
+
+  static const customSmallIconsMap = {
+    "OHE": "assets/images/ohe_icon_small.png", //OHE
+    "Lansdowne Pub": "assets/images/landsdowne_icon_small.png", //landsdowne
+    "Game On": "assets/images/game_on_icon_small.png", //game on
+    "Sissy K’s": "assets/images/sissy_ks_icon_small.png",//sissy k's
+  };
 }
