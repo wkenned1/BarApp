@@ -24,11 +24,9 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
+			<string>None</string>
 			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>632843554534-3icj5jvc0q5atvl1tb62grk3mdcvlc0d.apps.googleusercontent.com</string>
-			</array>
+			<array/>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
