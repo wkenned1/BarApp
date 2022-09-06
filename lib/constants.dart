@@ -51,3 +51,14 @@ class Constants {
     "Sissy K’s": "assets/images/sissy_ks_icon_small.png",//sissy k's
   };
 }
+
+//permissions
+enum PermissionGroup {
+  /// Android: Fine and Coarse Location
+  /// iOS: CoreLocation - Always
+  locationAlways,
+
+  /// Android: Fine and Coarse Location
+  /// iOS: CoreLocation - WhenInUse
+  locationWhenInUse
+}

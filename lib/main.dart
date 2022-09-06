@@ -7,6 +7,7 @@ import 'package:Linez/resources/repositories/database_repository_impl.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:Linez/resources/services/notification_service.dart';
 import 'package:Linez/resources/util/get_distance.dart';
+import 'package:Linez/resources/util/get_location.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
@@ -114,7 +115,7 @@ void main() async {
                   weekday == 7 ||
                   weekday == 1))) {
         print("working12");
-        LatLng? userLocation = await _getUserPosition();
+        LatLng? userLocation = await getUserLocation(); //_getUserPosition();
         print("working2");
         if (userLocation != null) {
           print("working3");

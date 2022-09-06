@@ -27,15 +27,15 @@ class ClickableLocationsList extends StatelessWidget {
         Align(
             alignment: Alignment.centerLeft,
             child: Text(location.markerId, style: TextStyle(fontSize: 25))),
-        if (userLocation?.longitude != null && userLocation?.latitude != null)
+        if (userLocation != null)
           Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  "${calculateDistanceMiles(userLocation?.latitude, userLocation?.longitude, location.position.latitude, location.position.longitude)} miles away"))
-        else
+                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away"))
+        /*else
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(location.address, style: TextStyle(fontSize: 15))),
+              child: Text(location.address, style: TextStyle(fontSize: 15))),*/
       ],
     );
   }
@@ -59,10 +59,6 @@ class ClickableLocationsList extends StatelessWidget {
             Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
           else
             Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
-          /*Container(
-            width: MediaQuery.of(context).size.width * .70,
-            child: barLocationColumn(location, userLocation),
-          ),*/
           BlocBuilder<UserLocationBloc, UserLocationState>(
               builder: (context, state) {
                 if (state is UserLocationUpdate) {
