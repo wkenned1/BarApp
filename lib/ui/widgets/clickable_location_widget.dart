@@ -1,4 +1,5 @@
 import 'package:Linez/models/location_model.dart';
+import 'package:Linez/resources/util/get_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,6 +106,11 @@ class ClickableLocationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LatLng? userLatLng = userLocation.getUserLocation();
+    if(userLatLng != null)
+      {
+        locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, userLatLng.latitude, userLatLng.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, userLatLng.latitude, userLatLng.longitude)).toInt());
+      }
     return SingleChildScrollView(
         child: Column(children: [
           //GetLocationWidget(),
