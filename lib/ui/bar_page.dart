@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:location/location.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
+import '../blocs/profile/profile_bloc.dart';
 import '../blocs/wait_time_report/wait_time_report_bloc.dart';
 
 Widget waitTimeDisplay(int time, {double fontSize = 15}) {
@@ -98,13 +99,14 @@ class _BarPageState extends State<BarPage> {
     );
   }
 
-  Widget _buildLocationErrorDialog(bool locEnabled, BuildContext context) {
+  Widget _buildLocationErrorDialog(bool locEnabled, BuildContext context, {bool locImprecise = false}) {
     return new AlertDialog(
       title: const Text('Not so fast!'),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          (locImprecise) ? Text("You must have precise location tracking enabled") :
           Text(locEnabled ? "You have to be close to the bar to report a wait time." : "You must enable location tracking before reporting a wait time."),
         ],
       ),
@@ -303,7 +305,8 @@ class _BarPageState extends State<BarPage> {
                     listener: (context, state) {
                       if (state.errorMessage == null) {
                         if(state.submitSuccessful){
-                          DatabaseService().incrementTickets();
+                          //TODO test then statement
+                          DatabaseService().incrementTickets().then((value) => context.read<ProfileBloc>().add(GetProfileEvent()));
                           Navigator.of(context).pop();
                         }
                       }
@@ -338,6 +341,12 @@ class _BarPageState extends State<BarPage> {
                               context: context,
                               builder: (BuildContext context) =>
                                   _buildLocationErrorDialog(false, context));
+                        }
+                        else if(state.errorMessage == Constants.waitTimeImpreciseLocationError) {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildLocationErrorDialog(false, context, locImprecise: true));
                         }
                       }
                     },

@@ -87,7 +87,7 @@ Widget _buildTicketDialog(BuildContext context) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => PhoneAuthPage()),
             );
-          }, child: Text("SignUp")),
+          }, child: Text("Sign Up")),
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();

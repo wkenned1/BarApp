@@ -97,7 +97,7 @@ class NotificationService {
         android: AndroidNotificationDetails('main_channel', 'Main Channel',
             importance: Importance.max,
             priority: Priority.max,
-            icon: 'mipmap/ic_launcher'),
+            icon: 'mipmap/launcher_icon'),
         iOS: IOSNotificationDetails(
           sound: 'default.wav',
           presentAlert: true,

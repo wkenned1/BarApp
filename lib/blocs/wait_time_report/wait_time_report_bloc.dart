@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
 import 'package:bloc/bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:meta/meta.dart';
@@ -12,6 +13,7 @@ import '../../resources/repositories/database_repository_impl.dart';
 import '../../resources/util/get_distance.dart';
 import '../../resources/util/get_location.dart';
 import '../get_wait_time/wait_time_bloc.dart';
+import 'dart:io' show Platform;
 
 part 'wait_time_report_event.dart';
 part 'wait_time_report_state.dart';
@@ -28,11 +30,28 @@ class WaitTimeReportBloc
   _reportWaitTime(
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
+
+    if (Platform.isIOS) {
+      final accuracyStatus = await Geolocator.getLocationAccuracy();
+      switch(accuracyStatus) {
+        case LocationAccuracyStatus.reduced:
+        // Precise location switch is OFF.
+          emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+          return;
+      /*case LocationAccuracyStatus.precise:
+      // Precise location switch is ON.
+        break;*/
+        case LocationAccuracyStatus.unknown:
+          emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+          return;
+      }
+    }
+
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
     print("Weekday: ${weekday}, Hour: ${hour}");
     //check if day and time is correct
-    if ((hour >= 20 &&
+    if (true || (hour >= 20 &&
         hour <= 23 &&
         (weekday == 4 ||
             weekday == 5 ||
@@ -81,7 +100,8 @@ class WaitTimeReportBloc
             event.location.longitude);
         //if user is too far away from bar
         print("distance: ${distance}");
-        if(distance > Constants.distanceToBarRequirement){
+        //TODO remove false
+        if(distance > Constants.distanceToBarRequirement && false){
           emit(WaitTimeReportState(
               submitSuccessful: false,
               loading: false,

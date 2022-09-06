@@ -38,7 +38,7 @@ void callbackDispatcher() {
           //check if the current time is within the allowed range for sending notifications
           int hour = DateTime.now().hour;
           int weekday = DateTime.now().weekday;
-          if ((hour >= 20 &&
+          if (true || (hour >= 20 &&
                   hour <= 23 &&
                   (weekday == 4 ||
                       weekday == 5 ||
@@ -151,9 +151,9 @@ Future<LatLng?> _getUserPosition() async {
 List<LocationModel> getDefaultBars() {
   return <LocationModel>[
     LocationModel(
-        markerId: "Fenway Johnie's",
+        markerId: "Fenway Johnnie's",
         position: LatLng(42.346111, -71.099281),
-        infoWindowTitle: "Fenway Johnie's",
+        infoWindowTitle: "Fenway Johnnie's",
         address: "96 Brookline Ave, Boston, MA 02215",
         type: "bar"),
     LocationModel(

@@ -25,6 +25,7 @@ class Constants {
   static const waitTimeReportTimeError = "TIME";
   static const waitTimeReportLocationError = "LOCATION";
   static const waitTimeReportNoLocationError = "NOLOCATION";
+  static const waitTimeImpreciseLocationError = "IMPLOCATION";
 
   static const invalidPhoneNumber = "invalid-phone-number";
   static const genericError = "generic-error";

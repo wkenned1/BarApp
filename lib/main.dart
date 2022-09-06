@@ -101,7 +101,7 @@ void main() async {
       //check if the current time is within the allowed range for sending notifications
       int hour = DateTime.now().hour;
       int weekday = DateTime.now().weekday;
-      if ((hour >= 20 &&
+      if (true || (hour >= 20 &&
           hour <= 23 &&
           (weekday == 4 ||
               weekday == 5 ||
@@ -135,7 +135,7 @@ void main() async {
           }
           if (shortestLocation != null) {
             print("working4");
-            if (shortestDistance <= 50) {
+            if (shortestDistance <= Constants.distanceToBarRequirement) {
               print("working5");
               SharedPreferences prefs =
               await SharedPreferences.getInstance();
