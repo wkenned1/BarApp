@@ -76,7 +76,6 @@ class SearchPage extends StatelessWidget {
     print("!!!!!!!!!! Location: ${_locationData.latitude}, ${_locationData.longitude}");
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
-
     initBackgroundTracking();
   }
 

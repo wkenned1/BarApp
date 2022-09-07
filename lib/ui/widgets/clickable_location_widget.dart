@@ -1,3 +1,4 @@
+import 'package:Linez/globals.dart';
 import 'package:Linez/models/location_model.dart';
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,10 +33,10 @@ class ClickableLocationsList extends StatelessWidget {
               alignment: Alignment.centerLeft,
               child: Text(
                   "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away"))
-        /*else
+        else
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(location.address, style: TextStyle(fontSize: 15))),*/
+              child: Text(location.address, style: TextStyle(fontSize: 15))),
       ],
     );
   }
@@ -68,10 +69,10 @@ class ClickableLocationsList extends StatelessWidget {
                   );
                 }
                 else {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * .70,
-                    child: barLocationColumn(location, null),
-                  );
+                    return Container(
+                      width: MediaQuery.of(context).size.width * .70,
+                      child: barLocationColumn(location, null),
+                    );
                 }
               }),
           FutureBuilder<WaitTimeState>(

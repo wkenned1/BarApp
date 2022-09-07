@@ -115,7 +115,7 @@ void main() async {
                   weekday == 7 ||
                   weekday == 1))) {
         print("working12");
-        LatLng? userLocation = await getUserLocation(); //_getUserPosition();
+        LatLng? userLocation = await _getUserPosition(); //_getUserPosition();
         print("working2");
         if (userLocation != null) {
           print("working3");

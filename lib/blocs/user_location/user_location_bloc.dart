@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:meta/meta.dart';
