@@ -20,7 +20,10 @@ class _CountdownWidgetState extends State<CountdownWidget> {
   void initState() {
     print("countdown");
     timer = Timer.periodic(Duration(seconds: 1), (_) {
-      setState(() {});
+      if (this.mounted) {
+        setState(() {
+        });
+      }
     });
   }
 

@@ -1,3 +1,4 @@
+import 'package:Linez/resources/util/get_location.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -33,8 +34,9 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   Set<Marker> markers = Set(); //markers for google map
   CustomInfoWindowController _customInfoWindowController =
       CustomInfoWindowController();
+  Set<Circle> circles = Set();
 
-  LatLng startLocation = LatLng(42.340080, -71.088890);
+  LatLng startLocation = LatLng(42.3428, -71.0675);
 
   @override
   bool get wantKeepAlive => true;
@@ -214,42 +216,43 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
     super.build(context);
 
     return Container(
-        child: Stack(
-      children: [
-        GoogleMap(
-          myLocationEnabled: false,
-          //Map widget from google_maps_flutter package
-          zoomGesturesEnabled: true, //enable Zoom in, out on map
-          initialCameraPosition: CameraPosition(
-            //innital position in map
-            target: startLocation, //initial position
-            zoom: 14.0, //initial zoom level
-          ),
-          markers: markers, //markers to show on map
-          mapType: MapType.normal,
-          onTap: (position) {
-            _customInfoWindowController.hideInfoWindow!();
-          }, //map type
-          onMapCreated: (controller) {
-            _customInfoWindowController.googleMapController = controller;
-            controller.setMapStyle(
-                '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
-            //method called when map is created
-            setState(() {
-              mapController = controller;
-            });
-          },
-          onCameraMove: (position) {
-            _customInfoWindowController.onCameraMove!();
-          },
-        ),
-        CustomInfoWindow(
-          controller: _customInfoWindowController,
-          height: 240,
-          width: 180,
-          offset: 50,
-        ),
-      ],
-    ));
+          child: Stack(
+            children: [
+              GoogleMap(
+                circles: circles,
+                myLocationEnabled: false,
+                //Map widget from google_maps_flutter package
+                zoomGesturesEnabled: true, //enable Zoom in, out on map
+                initialCameraPosition: CameraPosition(
+                  //innital position in map
+                  target: startLocation, //initial position
+                  zoom: 13.0, //initial zoom level
+                ),
+                markers: markers, //markers to show on map
+                mapType: MapType.normal,
+                onTap: (position) {
+                  _customInfoWindowController.hideInfoWindow!();
+                }, //map type
+                onMapCreated: (controller) {
+                  _customInfoWindowController.googleMapController = controller;
+                  controller.setMapStyle(
+                      '[{"featureType": "poi","stylers": [{"visibility": "off"}]}]');
+                  //method called when map is created
+                  setState(() {
+                    mapController = controller;
+                  });
+                },
+                onCameraMove: (position) {
+                  _customInfoWindowController.onCameraMove!();
+                },
+              ),
+              CustomInfoWindow(
+                controller: _customInfoWindowController,
+                height: 240,
+                width: 180,
+                offset: 50,
+              ),
+            ],
+          ));
   }
 }
