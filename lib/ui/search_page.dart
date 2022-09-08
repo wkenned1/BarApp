@@ -185,6 +185,7 @@ class SearchPage extends StatelessWidget {
     return RefreshIndicator(
       //TODO: find a cleaner way to refresh the page
       onRefresh: () async {
+        context.read<UserLocationBloc>().add(GetLocationEvent());
         (context as Element).reassemble();
       },
       child: Container(

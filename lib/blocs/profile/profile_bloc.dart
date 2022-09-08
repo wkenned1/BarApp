@@ -26,6 +26,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
       UserData.winnerMessage = profile.winnerMessage;
       UserData.reportedLocations = profile.reportedLocations;
+      print("PROFILE TICKETS: ${profile.tickets} !!!!!!!!!!!!!!!!!!");
       emit(ProfileUpdatedState(profile: profile));
     }
   }

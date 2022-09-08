@@ -78,6 +78,8 @@ class DatabaseService {
         .collection("WaitTimes")
         .doc(address)
         .set({"reports": reports.map((waitTime) => waitTime.toMap()).toList()});
+    print("CHANGED PROFILE !!!!!!!!!!!!");
+    return true;
   }
 
   Future<List<WaitTimeModel>> getWaitTimes(String address) async {

@@ -16,11 +16,15 @@ class UserLocationBloc extends Bloc<UserLocationEvent, UserLocationState> {
   }
 
   _getUserLocation(event, emit) async {
+    print("G LOCATION");
     LatLng? location = await getUserLocation();
+    print("G LOCATION 1");
     if(location == null) {
+      print("G LOCATION 2");
       emit(UserLocationInitial());
     }
     else {
+      print("G LOCATION 3");
       emit(UserLocationUpdate(location: location));
     }
   }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -116,7 +117,7 @@ class WaitTimeReportBloc
             .millisecondsSinceEpoch;
         prefs.setInt(event.address, timestamp);
         print("WORKED");
-        _databaseRepository.addReportedLocation(event.address);
+        await _databaseRepository.addReportedLocation(event.address);
         UserData.reportedLocations.add(event.address);
         emit(WaitTimeReportState(submitSuccessful: true, loading: false));
       } catch (e) {

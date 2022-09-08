@@ -60,7 +60,11 @@ class ClickableLocationsList extends StatelessWidget {
             Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
           else
             Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
-          BlocBuilder<UserLocationBloc, UserLocationState>(
+          Container(
+              width: MediaQuery.of(context).size.width * .70,
+              child: barLocationColumn(location, userLocation),
+          ),
+          /*BlocBuilder<UserLocationBloc, UserLocationState>(
               builder: (context, state) {
                 if (state is UserLocationUpdate) {
                   return Container(
@@ -74,7 +78,7 @@ class ClickableLocationsList extends StatelessWidget {
                       child: barLocationColumn(location, null),
                     );
                 }
-              }),
+              }),*/
           FutureBuilder<WaitTimeState>(
             future: getWaitTime(GetWaitTime(
               address: location.address,
@@ -103,20 +107,41 @@ class ClickableLocationsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    LatLng? userLatLng = userLocation.getUserLocation();
+    /*LatLng? userLatLng = userLocation.getUserLocation();
     if(userLatLng != null)
       {
         locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, userLatLng.latitude, userLatLng.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, userLatLng.latitude, userLatLng.longitude)).toInt());
-      }
+      }*/
     return SingleChildScrollView(
-        child: Column(children: [
-          //GetLocationWidget(),
-          Column(
-            children: <Widget>[
-              for (var location in locations)
-                clickableLocation(location, userLocation.getUserLocation(), context)
-            ],
-          )
-        ]));
+        child: BlocBuilder<UserLocationBloc, UserLocationState>(
+            builder: (context, state) {
+              print("REBUILDING SEARCHES");
+              if (state is UserLocationUpdate) {
+                print("UPDATING LOCATION");
+                locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, state.location.latitude, state.location.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, state.location.latitude, state.location.longitude)).toInt());
+                return Column(children: [
+                  //GetLocationWidget(),
+                  Column(
+                    children: <Widget>[
+                      for (var location in locations)
+                        clickableLocation(location, state.location, context)
+                    ],
+                  )
+                ]);
+              }
+              else {
+                print("no location");
+                return Column(children: [
+                  //GetLocationWidget(),
+                  Column(
+                    children: <Widget>[
+                      for (var location in locations)
+                        clickableLocation(location, null, context)
+                    ],
+                  )
+                ]);
+              }
+            }),
+        );
   }
 }
