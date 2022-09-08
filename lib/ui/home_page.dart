@@ -80,7 +80,7 @@ Widget _buildTicketDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
+        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
@@ -119,7 +119,7 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
+        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(

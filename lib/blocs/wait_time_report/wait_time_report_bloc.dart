@@ -100,7 +100,7 @@ class WaitTimeReportBloc
             event.location.longitude);
         //if user is too far away from bar
         print("distance: ${distance}");
-        if(distance > Constants.distanceToBarRequirement){
+        if(distance > Constants.distanceToBarRequirement && false){
           emit(WaitTimeReportState(
               submitSuccessful: false,
               loading: false,
