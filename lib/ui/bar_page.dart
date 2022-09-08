@@ -6,6 +6,7 @@ import 'package:Linez/models/location_model.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:location/location.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
@@ -127,7 +128,7 @@ class _BarPageState extends State<BarPage> {
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
         ));
-    return Scaffold(
+    return LoaderOverlay( child: Scaffold(
         key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
           centerTitle: true,
@@ -303,52 +304,54 @@ class _BarPageState extends State<BarPage> {
                     listeners: [
                       BlocListener<WaitTimeReportBloc, WaitTimeReportState>(
                     listener: (context, state) {
+                      print("REPORTED ############################");
                       if (state.errorMessage == null) {
                         if(state.submitSuccessful){
                           //TODO test then statement
                           DatabaseService().incrementTickets().then((value) => context.read<ProfileBloc>().add(GetProfileEvent()));
                           Navigator.of(context).pop();
                         }
+                        else if(state.loading) {
+                          print("LOADING");
+                          context.loaderOverlay.show();
+                        }
                       }
                       else {
-                        print("STATE ERROR: ${state.errorMessage}");
-                        print("STATE Opt1: ${Constants.waitTimeReportIntervalError}");
-                        print("STATE Opt2: ${Constants.waitTimeReportTimeError}");
-                        print(state.errorMessage == Constants.waitTimeReportIntervalError);
-                        if(state.errorMessage == Constants.waitTimeReportIntervalError){
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildIntervalErrorDialog(context));
+                          context.loaderOverlay.hide();
+                          if(state.errorMessage == Constants.waitTimeReportIntervalError){
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildIntervalErrorDialog(context));
 
+                          }
+                          else if (state.errorMessage == Constants.waitTimeReportTimeError) {
+                            int hour = DateTime.now().hour;
+                            int weekday = DateTime.now().weekday;
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildTimeErrorDialog(hour, weekday, context));
+                          }
+                          else if (state.errorMessage == Constants.waitTimeReportLocationError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildLocationErrorDialog(true, context));
+                          }
+                          else if (state.errorMessage == Constants.waitTimeReportNoLocationError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildLocationErrorDialog(false, context));
+                          }
+                          else if(state.errorMessage == Constants.waitTimeImpreciseLocationError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildLocationErrorDialog(false, context, locImprecise: true));
+                          }
                         }
-                        else if (state.errorMessage == Constants.waitTimeReportTimeError) {
-                          int hour = DateTime.now().hour;
-                          int weekday = DateTime.now().weekday;
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildTimeErrorDialog(hour, weekday, context));
-                        }
-                        else if (state.errorMessage == Constants.waitTimeReportLocationError) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildLocationErrorDialog(true, context));
-                        }
-                        else if (state.errorMessage == Constants.waitTimeReportNoLocationError) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildLocationErrorDialog(false, context));
-                        }
-                        else if(state.errorMessage == Constants.waitTimeImpreciseLocationError) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildLocationErrorDialog(false, context, locImprecise: true));
-                        }
-                      }
                     },
                   ),
                 ],
@@ -356,6 +359,6 @@ class _BarPageState extends State<BarPage> {
                 )],
                 )
             )
-            ));
+            )));
   }
 }

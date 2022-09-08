@@ -10,6 +10,6 @@ class WaitTimeReportState extends Equatable {
   final String? errorMessage;
   final bool loading;
 
-  /*@override
-  List<Object> get props => [submitSuccessful, loading];*/
+  @override
+  List<Object> get props => [submitSuccessful, loading];
 }
