@@ -304,7 +304,6 @@ class _BarPageState extends State<BarPage> {
                     listeners: [
                       BlocListener<WaitTimeReportBloc, WaitTimeReportState>(
                     listener: (context, state) {
-                      print("REPORTED ############################");
                       if (state.errorMessage == null) {
                         if(state.submitSuccessful){
                           //TODO test then statement
@@ -312,7 +311,6 @@ class _BarPageState extends State<BarPage> {
                           Navigator.of(context).pop();
                         }
                         else if(state.loading) {
-                          print("LOADING");
                           context.loaderOverlay.show();
                         }
                       }

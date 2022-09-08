@@ -105,11 +105,8 @@ Widget _buildTicketDialog(BuildContext context) {
 //show popup when ticket icon is clicked
 Widget _buildTicketSignedInDialog(BuildContext context) {
   bool showCountdown = false;
-  print("building");
   if(AppInfo.giveawayDate != null) {
-    print("NOT NULL");
     if(AppInfo.giveawayDate!.isAfter(DateTime.now().toUtc())) {
-      print("CORRECT");
       showCountdown = true;
     }
   }

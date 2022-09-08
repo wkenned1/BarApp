@@ -136,7 +136,6 @@ class NotificationService {
     int timestamp = DateTime.now().millisecondsSinceEpoch;
 
     prefs.setInt(Constants.notificationLastSentTime, timestamp);
-    print("TIMESTAMP: ${prefs.getInt(Constants.notificationLastSentTime)}");
   }
 
   Future<void> cancelAllNotifications() async {

@@ -50,7 +50,6 @@ class WaitTimeReportBloc
 
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
-    print("Weekday: ${weekday}, Hour: ${hour}");
     //check if day and time is correct
     if ((hour >= 20 &&
         hour <= 23 &&
@@ -74,7 +73,6 @@ class WaitTimeReportBloc
               .difference(DateTime.now().toUtc())
               .inMinutes <
               Constants.waitTimeReset) {
-            print("ERROR");
             emit(WaitTimeReportState(
                 submitSuccessful: false,
                 loading: false,
@@ -100,7 +98,6 @@ class WaitTimeReportBloc
             event.location.latitude,
             event.location.longitude);
         //if user is too far away from bar
-        print("distance: ${distance}");
         if(distance > Constants.distanceToBarRequirement){
           emit(WaitTimeReportState(
               submitSuccessful: false,
@@ -116,12 +113,10 @@ class WaitTimeReportBloc
             .toUtc()
             .millisecondsSinceEpoch;
         prefs.setInt(event.address, timestamp);
-        print("WORKED");
         await _databaseRepository.addReportedLocation(event.address);
         UserData.reportedLocations.add(event.address);
         emit(WaitTimeReportState(submitSuccessful: true, loading: false));
       } catch (e) {
-        print("ERROR 2");
         emit(WaitTimeReportState(
             submitSuccessful: false,
             loading: false,

@@ -51,9 +51,7 @@ class SearchPage extends StatelessWidget {
 
   //check location permissions and get user location
   Future<void> _getUserLocation() async {
-    print("location 1");
     Location location = Location();
-    print("location 2");
     // Check if location service is enable
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -62,7 +60,6 @@ class SearchPage extends StatelessWidget {
         return;
       }
     }
-    print("location 3");
     // Check if permission is granted
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
@@ -71,9 +68,7 @@ class SearchPage extends StatelessWidget {
         return;
       }
     }
-    print("location 4");
     final _locationData = await location.getLocation();
-    print("!!!!!!!!!! Location: ${_locationData.latitude}, ${_locationData.longitude}");
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
     initBackgroundTracking();
@@ -145,17 +140,12 @@ class SearchPage extends StatelessWidget {
   }
 
   Future<void> _initFunction(BuildContext context) async {
-    print("init");
     //get location
-    print("init1");
     AppInfo.giveawayDate = await DatabaseService().getGiveawayTime();
-    print("init2");
     await _getUserLocation();
     //get user info
-    print("CKECHING PROFILE");
     /*ProfileModel? profile = await DatabaseService().getUserProfile();
     if(profile != null) {
-      print("PROFILE FOUND");
       UserData.userTickets = profile.tickets;
       UserData.winner = profile.winner;
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
@@ -168,9 +158,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseMessaging.instance.getToken().then((token) {
-      print('TOKEN: $token');
     });
-    print("build");
     if (launchBarPage) {
       launchBarPage = false;
       pushBarPage(context);

@@ -115,9 +115,7 @@ class ClickableLocationsList extends StatelessWidget {
     return SingleChildScrollView(
         child: BlocBuilder<UserLocationBloc, UserLocationState>(
             builder: (context, state) {
-              print("REBUILDING SEARCHES");
               if (state is UserLocationUpdate) {
-                print("UPDATING LOCATION");
                 locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, state.location.latitude, state.location.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, state.location.latitude, state.location.longitude)).toInt());
                 return Column(children: [
                   //GetLocationWidget(),
@@ -130,7 +128,6 @@ class ClickableLocationsList extends StatelessWidget {
                 ]);
               }
               else {
-                print("no location");
                 return Column(children: [
                   //GetLocationWidget(),
                   Column(

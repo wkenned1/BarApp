@@ -108,7 +108,6 @@ Future<LatLng?> getUserLocation() async {
   LocationData? _userLocation;
 
   Location location = Location();
-  print("getUserLocation1");
   // Check if location service is enable
   _serviceEnabled = await location.serviceEnabled();
   if (!_serviceEnabled) {
@@ -117,7 +116,7 @@ Future<LatLng?> getUserLocation() async {
       return null;
     }
   }
-  print("getUserLocation2");
+
   // Check if permission is granted
   _permissionGranted = await location.hasPermission();
   if (_permissionGranted == PermissionStatus.denied) {
@@ -126,7 +125,7 @@ Future<LatLng?> getUserLocation() async {
       return null;
     }
   }
-  print("getUserLocation3");
+
   //final _locationData = await location.getLocation();
   var _locationData = await Future.any([
     location.getLocation(),
@@ -140,7 +139,6 @@ Future<LatLng?> getUserLocation() async {
     return null;
   }
 
-  print("getUserLocation5");
   LocationUtil util = LocationUtil();
   util.setUserLocation(_locationData!);
   if (util.getUserLocation() == null) {
@@ -150,7 +148,7 @@ Future<LatLng?> getUserLocation() async {
       util.getUserLocation()?.longitude == null) {
     return null;
   }
-  print("getUserLocation4");
+
   return LatLng(
       util.getUserLocation()!.latitude, util.getUserLocation()!.longitude);
 }

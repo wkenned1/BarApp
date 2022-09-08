@@ -83,19 +83,14 @@ void main() async {
     final prefs = await SharedPreferences.getInstance();
     int? ts = prefs.getInt(Constants.notificationLastSentTime);
     bool sendNotification = false;
-    print("TIMESTAMP2: ${prefs.getInt(Constants.notificationLastSentTime)}");
     if (ts != null) {
       final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts);
-      print("time 1");
-      print("DT: ${prev_ts.toString()}");
       if (prev_ts.difference(DateTime.now()).inHours > 7) {
-        print("time 2");
         sendNotification = true;
       }
     } else {
       sendNotification = true;
     }
-    print("working1");
 
     //check if the app was opened by notification
     if (sendNotification) {
@@ -114,11 +109,8 @@ void main() async {
                   weekday == 6 ||
                   weekday == 7 ||
                   weekday == 1))) {
-        print("working12");
         LatLng? userLocation = await _getUserPosition(); //_getUserPosition();
-        print("working2");
         if (userLocation != null) {
-          print("working3");
           final locations = new List.from(Locations.defaultBars)
             ..addAll(Locations.defaultClubs);
           LocationModel? shortestLocation = null;
@@ -135,9 +127,7 @@ void main() async {
             }
           }
           if (shortestLocation != null) {
-            print("working4");
             if (shortestDistance <= Constants.distanceToBarRequirement) {
-              print("working5");
               SharedPreferences prefs =
               await SharedPreferences.getInstance();
               prefs.setString(
@@ -152,13 +142,11 @@ void main() async {
                   Constants.notifiedBarAddress, shortestLocation.address);
               prefs.setString(
                   Constants.notifiedBarType, shortestLocation.type);
-              print("notification1");
               NotificationService().showNotification(
                   1,
                   "Near ${shortestLocation.markerId}? What's the wait?",
                   "Click to report wait the time",
                   1);
-              print("notification2");
             }
           }
         } else {

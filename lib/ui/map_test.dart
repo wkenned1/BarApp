@@ -50,9 +50,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   addMarkers() async {
     String bar_icon_path = "assets/images/bar_icon.png";
     String club_icon_path = "assets/images/club_icon.png";
-    print("platform");
     if (Platform.isIOS) {
-      print("platform ios");
       bar_icon_path = "assets/images/bar_icon_small.png";
       club_icon_path = "assets/images/club_icon_small.png";
     }
