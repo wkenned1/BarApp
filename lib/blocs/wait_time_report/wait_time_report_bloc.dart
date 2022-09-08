@@ -52,7 +52,7 @@ class WaitTimeReportBloc
     int weekday = DateTime.now().weekday;
     print("Weekday: ${weekday}, Hour: ${hour}");
     //check if day and time is correct
-    if (true || (hour >= 20 &&
+    if ((hour >= 20 &&
         hour <= 23 &&
         (weekday == 4 ||
             weekday == 5 ||
@@ -101,7 +101,7 @@ class WaitTimeReportBloc
             event.location.longitude);
         //if user is too far away from bar
         print("distance: ${distance}");
-        if(distance > Constants.distanceToBarRequirement && false){
+        if(distance > Constants.distanceToBarRequirement){
           emit(WaitTimeReportState(
               submitSuccessful: false,
               loading: false,
