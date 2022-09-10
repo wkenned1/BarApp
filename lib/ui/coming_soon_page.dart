@@ -2,6 +2,8 @@ import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
+
 class MyBullet extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class ComingSoonPage extends StatelessWidget {
     return Scaffold(
         key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           title: Text("Linez"),
           automaticallyImplyLeading: false,
           leading: new IconButton(

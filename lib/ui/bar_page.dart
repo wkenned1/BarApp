@@ -6,9 +6,11 @@ import 'package:Linez/models/location_model.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:location/location.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
+import '../blocs/profile/profile_bloc.dart';
 import '../blocs/wait_time_report/wait_time_report_bloc.dart';
 
 Widget waitTimeDisplay(int time, {double fontSize = 15}) {
@@ -98,13 +100,14 @@ class _BarPageState extends State<BarPage> {
     );
   }
 
-  Widget _buildLocationErrorDialog(bool locEnabled, BuildContext context) {
+  Widget _buildLocationErrorDialog(bool locEnabled, BuildContext context, {bool locImprecise = false}) {
     return new AlertDialog(
       title: const Text('Not so fast!'),
       content: new Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
+          (locImprecise) ? Text("You must have precise location tracking enabled") :
           Text(locEnabled ? "You have to be close to the bar to report a wait time." : "You must enable location tracking before reporting a wait time."),
         ],
       ),
@@ -125,9 +128,10 @@ class _BarPageState extends State<BarPage> {
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
         ));
-    return Scaffold(
+    return LoaderOverlay( child: Scaffold(
         key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           centerTitle: true,
           title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
           automaticallyImplyLeading: false,
@@ -166,7 +170,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("0 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 0 ? Colors.grey : Colors.blue,
+                                pressAttention != 0 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -180,7 +184,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("5 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 1 ? Colors.grey : Colors.blue,
+                                pressAttention != 1 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -194,7 +198,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("10 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 2 ? Colors.grey : Colors.blue,
+                                pressAttention != 2 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -208,7 +212,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("20 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 3 ? Colors.grey : Colors.blue,
+                                pressAttention != 3 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -222,7 +226,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("30 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 4 ? Colors.grey : Colors.blue,
+                                pressAttention != 4 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -236,7 +240,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("45 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 5 ? Colors.grey : Colors.blue,
+                                pressAttention != 5 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -250,7 +254,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("60+ min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 6 ? Colors.grey : Colors.blue,
+                                pressAttention != 6 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                     ],
                   ),
@@ -303,43 +307,50 @@ class _BarPageState extends State<BarPage> {
                     listener: (context, state) {
                       if (state.errorMessage == null) {
                         if(state.submitSuccessful){
-                          DatabaseService().incrementTickets();
+                          //TODO test then statement
+                          DatabaseService().incrementTickets().then((value) => context.read<ProfileBloc>().add(GetProfileEvent()));
                           Navigator.of(context).pop();
+                        }
+                        else if(state.loading) {
+                          context.loaderOverlay.show();
                         }
                       }
                       else {
-                        print("STATE ERROR: ${state.errorMessage}");
-                        print("STATE Opt1: ${Constants.waitTimeReportIntervalError}");
-                        print("STATE Opt2: ${Constants.waitTimeReportTimeError}");
-                        print(state.errorMessage == Constants.waitTimeReportIntervalError);
-                        if(state.errorMessage == Constants.waitTimeReportIntervalError){
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildIntervalErrorDialog(context));
+                          context.loaderOverlay.hide();
+                          if(state.errorMessage == Constants.waitTimeReportIntervalError){
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildIntervalErrorDialog(context));
 
+                          }
+                          else if (state.errorMessage == Constants.waitTimeReportTimeError) {
+                            int hour = DateTime.now().hour;
+                            int weekday = DateTime.now().weekday;
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildTimeErrorDialog(hour, weekday, context));
+                          }
+                          else if (state.errorMessage == Constants.waitTimeReportLocationError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildLocationErrorDialog(true, context));
+                          }
+                          else if (state.errorMessage == Constants.waitTimeReportNoLocationError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildLocationErrorDialog(false, context));
+                          }
+                          else if(state.errorMessage == Constants.waitTimeImpreciseLocationError) {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    _buildLocationErrorDialog(false, context, locImprecise: true));
+                          }
                         }
-                        else if (state.errorMessage == Constants.waitTimeReportTimeError) {
-                          int hour = DateTime.now().hour;
-                          int weekday = DateTime.now().weekday;
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildTimeErrorDialog(hour, weekday, context));
-                        }
-                        else if (state.errorMessage == Constants.waitTimeReportLocationError) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildLocationErrorDialog(true, context));
-                        }
-                        else if (state.errorMessage == Constants.waitTimeReportNoLocationError) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) =>
-                                  _buildLocationErrorDialog(false, context));
-                        }
-                      }
                     },
                   ),
                 ],
@@ -347,6 +358,6 @@ class _BarPageState extends State<BarPage> {
                 )],
                 )
             )
-            ));
+            )));
   }
 }

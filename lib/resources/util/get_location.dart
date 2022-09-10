@@ -101,6 +101,7 @@ void callbackDispatcher() {
   });
 }
 
+
 Future<LatLng?> getUserLocation() async {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
@@ -115,6 +116,7 @@ Future<LatLng?> getUserLocation() async {
       return null;
     }
   }
+
   // Check if permission is granted
   _permissionGranted = await location.hasPermission();
   if (_permissionGranted == PermissionStatus.denied) {
@@ -123,9 +125,22 @@ Future<LatLng?> getUserLocation() async {
       return null;
     }
   }
-  final _locationData = await location.getLocation();
+
+  //final _locationData = await location.getLocation();
+  var _locationData = await Future.any([
+    location.getLocation(),
+    Future.delayed(Duration(milliseconds: 500), () => null),
+  ]);
+  if (_locationData == null) {
+    _locationData = await location.getLocation();
+  }
+
+  if(_locationData == null) {
+    return null;
+  }
+
   LocationUtil util = LocationUtil();
-  util.setUserLocation(_locationData);
+  util.setUserLocation(_locationData!);
   if (util.getUserLocation() == null) {
     return null;
   }
@@ -133,6 +148,7 @@ Future<LatLng?> getUserLocation() async {
       util.getUserLocation()?.longitude == null) {
     return null;
   }
+
   return LatLng(
       util.getUserLocation()!.latitude, util.getUserLocation()!.longitude);
 }
@@ -151,9 +167,9 @@ Future<LatLng?> _getUserPosition() async {
 List<LocationModel> getDefaultBars() {
   return <LocationModel>[
     LocationModel(
-        markerId: "Fenway Johnie's",
+        markerId: "Fenway Johnnie's",
         position: LatLng(42.346111, -71.099281),
-        infoWindowTitle: "Fenway Johnie's",
+        infoWindowTitle: "Fenway Johnnie's",
         address: "96 Brookline Ave, Boston, MA 02215",
         type: "bar"),
     LocationModel(

@@ -15,6 +15,7 @@ class UserFeedbackPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           title: Text("Linez"),
           automaticallyImplyLeading: false,
           leading: new IconButton(

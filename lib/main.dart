@@ -7,6 +7,7 @@ import 'package:Linez/resources/repositories/database_repository_impl.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:Linez/resources/services/notification_service.dart';
 import 'package:Linez/resources/util/get_distance.dart';
+import 'package:Linez/resources/util/get_location.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/sign_up_view.dart';
 import 'package:flutter/material.dart';
@@ -82,19 +83,14 @@ void main() async {
     final prefs = await SharedPreferences.getInstance();
     int? ts = prefs.getInt(Constants.notificationLastSentTime);
     bool sendNotification = false;
-    print("TIMESTAMP2: ${prefs.getInt(Constants.notificationLastSentTime)}");
     if (ts != null) {
       final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts);
-      print("time 1");
-      print("DT: ${prev_ts.toString()}");
       if (prev_ts.difference(DateTime.now()).inHours > 7) {
-        print("time 2");
         sendNotification = true;
       }
     } else {
       sendNotification = true;
     }
-    print("working1");
 
     //check if the app was opened by notification
     if (sendNotification) {
@@ -113,11 +109,8 @@ void main() async {
                   weekday == 6 ||
                   weekday == 7 ||
                   weekday == 1))) {
-        print("working12");
-        LatLng? userLocation = await _getUserPosition();
-        print("working2");
+        LatLng? userLocation = await _getUserPosition(); //_getUserPosition();
         if (userLocation != null) {
-          print("working3");
           final locations = new List.from(Locations.defaultBars)
             ..addAll(Locations.defaultClubs);
           LocationModel? shortestLocation = null;
@@ -134,9 +127,7 @@ void main() async {
             }
           }
           if (shortestLocation != null) {
-            print("working4");
-            if (shortestDistance <= 50) {
-              print("working5");
+            if (shortestDistance <= Constants.distanceToBarRequirement) {
               SharedPreferences prefs =
               await SharedPreferences.getInstance();
               prefs.setString(
@@ -151,13 +142,11 @@ void main() async {
                   Constants.notifiedBarAddress, shortestLocation.address);
               prefs.setString(
                   Constants.notifiedBarType, shortestLocation.type);
-              print("notification1");
               NotificationService().showNotification(
                   1,
                   "Near ${shortestLocation.markerId}? What's the wait?",
                   "Click to report wait the time",
                   1);
-              print("notification2");
             }
           }
         } else {
@@ -210,6 +199,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

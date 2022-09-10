@@ -20,7 +20,10 @@ class _CountdownWidgetState extends State<CountdownWidget> {
   void initState() {
     print("countdown");
     timer = Timer.periodic(Duration(seconds: 1), (_) {
-      setState(() {});
+      if (this.mounted) {
+        setState(() {
+        });
+      }
     });
   }
 
@@ -38,12 +41,12 @@ class _CountdownWidgetState extends State<CountdownWidget> {
         fontWeight: FontWeight.w900
 
     ),) :
-    Text("${(diffDays > 9) ? diffDays : "0${diffDays}"}:"
-        "${(diffHours > 9) ? diffHours : "0${diffHours}"}:"
-        "${(diffMins > 9) ? diffMins : "0${diffMins}"}:"
-        "${(diffSecs > 9) ? diffSecs : "0${diffSecs}"}", style: TextStyle(
+    Text("${diffDays}d "
+        "${diffHours}h "
+        "${diffMins}m "
+        "${diffSecs}s", style: TextStyle(
         color: Colors.white,
-        fontSize: 20,
+        fontSize: 16,
         fontWeight: FontWeight.w900
 
     ),)

@@ -78,6 +78,8 @@ class DatabaseService {
         .collection("WaitTimes")
         .doc(address)
         .set({"reports": reports.map((waitTime) => waitTime.toMap()).toList()});
+    print("CHANGED PROFILE !!!!!!!!!!!!");
+    return true;
   }
 
   Future<List<WaitTimeModel>> getWaitTimes(String address) async {
@@ -293,22 +295,16 @@ class DatabaseService {
   }
 
   Future<DateTime?> getGiveawayTime() async {
-    print("TIME");
     DateTime? dt;
     DocumentSnapshot<Map<String, dynamic>> doc =
     await _db.collection("GiveawayDate").doc("GiveawayDate").get();
-    print("time 1");
     if(doc.exists){
-      print("time 2");
       try {
-        print("time 3");
         dt = (doc["date"].toDate());
       }
       catch (e) {
-        print("time 4 ${e.toString()}");
       }
     }
-    print("time 5");
     return dt;
   }
 }

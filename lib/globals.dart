@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'models/location_model.dart';
 
 class Locations {
@@ -15,4 +17,5 @@ class UserData {
   static bool feedbackTicketReceived = false;
   static String winnerMessage = "";
   static List<String> reportedLocations = [];
+  static bool showDisclaimerPopup = false;
 }

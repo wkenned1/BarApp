@@ -94,6 +94,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     return Scaffold(
         //key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           title: Text("Linez"),
           automaticallyImplyLeading: false,
           leading: new IconButton(
@@ -128,7 +129,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(child: Text("I am 21 years or older", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06),), padding: EdgeInsets.fromLTRB(0, 0, 5,0),),
+                  Padding(child: Text("I am 18 years or older", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06),), padding: EdgeInsets.fromLTRB(0, 0, 5,0),),
                   Transform.scale(
                       scale: 1.5,
                       child: Checkbox(

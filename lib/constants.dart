@@ -19,12 +19,14 @@ class Constants {
   static const notifiedBarAddress = "notifiedBarAddress";
   static const notifiedBarType = "notifiedBarType";
   static const notificationLastSentTime = "notificationLastSentTime";
+  static const termsOfServicePopupShown = "termsOfServicePopupShown";
 
   //error codes
   static const waitTimeReportIntervalError = "INTERVAL";
   static const waitTimeReportTimeError = "TIME";
   static const waitTimeReportLocationError = "LOCATION";
   static const waitTimeReportNoLocationError = "NOLOCATION";
+  static const waitTimeImpreciseLocationError = "IMPLOCATION";
 
   static const invalidPhoneNumber = "invalid-phone-number";
   static const genericError = "generic-error";
@@ -49,4 +51,15 @@ class Constants {
     "Game On": "assets/images/game_on_icon_small.png", //game on
     "Sissy K’s": "assets/images/sissy_ks_icon_small.png",//sissy k's
   };
+}
+
+//permissions
+enum PermissionGroup {
+  /// Android: Fine and Coarse Location
+  /// iOS: CoreLocation - Always
+  locationAlways,
+
+  /// Android: Fine and Coarse Location
+  /// iOS: CoreLocation - WhenInUse
+  locationWhenInUse
 }

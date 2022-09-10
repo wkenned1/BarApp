@@ -1,6 +1,6 @@
 part of 'wait_time_report_bloc.dart';
 
-class WaitTimeReportState {
+class WaitTimeReportState extends Equatable {
   WaitTimeReportState(
       {required this.submitSuccessful,
       this.errorMessage,
@@ -9,4 +9,7 @@ class WaitTimeReportState {
   final bool submitSuccessful;
   final String? errorMessage;
   final bool loading;
+
+  @override
+  List<Object> get props => [submitSuccessful, loading];
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:Linez/blocs/profile/profile_bloc.dart';
 import 'package:Linez/blocs/user_location/user_location_bloc.dart';
 import 'package:Linez/main.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
@@ -51,9 +53,7 @@ class SearchPage extends StatelessWidget {
 
   //check location permissions and get user location
   Future<void> _getUserLocation() async {
-    print("location 1");
     Location location = Location();
-    print("location 2");
     // Check if location service is enable
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
@@ -62,7 +62,6 @@ class SearchPage extends StatelessWidget {
         return;
       }
     }
-    print("location 3");
     // Check if permission is granted
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
@@ -71,13 +70,10 @@ class SearchPage extends StatelessWidget {
         return;
       }
     }
-    print("location 4");
     final _locationData = await location.getLocation();
-    print("!!!!!!!!!! Location: ${_locationData.latitude}, ${_locationData.longitude}");
     LocationUtil util = LocationUtil();
     util.setUserLocation(_locationData);
-
-    initBackgroundTracking();
+    //initBackgroundTracking();
   }
 
   //show popup on search page if the user won the givaway
@@ -103,8 +99,69 @@ class SearchPage extends StatelessWidget {
     );
   }
 
+  Future<void> _disableDisclaimerPopup() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool(Constants.termsOfServicePopupShown, true);
+  }
+
+  //show popup on when app is first opened
+  Widget _buildDisclaimerDialog(BuildContext context) {
+    TextStyle defaultStyle = TextStyle(color: Colors.black, fontSize: 20.0);
+    TextStyle linkStyle = TextStyle(color: Colors.blue);
+    _disableDisclaimerPopup();
+    return new AlertDialog(
+      //title: const Text("Congrats! You won this month's giveaway!"),
+      content: new Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          RichText(text: TextSpan(
+            style: defaultStyle,
+            children: <TextSpan>[
+              TextSpan(text: "By continuing you accept Linez App's "),
+              TextSpan(
+                  text: 'Terms of Service',
+                  style: linkStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      const url = 'https://linezapp.com/terms_conditions.html';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(Uri.parse(url));
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    }),
+              TextSpan(text: ' and our '),
+              TextSpan(
+                  text: 'Privacy Policy',
+                  style: linkStyle,
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () async {
+                      const url = 'https://linezapp.com/privacy.html';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(Uri.parse(url));
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    }),
+            ],
+          )),
+          //Text("By continuing you accept Linez App's terms of service and privacy policy."),
+        ],
+      ),
+      actions: <Widget>[
+        new ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Continue'),
+        ),
+      ],
+    );
+  }
+
   //start background process for sending notifications and tracking location
-  Future<void> initBackgroundTracking() async {
+  /*Future<void> initBackgroundTracking() async {
     Workmanager manager = Workmanager();
     manager.initialize(
       callbackDispatcher,
@@ -115,7 +172,7 @@ class SearchPage extends StatelessWidget {
       fetchBackground,
       frequency: Duration(minutes: 30),
     );
-  }
+  }*/
 
   //navigate to bar page
   Future<void> pushBarPage(BuildContext context) async {
@@ -146,17 +203,41 @@ class SearchPage extends StatelessWidget {
   }
 
   Future<void> _initFunction(BuildContext context) async {
-    print("init");
     //get location
-    print("init1");
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? disclaimerShown = prefs.getBool(Constants.termsOfServicePopupShown);
+    if(disclaimerShown != null) {
+      if(!disclaimerShown) {
+        UserData.showDisclaimerPopup = true;
+      }
+      else {
+        UserData.showDisclaimerPopup = false;
+      }
+    }
+    else {
+      UserData.showDisclaimerPopup = true;
+    }
+
+    if(UserData.showDisclaimerPopup) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              _buildDisclaimerDialog(context));
+    }
+
     AppInfo.giveawayDate = await DatabaseService().getGiveawayTime();
-    print("init2");
     await _getUserLocation();
+    if(UserData.winner && UserData.winnerMessage != Constants.winnerMessageAfterPopup){
+      showDialog(
+          context: context,
+          builder: (BuildContext context) =>
+              _buildWinnerDialog(context));
+    }
+
     //get user info
-    print("CKECHING PROFILE");
     /*ProfileModel? profile = await DatabaseService().getUserProfile();
     if(profile != null) {
-      print("PROFILE FOUND");
       UserData.userTickets = profile.tickets;
       UserData.winner = profile.winner;
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;
@@ -169,9 +250,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FirebaseMessaging.instance.getToken().then((token) {
-      print('TOKEN: $token');
     });
-    print("build");
     if (launchBarPage) {
       launchBarPage = false;
       pushBarPage(context);
@@ -186,21 +265,13 @@ class SearchPage extends StatelessWidget {
     return RefreshIndicator(
       //TODO: find a cleaner way to refresh the page
       onRefresh: () async {
+        context.read<UserLocationBloc>().add(GetLocationEvent());
         (context as Element).reassemble();
       },
       child: Container(
           child: FutureBuilder<void>(
               future: _initFunction(context)/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-                if(UserData.winner && UserData.winnerMessage != Constants.winnerMessageAfterPopup){
-                  Future.delayed(Duration.zero, () =>
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              _buildWinnerDialog(context))
-                  );
-
-                }
                 return SingleChildScrollView(
                     child: Column(
                   children: [

@@ -10,10 +10,12 @@ import 'package:Linez/ui/widgets/countdown_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../blocs/profile/profile_bloc.dart';
@@ -79,7 +81,7 @@ Widget _buildTicketDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
+        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
@@ -87,7 +89,7 @@ Widget _buildTicketDialog(BuildContext context) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => PhoneAuthPage()),
             );
-          }, child: Text("SignUp")),
+          }, child: Text("Sign Up")),
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();
@@ -104,11 +106,8 @@ Widget _buildTicketDialog(BuildContext context) {
 //show popup when ticket icon is clicked
 Widget _buildTicketSignedInDialog(BuildContext context) {
   bool showCountdown = false;
-  print("building");
   if(AppInfo.giveawayDate != null) {
-    print("NOT NULL");
     if(AppInfo.giveawayDate!.isAfter(DateTime.now().toUtc())) {
-      print("CORRECT");
       showCountdown = true;
     }
   }
@@ -118,31 +117,13 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win 1 out of 5 \$25 dollar gift cards."),
+        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(
           children: [
           Column(children: [
-            Text("Time left"),
-            Container(
-                decoration: new BoxDecoration (
-                    color: Colors.green
-                ),
-              height: MediaQuery.of(context).size.width/13,
-              width: MediaQuery.of(context).size.width/2.5,
-              child: new Center(child:
-              (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * .04,
-                    fontWeight: FontWeight.w900
-
-              ),) :
-                CountdownWidget(giveaway: AppInfo.giveawayDate!)
-              )
-            )
           ],),
-          Padding(padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
           Column(children: [
             Text("Your tickets"),
             Container(
@@ -166,6 +147,28 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.center,
         ),
         ),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10)),
+        Center(child: Container(child:
+        Column(children: [
+          Text("Time left"),
+          Container(
+              decoration: new BoxDecoration (
+                  color: Colors.green
+              ),
+              height: MediaQuery.of(context).size.width/13,
+              width: MediaQuery.of(context).size.width/2.5,
+              child: new Center(child:
+              (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
+                  color: Colors.white,
+                  fontSize: MediaQuery.of(context).size.width * .04,
+                  fontWeight: FontWeight.w900
+
+              ),) :
+              CountdownWidget(giveaway: AppInfo.giveawayDate!)
+              )
+          )
+        ],)
+        )),
       ],
     ),
   );
@@ -379,6 +382,30 @@ class _MyHomePageState extends State<HomePage> {
                           builder: (context) => ComingSoonPage()));
                     },
                   ),
+                  GestureDetector(child: ListTile(
+                    title: Text("Terms of Service", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    trailing: Icon(Icons.arrow_forward),
+                  ),
+                  onTap: () async {
+                    const url = 'https://linezapp.com/terms_conditions.html';
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },),
+                  GestureDetector(child: ListTile(
+                    title: Text("Privacy Policy", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    trailing: Icon(Icons.arrow_forward),
+                  ),
+                    onTap: () async {
+                      const url = 'https://linezapp.com/privacy.html';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(Uri.parse(url));
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },),
                   BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
                       builder: (context, state) {
                       if(state is AuthLoginConfirmed){
@@ -409,6 +436,8 @@ class _MyHomePageState extends State<HomePage> {
         ),
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         backgroundColor: Color(Constants.linezBlue),
         currentIndex: bottomSelectedIndex,
         onTap: (index) {
