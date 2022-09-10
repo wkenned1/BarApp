@@ -8,6 +8,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../blocs/get_wait_time/wait_time_bloc.dart';
 import '../../blocs/user_location/user_location_bloc.dart';
+import '../../constants.dart';
 import '../../resources/util/get_distance.dart';
 import '../../resources/util/location_util.dart';
 import '../bar_page.dart';
@@ -27,17 +28,66 @@ class ClickableLocationsList extends StatelessWidget {
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(location.markerId, style: TextStyle(fontSize: 25))),
+            child: Text(location.markerId, style: TextStyle(fontSize: 25, color: Colors.white))),
         if (userLocation != null)
           Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away"))
+                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: 15, color: Colors.white),),)
         else
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: 15))),
+              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: 15, color: Colors.white))),
       ],
+    );
+  }
+
+  //creates single row with one location
+  //when clicked takes the user to a page to report wait times
+  Widget newClickableLocation(
+      LocationModel location, LatLng? userLocation, BuildContext context) {
+    context.read<WaitTimeBloc>().add(GetWaitTime(
+      address: location.address,
+    ));
+    return GestureDetector(child: Container(
+      //margin: const EdgeInsets.all(15.0),
+      //padding: const EdgeInsets.all(3.0),
+      width: MediaQuery.of(context).size.width,
+      decoration:
+      BoxDecoration(color: Color(Constants.boxBlue), borderRadius: BorderRadius.all(Radius.circular(5))),
+      child: Row(
+        children: [
+          if(location.type == "bar")
+            Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
+          else
+            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
+          Container(
+            width: MediaQuery.of(context).size.width * .70,
+            child: barLocationColumn(location, userLocation),
+          ),
+          FutureBuilder<WaitTimeState>(
+            future: getWaitTime(GetWaitTime(
+              address: location.address,
+            )),
+            builder: (BuildContext context,
+                AsyncSnapshot<WaitTimeState> snapshot) {
+              if (snapshot.hasData) {
+                if (snapshot.data?.waitTime != null) {
+                  if (snapshot.data!.waitTime! >= 0) {
+                    return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
+                  }
+                }
+              }
+              return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
+            },
+          )
+        ],
+      ),
+    ),
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => BarPage(location: location)));
+      },
     );
   }
 
@@ -113,6 +163,8 @@ class ClickableLocationsList extends StatelessWidget {
         locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, userLatLng.latitude, userLatLng.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, userLatLng.latitude, userLatLng.longitude)).toInt());
       }*/
     return SingleChildScrollView(
+      child: Container(
+        color: Color(Constants.linezBlue),
         child: BlocBuilder<UserLocationBloc, UserLocationState>(
             builder: (context, state) {
               if (state is UserLocationUpdate) {
@@ -121,8 +173,9 @@ class ClickableLocationsList extends StatelessWidget {
                   //GetLocationWidget(),
                   Column(
                     children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
                       for (var location in locations)
-                        clickableLocation(location, state.location, context)
+                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, state.location, context))
                     ],
                   )
                 ]);
@@ -132,13 +185,14 @@ class ClickableLocationsList extends StatelessWidget {
                   //GetLocationWidget(),
                   Column(
                     children: <Widget>[
+                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
                       for (var location in locations)
-                        clickableLocation(location, null, context)
+                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, null, context))
                     ],
                   )
                 ]);
               }
             }),
-        );
+      ));
   }
 }

@@ -259,7 +259,7 @@ class _MyHomePageState extends State<HomePage> {
         bottom: PreferredSize(
             child: Container(
               color: Colors.white,
-              height: 2.0,
+              height: 1.0,
             ),
             preferredSize: Size.fromHeight(4.0)),
         backgroundColor: Color(Constants.linezBlue),
@@ -446,7 +446,7 @@ class _MyHomePageState extends State<HomePage> {
         border:  Border(
           top: BorderSide( //                   <--- right side
           color: Colors.white,
-            width: 2.0,
+            width: 1.0,
           ),
         )
         ),
