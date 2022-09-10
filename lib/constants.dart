@@ -19,6 +19,7 @@ class Constants {
   static const notifiedBarAddress = "notifiedBarAddress";
   static const notifiedBarType = "notifiedBarType";
   static const notificationLastSentTime = "notificationLastSentTime";
+  static const termsOfServicePopupShown = "termsOfServicePopupShown";
 
   //error codes
   static const waitTimeReportIntervalError = "INTERVAL";

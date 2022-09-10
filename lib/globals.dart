@@ -17,4 +17,5 @@ class UserData {
   static bool feedbackTicketReceived = false;
   static String winnerMessage = "";
   static List<String> reportedLocations = [];
+  static bool showDisclaimerPopup = false;
 }

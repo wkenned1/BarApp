@@ -36,7 +36,7 @@ class ClickableLocationsList extends StatelessWidget {
         else
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(location.address, style: TextStyle(fontSize: 15))),
+              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: 15))),
       ],
     );
   }

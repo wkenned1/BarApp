@@ -15,6 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:workmanager/workmanager.dart';
 
 import '../blocs/profile/profile_bloc.dart';
@@ -377,6 +378,30 @@ class _MyHomePageState extends State<HomePage> {
                           builder: (context) => ComingSoonPage()));
                     },
                   ),
+                  GestureDetector(child: ListTile(
+                    title: Text("Terms of Service", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    trailing: Icon(Icons.arrow_forward),
+                  ),
+                  onTap: () async {
+                    const url = 'https://linezapp.com/terms_conditions.html';
+                    if (await canLaunchUrl(Uri.parse(url))) {
+                      await launchUrl(Uri.parse(url));
+                    } else {
+                      throw 'Could not launch $url';
+                    }
+                  },),
+                  GestureDetector(child: ListTile(
+                    title: Text("Privacy Policy", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    trailing: Icon(Icons.arrow_forward),
+                  ),
+                    onTap: () async {
+                      const url = 'https://linezapp.com/privacy.html';
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(Uri.parse(url));
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    },),
                   BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
                       builder: (context, state) {
                       if(state is AuthLoginConfirmed){

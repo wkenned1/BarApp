@@ -777,6 +777,8 @@ PODS:
   - PromisesObjC (2.1.1)
   - shared_preferences_ios (0.0.1):
     - Flutter
+  - url_launcher_ios (0.0.1):
+    - Flutter
   - workmanager (0.0.1):
     - Flutter
 
@@ -792,6 +794,7 @@ DEPENDENCIES:
   - location (from `.symlinks/plugins/location/ios`)
   - notification_permissions (from `.symlinks/plugins/notification_permissions/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - workmanager (from `.symlinks/plugins/workmanager/ios`)
 
 SPEC REPOS:
@@ -840,6 +843,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/notification_permissions/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
   workmanager:
     :path: ".symlinks/plugins/workmanager/ios"
 
@@ -875,6 +880,7 @@ SPEC CHECKSUMS:
   notification_permissions: 825ea1bf2a52ab585c53fd7b5e8e96876d735d4b
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
   workmanager: 0afdcf5628bbde6924c21af7836fed07b42e30e6
 
 PODFILE CHECKSUM: 7368163408c647b7eb699d0d788ba6718e18fb8d
