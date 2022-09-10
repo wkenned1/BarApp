@@ -195,12 +195,14 @@ class _MyHomePageState extends State<HomePage> {
           icon: Image.asset("assets/images/martini_glass_icon.png",
               color: Colors.white,
               width: (bottomSelectedIndex == 0) ? 35 : 25,
-              height: (bottomSelectedIndex == 0) ? 35 : 25),),
+              height: (bottomSelectedIndex == 0) ? 35 : 25),
+          label: "Search"),
       BottomNavigationBarItem(
         icon: Image.asset("assets/images/map_icon.png",
             color: Colors.white,
             width: (bottomSelectedIndex == 1) ? 35 : 25,
             height: (bottomSelectedIndex == 1) ? 35 : 25),
+        label: "Map",
       ),
     ];
   }
@@ -430,6 +432,8 @@ class _MyHomePageState extends State<HomePage> {
         ),
       body: buildPageView(),
       bottomNavigationBar: BottomNavigationBar(
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         backgroundColor: Color(Constants.linezBlue),
         currentIndex: bottomSelectedIndex,
         onTap: (index) {
