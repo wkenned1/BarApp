@@ -123,25 +123,7 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
         Row(
           children: [
           Column(children: [
-            Text("Time left"),
-            Container(
-                decoration: new BoxDecoration (
-                    color: Colors.green
-                ),
-              height: MediaQuery.of(context).size.width/13,
-              width: MediaQuery.of(context).size.width/2.5,
-              child: new Center(child:
-              (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
-                    color: Colors.white,
-                    fontSize: MediaQuery.of(context).size.width * .04,
-                    fontWeight: FontWeight.w900
-
-              ),) :
-                CountdownWidget(giveaway: AppInfo.giveawayDate!)
-              )
-            )
           ],),
-          Padding(padding: EdgeInsets.fromLTRB(0, 0, 20, 0)),
           Column(children: [
             Text("Your tickets"),
             Container(
@@ -165,6 +147,28 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
           mainAxisAlignment: MainAxisAlignment.center,
         ),
         ),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10)),
+        Center(child: Container(child:
+        Column(children: [
+          Text("Time left"),
+          Container(
+              decoration: new BoxDecoration (
+                  color: Colors.green
+              ),
+              height: MediaQuery.of(context).size.width/13,
+              width: MediaQuery.of(context).size.width/2.5,
+              child: new Center(child:
+              (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
+                  color: Colors.white,
+                  fontSize: MediaQuery.of(context).size.width * .04,
+                  fontWeight: FontWeight.w900
+
+              ),) :
+              CountdownWidget(giveaway: AppInfo.giveawayDate!)
+              )
+          )
+        ],)
+        )),
       ],
     ),
   );
