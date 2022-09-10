@@ -269,17 +269,20 @@ class SearchPage extends StatelessWidget {
         (context as Element).reassemble();
       },
       child: Container(
+          //color: Color(Constants.boxBlue),
           child: FutureBuilder<void>(
               future: _initFunction(context)/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 return SingleChildScrollView(
                     child: Column(
                   children: [
+                    Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
-                        sectionTitle: "Bars",
-                        body: ClickableLocationsList(
-                            locations: barLocations,
-                            userLocation: userLocation)),
+                      sectionTitle: "Bars",
+                      body: ClickableLocationsList(
+                      locations: barLocations,
+                      userLocation: userLocation)),
+                Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
                         sectionTitle: "Clubs",
                         body: ClickableLocationsList(

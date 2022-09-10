@@ -255,6 +255,7 @@ class _MyHomePageState extends State<HomePage> {
     NotificationService().initNotification(context);
     double profileIconSize = MediaQuery.of(context).size.width/10;
     return Scaffold(
+      backgroundColor: Color(Constants.linezBlue),
       appBar: AppBar(
         bottom: PreferredSize(
             child: Container(

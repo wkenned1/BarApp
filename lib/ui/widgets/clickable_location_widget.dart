@@ -173,7 +173,7 @@ class ClickableLocationsList extends StatelessWidget {
                   //GetLocationWidget(),
                   Column(
                     children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
+                      //Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
                       for (var location in locations)
                         Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, state.location, context))
                     ],
@@ -185,7 +185,7 @@ class ClickableLocationsList extends StatelessWidget {
                   //GetLocationWidget(),
                   Column(
                     children: <Widget>[
-                      Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
+                      //Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
                       for (var location in locations)
                         Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, null, context))
                     ],
