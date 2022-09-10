@@ -47,6 +47,7 @@ class LogoutPage extends StatelessWidget {
     return Scaffold(
         //key: formKey,
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           title: Text("Linez"),
           automaticallyImplyLeading: false,
           leading: new IconButton(

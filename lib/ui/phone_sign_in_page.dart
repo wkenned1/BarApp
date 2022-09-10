@@ -94,6 +94,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     return Scaffold(
         //key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           title: Text("Linez"),
           automaticallyImplyLeading: false,
           leading: new IconButton(

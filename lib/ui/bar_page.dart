@@ -131,6 +131,7 @@ class _BarPageState extends State<BarPage> {
     return LoaderOverlay( child: Scaffold(
         key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
+          backgroundColor: Color(Constants.linezBlue),
           centerTitle: true,
           title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
           automaticallyImplyLeading: false,
@@ -169,7 +170,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("0 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 0 ? Colors.grey : Colors.blue,
+                                pressAttention != 0 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -183,7 +184,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("5 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 1 ? Colors.grey : Colors.blue,
+                                pressAttention != 1 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -197,7 +198,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("10 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 2 ? Colors.grey : Colors.blue,
+                                pressAttention != 2 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -211,7 +212,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("20 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 3 ? Colors.grey : Colors.blue,
+                                pressAttention != 3 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -225,7 +226,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("30 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 4 ? Colors.grey : Colors.blue,
+                                pressAttention != 4 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -239,7 +240,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("45 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 5 ? Colors.grey : Colors.blue,
+                                pressAttention != 5 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -253,7 +254,7 @@ class _BarPageState extends State<BarPage> {
                               child: Text("60+ min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
                                 primary:
-                                pressAttention != 6 ? Colors.grey : Colors.blue,
+                                pressAttention != 6 ? Colors.grey : Color(Constants.linezBlue),
                               ))),
                     ],
                   ),
