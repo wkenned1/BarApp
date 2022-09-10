@@ -256,6 +256,12 @@ class _MyHomePageState extends State<HomePage> {
     double profileIconSize = MediaQuery.of(context).size.width/10;
     return Scaffold(
       appBar: AppBar(
+        bottom: PreferredSize(
+            child: Container(
+              color: Colors.white,
+              height: 2.0,
+            ),
+            preferredSize: Size.fromHeight(4.0)),
         backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
         title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
@@ -435,19 +441,28 @@ class _MyHomePageState extends State<HomePage> {
               ),
         ),
       body: buildPageView(),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: Color(Constants.linezBlue),
-        currentIndex: bottomSelectedIndex,
-        onTap: (index) {
-          bottomTapped(index);
-        },
-        selectedLabelStyle: TextStyle(color: Colors.white),
-        items: buildBottomNavBarItems(),
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.white,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+        border:  Border(
+          top: BorderSide( //                   <--- right side
+          color: Colors.white,
+            width: 2.0,
+          ),
+        )
+        ),
+        child: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          backgroundColor: Color(Constants.linezBlue),
+          currentIndex: bottomSelectedIndex,
+          onTap: (index) {
+            bottomTapped(index);
+          },
+          selectedLabelStyle: TextStyle(color: Colors.white),
+          items: buildBottomNavBarItems(),
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.white,
       ),
-    );
+      ));
   }
 }
