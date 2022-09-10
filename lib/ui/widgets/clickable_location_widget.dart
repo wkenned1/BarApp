@@ -23,21 +23,22 @@ class ClickableLocationsList extends StatelessWidget {
 
   //rendered within clickable location widget
   //finds distance between the user and location
-  Widget barLocationColumn(LocationModel location, LatLng? userLocation) {
+  Widget barLocationColumn(LocationModel location, LatLng? userLocation, BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(location.markerId, style: TextStyle(fontSize: 25, color: Colors.white))),
+            child: Text(location.markerId, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .07, color: Colors.white))),
         if (userLocation != null)
           Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: 15, color: Colors.white),),)
+                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05, color: Colors.white),),)
         else
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: 15, color: Colors.white))),
+              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05, color: Colors.white))),
       ],
     );
   }
@@ -53,17 +54,19 @@ class ClickableLocationsList extends StatelessWidget {
       //margin: const EdgeInsets.all(15.0),
       //padding: const EdgeInsets.all(3.0),
       width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height/10,
       decoration:
       BoxDecoration(color: Color(Constants.boxBlue), borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if(location.type == "bar")
-            Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
+            Image.asset("assets/images/bar_icon.png", width: 50, height: 50)
           else
-            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
+            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
           Container(
             width: MediaQuery.of(context).size.width * .70,
-            child: barLocationColumn(location, userLocation),
+            child: barLocationColumn(location, userLocation, context),
           ),
           FutureBuilder<WaitTimeState>(
             future: getWaitTime(GetWaitTime(
@@ -78,71 +81,7 @@ class ClickableLocationsList extends StatelessWidget {
                   }
                 }
               }
-              return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
-            },
-          )
-        ],
-      ),
-    ),
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => BarPage(location: location)));
-      },
-    );
-  }
-
-  //creates single row with one location
-  //when clicked takes the user to a page to report wait times
-  Widget clickableLocation(
-      LocationModel location, LatLng? userLocation, BuildContext context) {
-    context.read<WaitTimeBloc>().add(GetWaitTime(
-      address: location.address,
-    ));
-    return GestureDetector(child: Container(
-      //margin: const EdgeInsets.all(15.0),
-      //padding: const EdgeInsets.all(3.0),
-      width: MediaQuery.of(context).size.width,
-      decoration:
-      BoxDecoration(border: Border.all(color: Colors.black, width: 2)),
-      child: Row(
-        children: [
-          if(location.type == "bar")
-            Image.asset("assets/images/bar_icon.png", width: 40, height: 40)
-          else
-            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 30, height: 30),),
-          Container(
-              width: MediaQuery.of(context).size.width * .70,
-              child: barLocationColumn(location, userLocation),
-          ),
-          /*BlocBuilder<UserLocationBloc, UserLocationState>(
-              builder: (context, state) {
-                if (state is UserLocationUpdate) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width * .70,
-                    child: barLocationColumn(location, state.location),
-                  );
-                }
-                else {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * .70,
-                      child: barLocationColumn(location, null),
-                    );
-                }
-              }),*/
-          FutureBuilder<WaitTimeState>(
-            future: getWaitTime(GetWaitTime(
-              address: location.address,
-            )),
-            builder: (BuildContext context,
-                AsyncSnapshot<WaitTimeState> snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data?.waitTime != null) {
-                  if (snapshot.data!.waitTime! >= 0) {
-                    return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
-                  }
-                }
-              }
-              return Text("none", style: TextStyle(fontSize: MediaQuery.of(context).size.width*.05));
+              return Text("none", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*.05));
             },
           )
         ],
