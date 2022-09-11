@@ -406,7 +406,7 @@ class _MyHomePageState extends State<HomePage> {
                     trailing: Icon(Icons.arrow_forward),
                   ),
                   onTap: () async {
-                    const url = 'https://linezapp.com/terms_conditions.html';
+                    const url = 'https://linezapp.com/terms_conditions_app.html';
                     if (await canLaunchUrl(Uri.parse(url))) {
                       await launchUrl(Uri.parse(url));
                     } else {
@@ -418,7 +418,7 @@ class _MyHomePageState extends State<HomePage> {
                     trailing: Icon(Icons.arrow_forward),
                   ),
                     onTap: () async {
-                      const url = 'https://linezapp.com/privacy.html';
+                      const url = 'https://linezapp.com/privacy_app.html';
                       if (await canLaunchUrl(Uri.parse(url))) {
                         await launchUrl(Uri.parse(url));
                       } else {
