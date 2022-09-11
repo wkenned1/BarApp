@@ -141,7 +141,7 @@ class _BarPageState extends State<BarPage> {
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
           centerTitle: true,
-          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
+          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.width * .07),),
           automaticallyImplyLeading: false,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),

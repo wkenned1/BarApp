@@ -95,7 +95,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         //key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
-          title: Text("Linez"),
+          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.width * .07),),
           automaticallyImplyLeading: false,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),

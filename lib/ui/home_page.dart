@@ -265,7 +265,7 @@ class _MyHomePageState extends State<HomePage> {
             preferredSize: Size.fromHeight(4.0)),
         backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
-        title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .07),),
+        title: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.width * .07),),
         //automaticallyImplyLeading: false,
         actions: <Widget>[
           BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
@@ -379,7 +379,7 @@ class _MyHomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           color: Color(Constants.linezBlue),
                         ),
-                        child: Center(child: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),))
+                        child: Center(child: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: 20),))
                     ),
                   ),
                   GestureDetector(
