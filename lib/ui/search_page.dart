@@ -286,7 +286,7 @@ class SearchPage extends StatelessWidget {
                       body: ClickableLocationsList(
                       locations: barLocations,
                       userLocation: userLocation)),
-                Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+                //Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
                         sectionTitle: "Clubs",
                         body: ClickableLocationsList(
