@@ -150,7 +150,7 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
         Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10)),
         Center(child: Container(child:
         Column(children: [
-          Text("Time left"),
+          Text("Countdown to giveaway"),
           Container(
               decoration: new BoxDecoration (
                   color: Colors.green
