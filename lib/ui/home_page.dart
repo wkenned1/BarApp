@@ -134,7 +134,7 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
                   "#${UserData.userTickets}",
                   style: new TextStyle(
                       color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.width * .04,
+                      fontSize: MediaQuery.of(context).size.width * .05,
                       fontWeight: FontWeight.w900
                   )
               ),),
@@ -155,16 +155,16 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
               decoration: new BoxDecoration (
                   color: Colors.green
               ),
-              height: MediaQuery.of(context).size.width/13,
-              width: MediaQuery.of(context).size.width/2.5,
+              height: MediaQuery.of(context).size.width/10,
+              width: MediaQuery.of(context).size.width/2,
               child: new Center(child:
               (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
                   color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * .04,
+                  fontSize: MediaQuery.of(context).size.width * .05,
                   fontWeight: FontWeight.w900
 
               ),) :
-              CountdownWidget(giveaway: AppInfo.giveawayDate!)
+              CountdownWidget(giveaway: AppInfo.giveawayDate!, fontSize: MediaQuery.of(context).size.width * .05,)
               )
           )
         ],)

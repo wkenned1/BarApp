@@ -5,16 +5,18 @@ import 'package:flutter/material.dart';
 
 class CountdownWidget extends StatefulWidget {
   final DateTime giveaway;
-  CountdownWidget({Key? key, required this.giveaway}) : super(key: key);
+  final double fontSize;
+  CountdownWidget({Key? key, required this.giveaway, required this.fontSize}) : super(key: key);
   @override
-  _CountdownWidgetState createState() => _CountdownWidgetState(giveaway: giveaway);
+  _CountdownWidgetState createState() => _CountdownWidgetState(giveaway: giveaway, fontSize: fontSize);
 }
 
 class _CountdownWidgetState extends State<CountdownWidget> {
   final DateTime giveaway;
   late Timer timer;
+  final double fontSize;
 
-  _CountdownWidgetState({Key? key, required this.giveaway});
+  _CountdownWidgetState({Key? key, required this.giveaway, required this.fontSize});
 
   @override
   void initState() {
@@ -46,7 +48,7 @@ class _CountdownWidgetState extends State<CountdownWidget> {
         "${diffMins}m "
         "${diffSecs}s", style: TextStyle(
         color: Colors.white,
-        fontSize: 16,
+        fontSize: fontSize,
         fontWeight: FontWeight.w900
 
     ),)
