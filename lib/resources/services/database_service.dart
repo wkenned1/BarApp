@@ -297,7 +297,7 @@ class DatabaseService {
   Future<DateTime?> getGiveawayTime() async {
     DateTime? dt;
     DocumentSnapshot<Map<String, dynamic>> doc =
-    await _db.collection("GiveawayDate").doc("GiveawayDate").get();
+    await _db.collection("Globals").doc("GiveawayDate").get();
     if(doc.exists){
       try {
         dt = (doc["date"].toDate());
@@ -306,5 +306,19 @@ class DatabaseService {
       }
     }
     return dt;
+  }
+
+  Future<bool> getRestrictionMode() async {
+    bool disabled = false;
+    DocumentSnapshot<Map<String, dynamic>> doc =
+    await _db.collection("Globals").doc("RestrictionMode").get();
+    if(doc.exists){
+      try {
+        disabled = doc["disableAll"] as bool;
+      }
+      catch (e) {
+      }
+    }
+    return disabled;
   }
 }

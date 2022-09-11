@@ -51,6 +51,11 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   Future<ProfileModel?> getUserProfile() async {
     return await service.getUserProfile();
   }
+
+  @override
+  Future<bool> getRestrictionMode() async {
+    return await service.getRestrictionMode();
+  }
 }
 
 abstract class DatabaseRepository {
@@ -63,4 +68,5 @@ abstract class DatabaseRepository {
   Future<void> deleteProfile();
   Future<void> addReportedLocation(String address);
   Future<ProfileModel?> getUserProfile();
+  Future<bool> getRestrictionMode();
 }
