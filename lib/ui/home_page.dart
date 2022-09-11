@@ -81,7 +81,7 @@ Widget _buildTicketDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
+        Text("Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 gift card. Winners will be contacted via text with information on how to claim the reward."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
@@ -117,7 +117,7 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
+        Text("Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 gift card. Winners will be contacted via text with information on how to claim the reward."),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(
