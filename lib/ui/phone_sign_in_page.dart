@@ -23,6 +23,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   String verificationID = "";
   bool otpVisibility = false;
   bool ageConfirmed = false;
+  bool consentConfirmed = false;
 
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
@@ -135,7 +136,6 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       child: Checkbox(
                           value: ageConfirmed,
                           onChanged: (bool? event) {
-                            print(ageConfirmed);
                             setState(() {
                               ageConfirmed = !ageConfirmed;
                             });
@@ -144,9 +144,20 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   )
                 ],
               ),
+              Padding(child: Text("I consent to being contacted by text if I win a giveaway", textAlign: TextAlign.center, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),), padding: EdgeInsets.fromLTRB(20, 0, 20, 0),),
+              Transform.scale(
+                  scale: 1.5,
+                  child: Checkbox(
+                      value: consentConfirmed,
+                      onChanged: (bool? event) {
+                        setState(() {
+                          consentConfirmed = !consentConfirmed;
+                        });
+                      }
+                  )
+              ),
               ElevatedButton(onPressed: () {
-                if(ageConfirmed) {
-                  print("SEND: ${phoneNumber}");
+                if(ageConfirmed && consentConfirmed) {
                   verifyPhone(context);
                 }
               }, child: Text("Submit"),

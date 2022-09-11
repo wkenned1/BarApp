@@ -292,7 +292,7 @@ class _MyHomePageState extends State<HomePage> {
                             height: 60,
                             child:
                         Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Container(child:
                             Row(children: [
                               Image.asset(
