@@ -73,7 +73,7 @@ class _BarPageState extends State<BarPage> {
       actions: <Widget>[
         new ElevatedButton(
           style: ElevatedButton.styleFrom(
-          backgroundColor: Color(Constants.submitButtonBlue)),
+          backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -96,7 +96,7 @@ class _BarPageState extends State<BarPage> {
       actions: <Widget>[
         new ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Color(Constants.submitButtonBlue)),
+              backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -120,7 +120,7 @@ class _BarPageState extends State<BarPage> {
       actions: <Widget>[
         new ElevatedButton(
           style: ElevatedButton.styleFrom(
-              backgroundColor: Color(Constants.submitButtonBlue)),
+              backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },

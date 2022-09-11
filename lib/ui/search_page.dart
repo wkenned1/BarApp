@@ -90,6 +90,8 @@ class SearchPage extends StatelessWidget {
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -152,11 +154,11 @@ class SearchPage extends StatelessWidget {
       actions: <Widget>[
         new ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Color(Constants.submitButtonBlue)),
+            backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Continue'),
+          child: const Text('Continue', style: TextStyle(color: Colors.white),),
         ),
       ],
     );
