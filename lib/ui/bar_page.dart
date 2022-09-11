@@ -18,6 +18,7 @@ Widget waitTimeDisplay(int time, {double fontSize = 15}) {
     "${time} min",
     style: TextStyle(
         fontSize: fontSize,
+        fontWeight: FontWeight.bold,
         color: Color((time <= 10)
             ? Constants.waitTimeTextGreen
             : (time > 10 && time <= 30)

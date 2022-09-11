@@ -174,6 +174,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                                 },
                               )),
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)),
                                 child: Text("Input Time"),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(

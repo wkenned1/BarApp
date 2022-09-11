@@ -150,7 +150,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   verifyPhone(context);
                 }
               }, child: Text("Submit"),
-                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue))),
               if(otpVisibility)
                 Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0), child: Column(
                   children: [
@@ -159,10 +159,11 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       controller: otp,
                       keyboardType: TextInputType.number,
                     ),
-                    ElevatedButton(onPressed: () {
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue)),
+                        onPressed: () {
                       signIn(context);
-                    }, child: Text("submit"),
-    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)))
+                    }, child: Text("submit"),)
                   ],
                 ),),
             ],

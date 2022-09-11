@@ -51,7 +51,7 @@ class UserFeedbackPage extends StatelessWidget {
               ),),
               Center(
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)),
+                    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue)),
                   child: Text("Submit"),
                   onPressed: (){
                     if(_feedbackController.text.length > 0) {

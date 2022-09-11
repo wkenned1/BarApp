@@ -10,7 +10,9 @@ class Constants {
   static const waitTimeTextOrange = 0xfff99500;
   static const waitTimeTextGreen = 0xff2ac300;
   static const linezBlue = 0xff35558a;
-  static const boxBlue = 0xff6183bc;
+  static const boxBlue = 0xff516fa2;
+  //static const boxBlue = 0xff6183bc;
+  static const submitButtonBlue = 0xff4285f4;
 
   //shared preferences keys
   static const notifiedBarMarkerId = "notifiedBarMarkerId";

@@ -34,7 +34,7 @@ class ProfilePage extends StatelessWidget {
                 ElevatedButton(onPressed: () {
                   DatabaseService().sendWinnerAddress(_addressTextController.text);
                 }, child: Text("submit"),
-    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)))
+    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue)))
               ]),
           ],)
         )
