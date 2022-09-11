@@ -253,7 +253,7 @@ class _MyHomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     context.read<PhoneAuthBloc>().add(AuthConfirmLoginEvent());
     NotificationService().initNotification(context);
-    double profileIconSize = MediaQuery.of(context).size.width/10;
+    double profileIconSize = MediaQuery.of(context).size.width/8;
     return Scaffold(
       backgroundColor: Color(Constants.linezBlue),
       appBar: AppBar(
@@ -265,7 +265,7 @@ class _MyHomePageState extends State<HomePage> {
             preferredSize: Size.fromHeight(4.0)),
         backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
-        title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .07),),
         //automaticallyImplyLeading: false,
         actions: <Widget>[
           BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
@@ -277,7 +277,9 @@ class _MyHomePageState extends State<HomePage> {
                   builder: (context, state) {
                     if(state is ProfileUpdatedState){
                       return
-                        GestureDetector(
+                        InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                           onTap: (){
                             showDialog(
                                 context: context,
@@ -285,10 +287,14 @@ class _MyHomePageState extends State<HomePage> {
                                     _buildTicketSignedInDialog(context));
                           },
                             child:
-                        Container(child:
+                        Container(
+                          width: 70,
+                            height: 60,
+                            child:
                         Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                            child: Container(child: Row(children: [
+                            child: Container(child:
+                            Row(children: [
                               Image.asset(
                                 'assets/images/ticket_icon.png', // Fixes border issues
                                 width: profileIconSize/2,
@@ -301,7 +307,9 @@ class _MyHomePageState extends State<HomePage> {
                             ],),))));
                     }
                     else {
-                      return GestureDetector(
+                      return InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         onTap: (){
                           showDialog(
                               context: context,
@@ -309,9 +317,13 @@ class _MyHomePageState extends State<HomePage> {
                                   _buildTicketDialog(context));
                         },
                         child:
-                      Container(child: Padding(
+                      Container(
+                          width: 70,
+                          height: 60,
+                          child: Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                        child: Container(child: Row(children: [
+                        child: Container(child:
+                        Row(children: [
                           Image.asset(
                             'assets/images/ticket_icon.png', // Fixes border issues
                             width: profileIconSize/2,
