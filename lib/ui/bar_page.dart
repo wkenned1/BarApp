@@ -171,8 +171,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("0 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 0 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 0 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -185,8 +184,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("5 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 1 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 1 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -199,8 +197,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("10 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 2 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 2 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -213,8 +210,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("20 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 3 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 3 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -227,8 +223,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("30 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 4 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 4 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -241,8 +236,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("45 min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 5 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 5 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
@@ -255,8 +249,7 @@ class _BarPageState extends State<BarPage> {
                               },
                               child: Text("60+ min", style: TextStyle(fontSize: 30)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 6 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 6 ? Color(Constants.boxBlue): Color(Constants.linezBlue),
                               ))),
                     ],
                   ),
@@ -302,6 +295,9 @@ class _BarPageState extends State<BarPage> {
                               }
                               //Navigator.of(context).pop();
                             },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(Constants.submitButtonBlue),
+                          ),
                           child: Text("Submit", style: TextStyle(fontSize: 30)))),
                 MultiBlocListener(
                     listeners: [
