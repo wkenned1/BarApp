@@ -30,6 +30,7 @@ Widget waitTimeDisplayAdjustable(int time, double width) {
   return Text(
     "${time} min",
     style: TextStyle(
+      fontWeight: FontWeight.bold,
         fontSize: width*.05,
         color: Color((time <= 10)
             ? Constants.waitTimeTextGreen

@@ -29,16 +29,16 @@ class ClickableLocationsList extends StatelessWidget {
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(location.markerId, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .07, color: Colors.white))),
+            child: Text(location.markerId, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06, color: Colors.white))),
         if (userLocation != null)
           Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05, color: Colors.white),),)
+                  "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04, color: Colors.white),),)
         else
           Align(
               alignment: Alignment.centerLeft,
-              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05, color: Colors.white))),
+              child: Text(location.address.split(",")[0], style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04, color: Colors.white))),
       ],
     );
   }
@@ -65,7 +65,7 @@ class ClickableLocationsList extends StatelessWidget {
           else
             Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
           Container(
-            width: MediaQuery.of(context).size.width * .70,
+            width: MediaQuery.of(context).size.width * .62,
             child: barLocationColumn(location, userLocation, context),
           ),
           FutureBuilder<WaitTimeState>(
@@ -81,9 +81,9 @@ class ClickableLocationsList extends StatelessWidget {
                   }
                 }
               }
-              return Text("none", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width*.05));
+              return Text("none", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width*.05));
             },
-          )
+          ),
         ],
       ),
     ),
