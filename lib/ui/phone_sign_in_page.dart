@@ -155,10 +155,21 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                 Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0), child: Column(
                   children: [
                     Text("Enter verification code", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06)),
+                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0), child:
                     TextFormField(
                       controller: otp,
                       keyboardType: TextInputType.number,
-                    ),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        hintText: "Code", // pass the hint text parameter here
+                      ),
+                    ),),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue)),
                         onPressed: () {

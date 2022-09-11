@@ -14,7 +14,8 @@ class UserFeedbackPage extends StatelessWidget {
     final _feedbackController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Color(Constants.linezBlue),
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Color(Constants.linezBlue),
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
           title: Text("Linez"),
@@ -49,6 +50,9 @@ class UserFeedbackPage extends StatelessWidget {
                       filled: true,
                       fillColor: Colors.white,
                       contentPadding: EdgeInsets.all(10.0),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.black, width: 1.0),
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white, width: 2.0),
                       ),
