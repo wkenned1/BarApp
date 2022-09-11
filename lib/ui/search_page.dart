@@ -151,6 +151,8 @@ class SearchPage extends StatelessWidget {
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(Constants.submitButtonBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
