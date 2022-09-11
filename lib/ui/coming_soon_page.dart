@@ -23,6 +23,7 @@ class ComingSoonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(Constants.linezBlue),
         key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
@@ -33,37 +34,34 @@ class ComingSoonPage extends StatelessWidget {
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
-        body: FutureBuilder<List<String>>(
-        future: DatabaseService().getComingSoon(),
-    builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
-          return Container(
-            child: Column(
-              children: [
-                Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0),
-                  child:  Center(
-                      child: Text("Coming soon...", style: TextStyle(fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .08),)),),
-                if(snapshot.hasData)
-                  Column(
-                  children: <Widget>[
-                    for(String item in snapshot.data!)
-                      new ListTile(
-                        leading: new MyBullet(),
-                        title: new Text(item),
-                      ),
-                    /*new ListTile(
-                      leading: new MyBullet(),
-                      title: new Text('My first line'),
-                    ),
-                    new ListTile(
-                      leading: new MyBullet(),
-                      title: new Text('My second line'),
-                    )*/
-                  ],
-                )
-              ],
-            ),
-          );
-    })
+        body:
+        Padding(padding: EdgeInsets.fromLTRB(10, 10, 10, MediaQuery.of(context).size.height * .25), child:
+          Container(
+          decoration: BoxDecoration(color: Color(Constants.boxBlue), borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: FutureBuilder<List<String>>(
+              future: DatabaseService().getComingSoon(),
+              builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+                return Container(
+                  child: Column(
+                    children: [
+                      Padding(padding: EdgeInsets.fromLTRB(0, 20.0, 0, 15.0),
+                        child:  Center(
+                            child: Text("Coming soon", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .09),)),),
+                      if(snapshot.hasData)
+                        Column(
+                          children: <Widget>[
+                            for(String item in snapshot.data!)
+                              new ListTile(
+                                //leading: new MyBullet(),
+                                title: new Text("-    $item", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * .05)),
+                              ),
+                          ],
+                        )
+                    ],
+                  ),
+                );
+              }),
+          ))
     );
   }
 }
