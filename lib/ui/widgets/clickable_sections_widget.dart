@@ -41,6 +41,7 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
         child: GestureDetector(
           child: Container(
           //width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height/20,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(5)),
               color: Color(Constants.boxBlue)),
@@ -48,9 +49,10 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
     Padding(
               padding: EdgeInsets.fromLTRB(10, 4, 5, 4),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * .80,
+                    width: MediaQuery.of(context).size.width * .75,
                     child: Align(
                       child: Text(
                         sectionTitle,
@@ -64,7 +66,7 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
                     child: Transform.rotate(
                       angle: !sectionOpen ? -math.pi / 2 : 0,
                       child: Image.asset("assets/images/arrow_icon.png",
-                          width: 30, height: 30, color: Colors.white,),
+                          width: 25, height: 25, color: Colors.white,),
                     ),
                     alignment: Alignment.centerRight,
                   ),

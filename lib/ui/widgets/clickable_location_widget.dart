@@ -29,7 +29,7 @@ class ClickableLocationsList extends StatelessWidget {
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(location.markerId, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06, color: Colors.white))),
+            child: Text(location.markerId, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05, color: Colors.white))),
         if (userLocation != null)
           Align(
               alignment: Alignment.centerLeft,
@@ -51,23 +51,27 @@ class ClickableLocationsList extends StatelessWidget {
       address: location.address,
     ));
     return GestureDetector(child: Container(
-      //margin: const EdgeInsets.all(15.0),
+      //margin: const EdgeInsets.fromLTRB(0, 0,10,0),
       //padding: const EdgeInsets.all(3.0),
       width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height/10,
       decoration:
       BoxDecoration(color: Color(Constants.boxBlue), borderRadius: BorderRadius.all(Radius.circular(5))),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if(location.type == "bar")
-            Image.asset("assets/images/bar_icon.png", width: 50, height: 50)
-          else
-            Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
-          Container(
-            width: MediaQuery.of(context).size.width * .62,
-            child: barLocationColumn(location, userLocation, context),
-          ),
+          Row(children: [
+            if(location.type == "bar")
+              Image.asset("assets/images/bar_icon.png", width: 50, height: 50)
+            else
+              Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
+            Container(
+              width: MediaQuery.of(context).size.width * .55,
+              child: barLocationColumn(location, userLocation, context),
+            ),
+          ],),
+          //Spacer(),
           FutureBuilder<WaitTimeState>(
             future: getWaitTime(GetWaitTime(
               address: location.address,
@@ -84,6 +88,7 @@ class ClickableLocationsList extends StatelessWidget {
               return Text("none", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width*.05));
             },
           ),
+          Spacer()
         ],
       ),
     ),
