@@ -6,7 +6,6 @@ import 'package:geolocator/geolocator.dart' as Geo;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:workmanager/workmanager.dart';
 
 import '../../globals.dart';
 import '../../models/location_model.dart';
@@ -19,7 +18,7 @@ import 'package:timezone/data/latest.dart' as tz;
 
 const fetchBackground = "fetchBackground";
 
-void callbackDispatcher() {
+/*void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     switch (task) {
       case fetchBackground:
@@ -99,7 +98,7 @@ void callbackDispatcher() {
     }
     return Future.value(true);
   });
-}
+}*/
 
 
 Future<LatLng?> getUserLocation() async {

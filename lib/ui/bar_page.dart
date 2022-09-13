@@ -132,6 +132,8 @@ class _BarPageState extends State<BarPage> {
 
   @override
   Widget build(BuildContext context) {
+    double buttonHeight = MediaQuery.of(context).size.height * .07;
+    double buttonWidth = MediaQuery.of(context).size.width * .4;
     int waitTime = -1;
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
@@ -159,17 +161,17 @@ class _BarPageState extends State<BarPage> {
                     final time = state.waitTime ?? -1;
 
                     return time >= 0
-                        ? waitTimeDisplay(time, fontSize: 30)
+                        ? waitTimeDisplay(time, fontSize: MediaQuery.of(context).size.width*.08)
                         : Text("No wait time available",
-                        style: TextStyle(fontSize: 30));
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width*.08));
                     // return widget here based on BlocA's state
                   }),
                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                   Column(
                     children: [
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 0;
@@ -181,8 +183,8 @@ class _BarPageState extends State<BarPage> {
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 1;
@@ -194,8 +196,8 @@ class _BarPageState extends State<BarPage> {
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 2;
@@ -207,8 +209,8 @@ class _BarPageState extends State<BarPage> {
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 3;
@@ -220,8 +222,8 @@ class _BarPageState extends State<BarPage> {
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 4;
@@ -233,8 +235,8 @@ class _BarPageState extends State<BarPage> {
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 5;
@@ -246,8 +248,8 @@ class _BarPageState extends State<BarPage> {
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 6;
@@ -261,8 +263,8 @@ class _BarPageState extends State<BarPage> {
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                   Container(
-                      width: 200,
-                      height: 50,
+                      width: buttonWidth,
+                      height: buttonHeight,
                       child: ElevatedButton(
                           onPressed: () {
                               int submission = -1;

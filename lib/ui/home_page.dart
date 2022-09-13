@@ -16,7 +16,6 @@ import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:workmanager/workmanager.dart';
 
 import '../blocs/profile/profile_bloc.dart';
 import '../constants.dart';

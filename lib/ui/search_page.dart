@@ -31,7 +31,6 @@ import 'map_test.dart';
 import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
-import 'package:workmanager/workmanager.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class SearchPage extends StatelessWidget {

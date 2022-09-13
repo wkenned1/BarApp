@@ -57,40 +57,33 @@ class ClickableLocationsList extends StatelessWidget {
         height: MediaQuery.of(context).size.height/10,
       decoration:
       BoxDecoration(color: Color(Constants.boxBlue), borderRadius: BorderRadius.all(Radius.circular(5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(children: [
-            if(location.type == "bar")
-              Image.asset("assets/images/bar_icon.png", width: 50, height: 50)
-            else
-              Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
-            Container(
-              width: MediaQuery.of(context).size.width * .55,
-              child: barLocationColumn(location, userLocation, context),
-            ),
-          ],),
-          //Spacer(),
-          FutureBuilder<WaitTimeState>(
-            future: getWaitTime(GetWaitTime(
-              address: location.address,
-            )),
-            builder: (BuildContext context,
-                AsyncSnapshot<WaitTimeState> snapshot) {
-              if (snapshot.hasData) {
-                if (snapshot.data?.waitTime != null) {
-                  if (snapshot.data!.waitTime! >= 0) {
-                    return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
-                  }
+      child: ListTile(
+        leading:
+      (location.type == "bar") ?
+        Image.asset("assets/images/bar_icon.png", width: 50, height: 50) :
+        Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
+        title: Text(location.markerId, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05, color: Colors.white)),
+        subtitle: (userLocation != null) ?
+      Text(
+        "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04, color: Colors.white),) :
+        Text(location.address.split(",")[0], style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04, color: Colors.white)),
+        trailing: FutureBuilder<WaitTimeState>(
+          future: getWaitTime(GetWaitTime(
+            address: location.address,
+          )),
+          builder: (BuildContext context,
+              AsyncSnapshot<WaitTimeState> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data?.waitTime != null) {
+                if (snapshot.data!.waitTime! >= 0) {
+                  return waitTimeDisplayAdjustable(snapshot.data!.waitTime!, MediaQuery.of(context).size.width);//waitTimeDisplay(snapshot.data!.waitTime!, fontSize: 20);
                 }
               }
-              return Text("none", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width*.05));
-            },
-          ),
-          Spacer()
-        ],
-      ),
+            }
+            return Text("none", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width*.05));
+          },
+        ),
+    )
     ),
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
