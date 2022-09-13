@@ -32,7 +32,6 @@ class ProfilePage extends StatelessWidget {
                 controller: _addressTextController,
                 decoration: InputDecoration(labelText: "Address"),),
                 ElevatedButton(onPressed: () {
-                  DatabaseService().sendWinnerAddress(_addressTextController.text);
                 }, child: Text("submit"),
     style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue)))
               ]),

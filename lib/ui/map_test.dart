@@ -156,11 +156,8 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                                     if (snapshot.data?.waitTime != null) {
                                       if (snapshot.data!.waitTime! >= 0) {
                                         return Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              "Wait time: ",
-                                              style: TextStyle(fontSize: 20),
-                                            ),
                                             waitTimeDisplay(
                                                 snapshot.data!.waitTime!,
                                                 fontSize: 20)
