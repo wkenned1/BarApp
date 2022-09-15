@@ -11,6 +11,7 @@ import 'package:Linez/ui/widgets/ticket_icon_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:io' show Platform;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:location/location.dart';
@@ -77,12 +78,14 @@ class _GetLocationState extends State<GetLocationWidget> {
 //show popup when ticket icon is clicked
 Widget _buildTicketDialog(BuildContext context) {
   return new AlertDialog(
-    title: const Text("Giveaway"),
+    title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 gift card. Winners will be contacted via text with information on how to claim the reward."),
+        Text(Constants.giveawayExplanation, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        (Platform.isIOS) ? Text("(${Constants.giveawayDisclaimerIOS})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .035),) : Text("(${Constants.giveawayDisclaimerAndroid})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04),),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
@@ -90,11 +93,11 @@ Widget _buildTicketDialog(BuildContext context) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => PhoneAuthPage()),
             );
-          }, child: Text("Sign Up")),
+          }, child: Text("Sign Up", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();
-          }, child: Text("Not Now")),
+          }, child: Text("Not Now", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
         ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
@@ -113,12 +116,14 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
     }
   }
   return new AlertDialog(
-    title: const Text("Giveaway"),
+    title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 gift card. Winners will be contacted via text with information on how to claim the reward."),
+        Text(Constants.giveawayExplanation, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        (Platform.isIOS) ? Text("(${Constants.giveawayDisclaimerIOS})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .035),) : Text("(${Constants.giveawayDisclaimerAndroid})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04),),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(
@@ -253,9 +258,9 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void _updateColor() async {
-    for(var i = 0; i < 3; i++) {
+    for(var i = 0; i < 5; i++) {
       setState(() {
-        iconColor = Colors.red;
+        iconColor = Color(Constants.boxBlue);
       });
       await Future.delayed(Duration(milliseconds: 500));
       setState(() {
@@ -302,9 +307,29 @@ class _MyHomePageState extends State<HomePage> {
                                 builder: (BuildContext context) =>
                                     _buildTicketSignedInDialog(context));
                           },
-                            child: TicketIconWidget(ticketCount: state.profile.tickets)
-
-
+                            child: Container(
+                              //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
+                              padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              //width: 70,
+                              //height: 60,
+                              child:
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Container(child:
+                                Row(children: [
+                                  Image.asset(
+                                    'assets/images/ticket_icon.png', // Fixes border issues
+                                    width: profileIconSize/2,
+                                    height: profileIconSize/2,
+                                    color: iconColor,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                                  Text("${state.profile.tickets}", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * .05),),
+                                ],)
+                                ),),
+                            )
                         /*Container(
                           width: 70,
                             height: 60,
@@ -337,7 +362,29 @@ class _MyHomePageState extends State<HomePage> {
                               builder: (BuildContext context) =>
                                   _buildTicketDialog(context));
                         },
-                        child: const TicketIconWidget(ticketCount: 0)
+                        child: Container(
+                          //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
+                          padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          //width: 70,
+                          //height: 60,
+                          child:
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Container(child:
+                            Row(children: [
+                              Image.asset(
+                                'assets/images/ticket_icon.png', // Fixes border issues
+                                width: profileIconSize/2,
+                                height: profileIconSize/2,
+                                color: iconColor,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                              Text("0", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * .05),),
+                            ],)
+                            ),),
+                        )
 
 
                       /*Container(
@@ -365,8 +412,17 @@ class _MyHomePageState extends State<HomePage> {
                   });
                 }
                 else {
-                  return GestureDetector(child: /*TicketIconWidget(ticketCount: 0),*/
-                      Container(
+                  return
+                    InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: (){
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildTicketDialog(context));
+                        },
+                        child: Container(
                         //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
                         padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
                         margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -374,38 +430,31 @@ class _MyHomePageState extends State<HomePage> {
                         //height: 60,
                         child:
                         Padding(
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Container(child:
-                          Row(children: [
-                            Image.asset(
-                              'assets/images/ticket_icon.png', // Fixes border issues
-                              width: profileIconSize/2,
-                              height: profileIconSize/2,
-                              color: iconColor,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                            Text("0", style: TextStyle(color: iconColor, fontSize: MediaQuery.of(context).size.width * .05),),
-                            MultiBlocListener(
-                              listeners: [
-                                BlocListener<AnimationBloc, AnimationState>(
-                                    listener: (context, state) {
-                                      if(state is TicketAnimating) {
-                                        print("update");
-                                        _updateColor();
-                                      }
-                                    } )],
-                              child: Container(width: 0, height: 0,),)
-                          ],)
-                          ),),
-                      ),
-                    onTap: (){
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              _buildTicketDialog(context));
-                    },
-                  );
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Container(child:
+                        Row(children: [
+                        Image.asset(
+                        'assets/images/ticket_icon.png', // Fixes border issues
+                        width: profileIconSize/2,
+                        height: profileIconSize/2,
+                        color: iconColor,
+                        ),
+                        Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                        Text("0", style: TextStyle(color: iconColor, fontSize: MediaQuery.of(context).size.width * .05),),
+                        MultiBlocListener(
+                        listeners: [
+                        BlocListener<AnimationBloc, AnimationState>(
+                        listener: (context, state) {
+                        if(state is TicketAnimating) {
+                        print("update");
+                        _updateColor();
+                        }
+                        } )],
+                        child: Container(width: 0, height: 0,),)
+                        ],)
+                        ),),
+                        ),);
                 }
               }),
         ],

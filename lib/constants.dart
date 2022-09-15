@@ -39,6 +39,9 @@ class Constants {
 
   //user related
   static const winnerMessageAfterPopup = "PopupShown";
+  static const giveawayExplanation = "Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 Amazon gift card at the end of the giveaway. Each winner will be texted a link to redeem the gift card on amazon.com. Start earning tickets by signing up with your mobile phone!";
+  static const giveawayDisclaimerIOS = "This giveaway is sponsored by Linez App and not Apple.";
+  static const giveawayDisclaimerAndroid = "This giveaway is sponsored by Linez App and not the Google Play Store.";
 
   //location icons
   static const customIconsMap = {

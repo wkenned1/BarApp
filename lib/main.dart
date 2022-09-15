@@ -167,8 +167,8 @@ void main() async {
 
   //TODO remove
   //show disclaimer popup and animation every time
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setBool(Constants.termsOfServicePopupShown, false);
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+  //prefs.setBool(Constants.termsOfServicePopupShown, false);
 
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(

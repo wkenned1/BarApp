@@ -39,12 +39,14 @@ import 'package:flutter/services.dart' show rootBundle;
 //show popup when ticket icon is clicked
 Widget _buildTicketDialog(BuildContext context) {
   return new AlertDialog(
-    title: const Text("Giveaway"),
+    title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 gift card. Winners will be contacted via text with information on how to claim the reward."),
+        Text(Constants.giveawayExplanation, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        (Platform.isIOS) ? Text("(${Constants.giveawayDisclaimerIOS})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .035),) : Text("(${Constants.giveawayDisclaimerAndroid})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04),),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
@@ -52,12 +54,12 @@ Widget _buildTicketDialog(BuildContext context) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => PhoneAuthPage()),
             );
-          }, child: Text("Sign Up")),
+          }, child: Text("Sign Up", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();
             context.read<AnimationBloc>().add(TicketAnimation());
-          }, child: Text("Not Now")),
+          }, child: Text("Not Now", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
         ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
