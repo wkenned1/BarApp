@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'blocs/animation/animation_bloc.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
@@ -164,6 +165,11 @@ void main() async {
     }
   });
 
+  //TODO remove
+  //show disclaimer popup and animation every time
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setBool(Constants.termsOfServicePopupShown, false);
+
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(
       providers: [
@@ -196,6 +202,9 @@ void main() async {
         ),
         BlocProvider(
             create: (context) => UserLocationBloc()
+        ),
+        BlocProvider(
+            create: (context) => AnimationBloc()
         )
       ],
       child: MyApp(),

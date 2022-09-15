@@ -7,6 +7,7 @@ import 'package:Linez/ui/profile_page.dart';
 import 'package:Linez/ui/search_page.dart';
 import 'package:Linez/ui/user_feedback_page.dart';
 import 'package:Linez/ui/widgets/countdown_widget.dart';
+import 'package:Linez/ui/widgets/ticket_icon_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,7 +93,7 @@ Widget _buildTicketDialog(BuildContext context) {
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();
-          }, child: Text("No")),
+          }, child: Text("Not Now")),
         ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
@@ -285,8 +286,10 @@ class _MyHomePageState extends State<HomePage> {
                                 builder: (BuildContext context) =>
                                     _buildTicketSignedInDialog(context));
                           },
-                            child:
-                        Container(
+                            child: TicketIconWidget(ticketCount: state.profile.tickets)
+
+
+                        /*Container(
                           width: 70,
                             height: 60,
                             child:
@@ -303,7 +306,10 @@ class _MyHomePageState extends State<HomePage> {
                               Padding(
                                 padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                               Text("${state.profile.tickets}", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
-                            ],),))));
+                            ],),)))*/
+
+
+                        );
                     }
                     else {
                       return InkWell(
@@ -315,8 +321,10 @@ class _MyHomePageState extends State<HomePage> {
                               builder: (BuildContext context) =>
                                   _buildTicketDialog(context));
                         },
-                        child:
-                      Container(
+                        child: const TicketIconWidget(ticketCount: 0)
+
+
+                      /*Container(
                           width: 70,
                           height: 60,
                           child: Padding(
@@ -333,14 +341,16 @@ class _MyHomePageState extends State<HomePage> {
                             padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                           Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
                         ],),),
-                      ))
+                      ))*/
+
+
                       );
                     }
                   });
                 }
                 else {
-                  return GestureDetector(child:
-                      Container(child:
+                  return GestureDetector(child: TicketIconWidget(ticketCount: 0),
+                      /*Container(child:
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
                         child: Container(child: Row(children: [
@@ -354,7 +364,7 @@ class _MyHomePageState extends State<HomePage> {
                             padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                           Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
                         ],),),
-                      ),),
+                      ),),*/
                     onTap: (){
                       showDialog(
                           context: context,

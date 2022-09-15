@@ -134,6 +134,7 @@ class _BarPageState extends State<BarPage> {
   Widget build(BuildContext context) {
     double buttonHeight = MediaQuery.of(context).size.height * .07;
     double buttonWidth = MediaQuery.of(context).size.width * .4;
+    double buttonTextSize = MediaQuery.of(context).size.width*.06;
     int waitTime = -1;
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
@@ -177,7 +178,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 0;
                                 setState(() => pressAttention = 0);
                               },
-                              child: Text("0 min", style: TextStyle(fontSize: 30)),
+                              child: Text("0 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 0 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
@@ -190,7 +191,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 1;
                                 setState(() => pressAttention = 1);
                               },
-                              child: Text("5 min", style: TextStyle(fontSize: 30)),
+                              child: Text("5 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 1 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
@@ -203,7 +204,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 2;
                                 setState(() => pressAttention = 2);
                               },
-                              child: Text("10 min", style: TextStyle(fontSize: 30)),
+                              child: Text("10 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 2 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
@@ -216,7 +217,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 3;
                                 setState(() => pressAttention = 3);
                               },
-                              child: Text("20 min", style: TextStyle(fontSize: 30)),
+                              child: Text("20 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 3 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
@@ -229,7 +230,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 4;
                                 setState(() => pressAttention = 4);
                               },
-                              child: Text("30 min", style: TextStyle(fontSize: 30)),
+                              child: Text("30 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 4 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
@@ -242,7 +243,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 5;
                                 setState(() => pressAttention = 5);
                               },
-                              child: Text("45 min", style: TextStyle(fontSize: 30)),
+                              child: Text("45 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 5 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
@@ -255,7 +256,7 @@ class _BarPageState extends State<BarPage> {
                                 index = 6;
                                 setState(() => pressAttention = 6);
                               },
-                              child: Text("60+ min", style: TextStyle(fontSize: 30)),
+                              child: Text("60+ min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: pressAttention != 6 ? Color(Constants.boxBlue): Color(Constants.linezBlue),
                               ))),

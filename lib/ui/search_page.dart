@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../blocs/animation/animation_bloc.dart';
 import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
@@ -156,6 +157,7 @@ class SearchPage extends StatelessWidget {
             backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
+            context.read<AnimationBloc>().add(TicketAnimation());
           },
           child: const Text('Continue', style: TextStyle(color: Colors.white),),
         ),

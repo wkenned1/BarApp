@@ -6,8 +6,7 @@ abstract class AnimationState {}
 class AnimationInitial extends AnimationState {
 }
 
-class BounceAnimationState extends AnimationState {
-  final int durationMillis;
+class TicketAnimating extends AnimationState {
 
-  BounceAnimationState({required this.durationMillis});
+  TicketAnimating();
 }
