@@ -20,7 +20,7 @@ class AnimationBloc extends Bloc<AnimationEvent, AnimationState> {
       print("anim 2");
       animating = true;
       emit(TicketAnimating());
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 2));
       animating = false;
       print("anim 3");
     }

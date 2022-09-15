@@ -34,6 +34,39 @@ import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:flutter/services.dart' show rootBundle;
 
+
+
+//show popup when ticket icon is clicked
+Widget _buildTicketDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text("Giveaway"),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text("Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 gift card. Winners will be contacted via text with information on how to claim the reward."),
+        Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+        Center(child: Container(child:
+        Row(children: [
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PhoneAuthPage()),
+            );
+          }, child: Text("Sign Up")),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pop();
+            context.read<AnimationBloc>().add(TicketAnimation());
+          }, child: Text("Not Now")),
+        ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        ),),
+      ],
+    ),
+  );
+}
+
 class SearchPage extends StatelessWidget {
   bool launchBarPage = false;
 
@@ -157,7 +190,10 @@ class SearchPage extends StatelessWidget {
             backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
-            context.read<AnimationBloc>().add(TicketAnimation());
+            showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    _buildTicketDialog(context));
           },
           child: const Text('Continue', style: TextStyle(color: Colors.white),),
         ),

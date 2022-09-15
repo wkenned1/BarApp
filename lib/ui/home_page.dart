@@ -18,6 +18,7 @@ import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../blocs/animation/animation_bloc.dart';
 import '../blocs/profile/profile_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
@@ -192,6 +193,8 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
   int bottomSelectedIndex = 0;
+  final double ticketOffsetPixels = 10;
+  Color iconColor = Colors.white;
 
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
     return [
@@ -247,6 +250,19 @@ class _MyHomePageState extends State<HomePage> {
       pageController.animateToPage(index,
           duration: Duration(milliseconds: 500), curve: Curves.ease);
     });
+  }
+
+  void _updateColor() async {
+    for(var i = 0; i < 3; i++) {
+      setState(() {
+        iconColor = Colors.red;
+      });
+      await Future.delayed(Duration(milliseconds: 500));
+      setState(() {
+        iconColor = Colors.white;
+      });
+      await Future.delayed(Duration(milliseconds: 500));
+    }
   }
 
   @override
@@ -349,22 +365,40 @@ class _MyHomePageState extends State<HomePage> {
                   });
                 }
                 else {
-                  return GestureDetector(child: TicketIconWidget(ticketCount: 0),
-                      /*Container(child:
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                        child: Container(child: Row(children: [
-                          Image.asset(
-                            'assets/images/ticket_icon.png', // Fixes border issues
-                            width: profileIconSize/2,
-                            height: profileIconSize/2,
-                            color: Colors.white,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                          Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
-                        ],),),
-                      ),),*/
+                  return GestureDetector(child: /*TicketIconWidget(ticketCount: 0),*/
+                      Container(
+                        //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
+                        padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        //width: 70,
+                        //height: 60,
+                        child:
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: Container(child:
+                          Row(children: [
+                            Image.asset(
+                              'assets/images/ticket_icon.png', // Fixes border issues
+                              width: profileIconSize/2,
+                              height: profileIconSize/2,
+                              color: iconColor,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                            Text("0", style: TextStyle(color: iconColor, fontSize: MediaQuery.of(context).size.width * .05),),
+                            MultiBlocListener(
+                              listeners: [
+                                BlocListener<AnimationBloc, AnimationState>(
+                                    listener: (context, state) {
+                                      if(state is TicketAnimating) {
+                                        print("update");
+                                        _updateColor();
+                                      }
+                                    } )],
+                              child: Container(width: 0, height: 0,),)
+                          ],)
+                          ),),
+                      ),
                     onTap: (){
                       showDialog(
                           context: context,
