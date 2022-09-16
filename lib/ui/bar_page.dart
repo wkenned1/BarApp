@@ -66,8 +66,8 @@ class _BarPageState extends State<BarPage> {
           Text((day < 4)
               ? "It's a weekday bozo, there's no line out here."
               : (hour > 2 && hour < 6)
-                  ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."
-                  : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."),
+                  ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 3:00am."
+                  : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 3:00am."),
         ],
       ),
       actions: <Widget>[
