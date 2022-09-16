@@ -109,7 +109,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                           child: Text(
                         location.infoWindowTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                            fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .04, color: Colors.white),
                       )),
                       decoration: BoxDecoration(
                           color: Color(Constants.linezBlue),
@@ -215,6 +215,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
           child: Stack(
             children: [
               GoogleMap(
+                myLocationButtonEnabled: false,
                 circles: circles,
                 myLocationEnabled: false,
                 //Map widget from google_maps_flutter package

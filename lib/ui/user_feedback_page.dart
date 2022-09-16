@@ -42,7 +42,7 @@ class UserFeedbackPage extends StatelessWidget {
                 Padding(padding: EdgeInsets.fromLTRB(10.0, 0, 10.0, 10.0), child:
                 Center(
                   child: TextFormField(
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                     inputFormatters: [
                       new LengthLimitingTextInputFormatter(140),
                     ],

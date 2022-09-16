@@ -32,28 +32,30 @@ class WaitTimeReportBloc
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
 
+    //restrictions will be disabled during app review
+    //when restrictions are disabled users can submit wait times at any time and from any location
+    bool restrictionsDisabled = await _databaseRepository.getRestrictionMode();
+
     if (Platform.isIOS) {
       final accuracyStatus = await Geolocator.getLocationAccuracy();
-      switch(accuracyStatus) {
-        case LocationAccuracyStatus.reduced:
-        // Precise location switch is OFF.
-          emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
-          return;
-      /*case LocationAccuracyStatus.precise:
+      if(!restrictionsDisabled) {
+        switch(accuracyStatus) {
+          case LocationAccuracyStatus.reduced:
+          // Precise location switch is OFF.
+            emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+            return;
+        /*case LocationAccuracyStatus.precise:
       // Precise location switch is ON.
         break;*/
-        case LocationAccuracyStatus.unknown:
-          emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
-          return;
+          case LocationAccuracyStatus.unknown:
+            emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+            return;
+        }
       }
     }
 
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
-
-    //restrictions will be disabled during app review
-    //when restrictions are disabled users can submit wait times at any time and from any location
-    bool restrictionsDisabled = await _databaseRepository.getRestrictionMode();
 
     //check if day and time is correct
     if (restrictionsDisabled || (hour >= 20 &&

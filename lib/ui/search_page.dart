@@ -120,7 +120,7 @@ class SearchPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(UserData.winnerMessage),
+          Text("You will receive a text "),
         ],
       ),
       actions: <Widget>[
@@ -264,6 +264,7 @@ class SearchPage extends StatelessWidget {
 
     if(UserData.showDisclaimerPopup) {
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (BuildContext context) =>
               _buildDisclaimerDialog(context));
