@@ -120,7 +120,7 @@ class SearchPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text("You will receive a text "),
+          Text("You will receive a text with a link to claim your Amazon gift card."),
         ],
       ),
       actions: <Widget>[
