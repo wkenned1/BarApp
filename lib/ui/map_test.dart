@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
@@ -107,9 +109,10 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                       height: 60,
                       child: Center(
                           child: Text(
+                            textAlign: TextAlign.center,
                         location.infoWindowTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: MediaQuery.of(context).size.width * .04, color: Colors.white),
+                            fontWeight: FontWeight.bold, fontSize: min(20, MediaQuery.of(context).size.width * .05), color: Colors.white),
                       )),
                       decoration: BoxDecoration(
                           color: Color(Constants.linezBlue),

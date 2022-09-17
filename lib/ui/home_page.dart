@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Linez/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:Linez/resources/util/location_util.dart';
 import 'package:Linez/ui/coming_soon_page.dart';
@@ -23,6 +25,7 @@ import '../blocs/animation/animation_bloc.dart';
 import '../blocs/profile/profile_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
+import '../main.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
 import 'logout_page.dart';
@@ -278,6 +281,11 @@ class _MyHomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Color(Constants.linezBlue),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+          size: min(MediaQuery.of(context).size.height * .06, MediaQuery.of(context).size.width * .08),//change size on your need//change color on your need
+        ),
+        toolbarHeight: WidgetsBinding.instance.window.physicalSize.height /35,
         bottom: PreferredSize(
             child: Container(
               color: Colors.white,
@@ -286,7 +294,7 @@ class _MyHomePageState extends State<HomePage> {
             preferredSize: Size.fromHeight(4.0)),
         backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
-        title: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.width * .07),),
+        title: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.height * .05),),
         //automaticallyImplyLeading: false,
         actions: <Widget>[
           BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
@@ -317,16 +325,17 @@ class _MyHomePageState extends State<HomePage> {
                               Padding(
                                 padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 child: Container(child:
-                                Row(children: [
+                                Row(
+                                  children: [
                                   Image.asset(
                                     'assets/images/ticket_icon.png', // Fixes border issues
-                                    width: profileIconSize/2,
-                                    height: profileIconSize/2,
+                                    width: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                                    height: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
                                     color: iconColor,
                                   ),
                                   Padding(
                                     padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                                  Text("${state.profile.tickets}", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * .05),),
+                                  Text("${state.profile.tickets}", style: TextStyle(color: Colors.white, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
                                 ],)
                                 ),),
                             )
@@ -375,13 +384,13 @@ class _MyHomePageState extends State<HomePage> {
                             Row(children: [
                               Image.asset(
                                 'assets/images/ticket_icon.png', // Fixes border issues
-                                width: profileIconSize/2,
-                                height: profileIconSize/2,
+                                width: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                                height: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
                                 color: iconColor,
                               ),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                              Text("0", style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * .05),),
+                              Text("0", style: TextStyle(color: Colors.white, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
                             ],)
                             ),),
                         )
@@ -435,13 +444,13 @@ class _MyHomePageState extends State<HomePage> {
                         Row(children: [
                         Image.asset(
                         'assets/images/ticket_icon.png', // Fixes border issues
-                        width: profileIconSize/2,
-                        height: profileIconSize/2,
+                        width: min(MediaQuery.of(context).size.height * .035, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                        height: min(MediaQuery.of(context).size.height * .035, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
                         color: iconColor,
                         ),
                         Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                        Text("0", style: TextStyle(color: iconColor, fontSize: MediaQuery.of(context).size.width * .05),),
+                        Text("0", style: TextStyle(color: Colors.white, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
                         MultiBlocListener(
                         listeners: [
                         BlocListener<AnimationBloc, AnimationState>(
@@ -463,7 +472,7 @@ class _MyHomePageState extends State<HomePage> {
               child:
               ListView(
                 children: <Widget>[
-                  const SizedBox(
+                  SizedBox(
                   height: 64.0,
                     child: DrawerHeader(
                         margin: EdgeInsets.all(0.0),
@@ -471,12 +480,12 @@ class _MyHomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           color: Color(Constants.linezBlue),
                         ),
-                        child: Center(child: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: 20),))
+                        child: Center(child: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .02, WidgetsBinding.instance.window.physicalSize.width * .04),)))
                     ),
                   ),
                   GestureDetector(
                     child: ListTile(
-                      title: Text("Send us feedback", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                      title: Text("Send us feedback", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                       trailing: Icon(Icons.arrow_forward),
                     ),
                     onTap: (){
@@ -485,7 +494,7 @@ class _MyHomePageState extends State<HomePage> {
                     },
                   ),
                   GestureDetector(child: ListTile(
-                    title: Text("Coming soon", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    title: Text("Coming soon", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                     trailing: Icon(Icons.arrow_forward),
                   ),
                     onTap: (){
@@ -494,7 +503,7 @@ class _MyHomePageState extends State<HomePage> {
                     },
                   ),
                   GestureDetector(child: ListTile(
-                    title: Text("Terms of Service", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    title: Text("Terms of Service", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                     trailing: Icon(Icons.arrow_forward),
                   ),
                   onTap: () async {
@@ -506,7 +515,7 @@ class _MyHomePageState extends State<HomePage> {
                     }
                   },),
                   GestureDetector(child: ListTile(
-                    title: Text("Privacy Policy", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    title: Text("Privacy Policy", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                     trailing: Icon(Icons.arrow_forward),
                   ),
                     onTap: () async {
@@ -521,7 +530,7 @@ class _MyHomePageState extends State<HomePage> {
                       builder: (context, state) {
                       if(state is AuthLoginConfirmed){
                         return GestureDetector(child: ListTile(
-                          title: Text("Logout", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                          title: Text("Logout", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                           trailing: Icon(Icons.arrow_forward),
                         ),
                           onTap: (){
@@ -532,7 +541,7 @@ class _MyHomePageState extends State<HomePage> {
                       }
                       else {
                         return GestureDetector(child: ListTile(
-                          title: Text("Login with phone", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                          title: Text("Login with phone", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                           trailing: Icon(Icons.arrow_forward),
                         ),
                           onTap: (){
