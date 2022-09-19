@@ -450,7 +450,7 @@ class _MyHomePageState extends State<HomePage> {
                         ),
                         Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                        Text("0", style: TextStyle(color: Colors.white, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
+                        Text("0", style: TextStyle(color: iconColor, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
                         MultiBlocListener(
                         listeners: [
                         BlocListener<AnimationBloc, AnimationState>(

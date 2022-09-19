@@ -78,7 +78,7 @@ class WaitTimeReportBloc
           final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
           if (prev_ts
               .difference(DateTime.now().toUtc())
-              .inMinutes <
+              .inMinutes.abs() <
               Constants.waitTimeReset) {
             emit(WaitTimeReportState(
                 submitSuccessful: false,

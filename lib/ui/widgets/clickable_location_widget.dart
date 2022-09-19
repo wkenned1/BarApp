@@ -31,7 +31,7 @@ class ClickableLocationsList extends StatelessWidget {
       children: [
         Align(
             alignment: Alignment.centerLeft,
-            child: Text(location.markerId, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05), color: Colors.white))),
+            child: Text(location.markerId, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05), color: Colors.white))),
         if (userLocation != null)
           Align(
               alignment: Alignment.centerLeft,
@@ -64,11 +64,11 @@ class ClickableLocationsList extends StatelessWidget {
       (location.type == "bar") ?
         Image.asset("assets/images/bar_icon.png", width: 50, height: 50) :
         Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
-        title: Text(location.markerId, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05), color: Colors.white)),
-        subtitle: (userLocation != null) ?
+        title: Row(children: [Flexible(child: Text(location.markerId, maxLines: 1, softWrap: false, overflow: TextOverflow.fade, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05), color: Colors.white))),],),
+        subtitle: Row(children: [Flexible(child: (userLocation != null) ?
       Text(
-        "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .024, MediaQuery.of(context).size.width * .04), color: Colors.white),) :
-        Text(location.address.split(",")[0], style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .024, MediaQuery.of(context).size.width * .04), color: Colors.white)),
+        "${calculateDistanceMiles(userLocation!.latitude, userLocation!.longitude, location.position.latitude, location.position.longitude)} miles away", maxLines: 1, softWrap: false, overflow: TextOverflow.fade, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .024, MediaQuery.of(context).size.width * .04), color: Colors.white),) :
+        Text(location.address.split(",")[0], maxLines: 1, softWrap: false, overflow: TextOverflow.fade, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .024, MediaQuery.of(context).size.width * .04), color: Colors.white)))]),
         trailing: FutureBuilder<WaitTimeState>(
           future: getWaitTime(GetWaitTime(
             address: location.address,
