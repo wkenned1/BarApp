@@ -82,7 +82,7 @@ class ClickableLocationsList extends StatelessWidget {
                 }
               }
             }
-            return Text("none", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05),));
+            return Text("none", style: TextStyle(color: Colors.white, /*fontWeight: FontWeight.bold,*/ fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05),));
           },
         ),
     )
