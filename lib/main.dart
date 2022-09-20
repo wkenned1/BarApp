@@ -10,12 +10,15 @@ import 'package:Linez/resources/util/get_distance.dart';
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/sign_up_view.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'blocs/animation/animation_bloc.dart';
 import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
@@ -54,11 +57,18 @@ Future<LatLng?> _getUserPosition() async {
 }
 
 void main() async {
+  print("starting!");
   WidgetsFlutterBinding.ensureInitialized();
   //initialize firebase app
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate(
+  );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   //get locations from database
   final locations = await DatabaseService().getLocations();
   Locations.defaultBars = [];
@@ -155,6 +165,11 @@ void main() async {
     }
   });
 
+  //TODO remove
+  //show disclaimer popup and animation every time
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+  //prefs.setBool(Constants.termsOfServicePopupShown, false);
+
   BlocOverrides.runZoned(
     () => runApp(MultiBlocProvider(
       providers: [
@@ -187,6 +202,9 @@ void main() async {
         ),
         BlocProvider(
             create: (context) => UserLocationBloc()
+        ),
+        BlocProvider(
+            create: (context) => AnimationBloc()
         )
       ],
       child: MyApp(),
@@ -199,7 +217,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

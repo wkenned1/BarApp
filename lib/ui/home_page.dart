@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Linez/blocs/phone_auth/phone_auth_bloc.dart';
 import 'package:Linez/resources/util/location_util.dart';
 import 'package:Linez/ui/coming_soon_page.dart';
@@ -7,20 +9,23 @@ import 'package:Linez/ui/profile_page.dart';
 import 'package:Linez/ui/search_page.dart';
 import 'package:Linez/ui/user_feedback_page.dart';
 import 'package:Linez/ui/widgets/countdown_widget.dart';
+import 'package:Linez/ui/widgets/ticket_icon_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:io' show Platform;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:workmanager/workmanager.dart';
 
+import '../blocs/animation/animation_bloc.dart';
 import '../blocs/profile/profile_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
+import '../main.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
 import 'logout_page.dart';
@@ -76,12 +81,14 @@ class _GetLocationState extends State<GetLocationWidget> {
 //show popup when ticket icon is clicked
 Widget _buildTicketDialog(BuildContext context) {
   return new AlertDialog(
-    title: const Text("Giveaway"),
+    title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
+        Text(Constants.giveawayExplanation, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        (Platform.isIOS) ? Text("(${Constants.giveawayDisclaimerIOS})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .035),) : Text("(${Constants.giveawayDisclaimerAndroid})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04),),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(children: [
@@ -89,11 +96,11 @@ Widget _buildTicketDialog(BuildContext context) {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => PhoneAuthPage()),
             );
-          }, child: Text("Sign Up")),
+          }, child: Text("Sign Up", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
           Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
           ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
             Navigator.of(context).pop();
-          }, child: Text("No")),
+          }, child: Text("Not Now", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
         ],
           mainAxisAlignment: MainAxisAlignment.center,
         ),
@@ -112,12 +119,14 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
     }
   }
   return new AlertDialog(
-    title: const Text("Giveaway"),
+    title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text("Everytime you submit a line estimate you will get 1 ticket for a chance to win a \$100 dollar gift card."),
+        Text(Constants.giveawayExplanation, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        (Platform.isIOS) ? Text("(${Constants.giveawayDisclaimerIOS})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .035),) : Text("(${Constants.giveawayDisclaimerAndroid})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04),),
         Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
         Center(child: Container(child:
         Row(
@@ -134,7 +143,7 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
                   "#${UserData.userTickets}",
                   style: new TextStyle(
                       color: Colors.white,
-                      fontSize: MediaQuery.of(context).size.width * .04,
+                      fontSize: MediaQuery.of(context).size.width * .05,
                       fontWeight: FontWeight.w900
                   )
               ),),
@@ -150,21 +159,21 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
         Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 10)),
         Center(child: Container(child:
         Column(children: [
-          Text("Time left"),
+          Text("Countdown to giveaway"),
           Container(
               decoration: new BoxDecoration (
                   color: Colors.green
               ),
-              height: MediaQuery.of(context).size.width/13,
-              width: MediaQuery.of(context).size.width/2.5,
+              height: MediaQuery.of(context).size.width/10,
+              width: MediaQuery.of(context).size.width/2,
               child: new Center(child:
               (!showCountdown) ? Text("00:00:00:00", style: TextStyle(
                   color: Colors.white,
-                  fontSize: MediaQuery.of(context).size.width * .04,
+                  fontSize: MediaQuery.of(context).size.width * .05,
                   fontWeight: FontWeight.w900
 
               ),) :
-              CountdownWidget(giveaway: AppInfo.giveawayDate!)
+              CountdownWidget(giveaway: AppInfo.giveawayDate!, fontSize: MediaQuery.of(context).size.width * .05,)
               )
           )
         ],)
@@ -192,6 +201,8 @@ class HomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<HomePage> {
   int bottomSelectedIndex = 0;
+  final double ticketOffsetPixels = 10;
+  Color iconColor = Colors.white;
 
   List<BottomNavigationBarItem> buildBottomNavBarItems() {
     return [
@@ -249,16 +260,41 @@ class _MyHomePageState extends State<HomePage> {
     });
   }
 
+  void _updateColor() async {
+    for(var i = 0; i < 5; i++) {
+      setState(() {
+        iconColor = Color(Constants.boxBlue);
+      });
+      await Future.delayed(Duration(milliseconds: 500));
+      setState(() {
+        iconColor = Colors.white;
+      });
+      await Future.delayed(Duration(milliseconds: 500));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     context.read<PhoneAuthBloc>().add(AuthConfirmLoginEvent());
     NotificationService().initNotification(context);
-    double profileIconSize = MediaQuery.of(context).size.width/10;
+    double profileIconSize = MediaQuery.of(context).size.width/8;
     return Scaffold(
+      backgroundColor: Color(Constants.linezBlue),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+          size: min(MediaQuery.of(context).size.height * .06, MediaQuery.of(context).size.width * .08),//change size on your need//change color on your need
+        ),
+        toolbarHeight: WidgetsBinding.instance.window.physicalSize.height /35,
+        bottom: PreferredSize(
+            child: Container(
+              color: Colors.white,
+              height: 1.0,
+            ),
+            preferredSize: Size.fromHeight(4.0)),
         backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
-        title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
+        title: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.height * .05),),
         //automaticallyImplyLeading: false,
         actions: <Widget>[
           BlocBuilder<PhoneAuthBloc, PhoneAuthState>(
@@ -270,18 +306,47 @@ class _MyHomePageState extends State<HomePage> {
                   builder: (context, state) {
                     if(state is ProfileUpdatedState){
                       return
-                        GestureDetector(
+                        InkWell(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                           onTap: (){
                             showDialog(
                                 context: context,
                                 builder: (BuildContext context) =>
                                     _buildTicketSignedInDialog(context));
                           },
+                            child: Container(
+                              //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
+                              padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
+                              margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              //width: 70,
+                              //height: 60,
+                              child:
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Container(child:
+                                Row(
+                                  children: [
+                                  Image.asset(
+                                    'assets/images/ticket_icon.png', // Fixes border issues
+                                    width: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                                    height: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                                    color: iconColor,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                                  Text("${state.profile.tickets}", style: TextStyle(color: Colors.white, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
+                                ],)
+                                ),),
+                            )
+                        /*Container(
+                          width: 70,
+                            height: 60,
                             child:
-                        Container(child:
                         Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                            child: Container(child: Row(children: [
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Container(child:
+                            Row(children: [
                               Image.asset(
                                 'assets/images/ticket_icon.png', // Fixes border issues
                                 width: profileIconSize/2,
@@ -291,20 +356,53 @@ class _MyHomePageState extends State<HomePage> {
                               Padding(
                                 padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                               Text("${state.profile.tickets}", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
-                            ],),))));
+                            ],),)))*/
+
+
+                        );
                     }
                     else {
-                      return GestureDetector(
+                      return InkWell(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         onTap: (){
                           showDialog(
                               context: context,
                               builder: (BuildContext context) =>
                                   _buildTicketDialog(context));
                         },
-                        child:
-                      Container(child: Padding(
+                        child: Container(
+                          //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
+                          padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
+                          margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          //width: 70,
+                          //height: 60,
+                          child:
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Container(child:
+                            Row(children: [
+                              Image.asset(
+                                'assets/images/ticket_icon.png', // Fixes border issues
+                                width: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                                height: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                                color: iconColor,
+                              ),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                              Text("0", style: TextStyle(color: Colors.white, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
+                            ],)
+                            ),),
+                        )
+
+
+                      /*Container(
+                          width: 70,
+                          height: 60,
+                          child: Padding(
                         padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                        child: Container(child: Row(children: [
+                        child: Container(child:
+                        Row(children: [
                           Image.asset(
                             'assets/images/ticket_icon.png', // Fixes border issues
                             width: profileIconSize/2,
@@ -315,35 +413,57 @@ class _MyHomePageState extends State<HomePage> {
                             padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
                           Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
                         ],),),
-                      ))
+                      ))*/
+
+
                       );
                     }
                   });
                 }
                 else {
-                  return GestureDetector(child:
-                      Container(child:
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, profileIconSize/4, 0),
-                        child: Container(child: Row(children: [
-                          Image.asset(
-                            'assets/images/ticket_icon.png', // Fixes border issues
-                            width: profileIconSize/2,
-                            height: profileIconSize/2,
-                            color: Colors.white,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
-                          Text("0", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)
-                        ],),),
-                      ),),
-                    onTap: (){
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              _buildTicketDialog(context));
-                    },
-                  );
+                  return
+                    InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onTap: (){
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) =>
+                                  _buildTicketDialog(context));
+                        },
+                        child: Container(
+                        //padding: EdgeInsets.fromLTRB(0, 0, MediaQuery.of(context).size.width * .025, 0),
+                        padding: EdgeInsets.fromLTRB(20, 10, ticketOffsetPixels, 10),
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        //width: 70,
+                        //height: 60,
+                        child:
+                        Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Container(child:
+                        Row(children: [
+                        Image.asset(
+                        'assets/images/ticket_icon.png', // Fixes border issues
+                        width: min(MediaQuery.of(context).size.height * .035, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                        height: min(MediaQuery.of(context).size.height * .035, MediaQuery.of(context).size.width * .06), //profileIconSize/2,
+                        color: iconColor,
+                        ),
+                        Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 5, 0),),
+                        Text("0", style: TextStyle(color: iconColor, fontSize: min(MediaQuery.of(context).size.height * .04, MediaQuery.of(context).size.width * .06),)),
+                        MultiBlocListener(
+                        listeners: [
+                        BlocListener<AnimationBloc, AnimationState>(
+                        listener: (context, state) {
+                        if(state is TicketAnimating) {
+                        print("update");
+                        _updateColor();
+                        }
+                        } )],
+                        child: Container(width: 0, height: 0,),)
+                        ],)
+                        ),),
+                        ),);
                 }
               }),
         ],
@@ -352,7 +472,7 @@ class _MyHomePageState extends State<HomePage> {
               child:
               ListView(
                 children: <Widget>[
-                  const SizedBox(
+                  SizedBox(
                   height: 64.0,
                     child: DrawerHeader(
                         margin: EdgeInsets.all(0.0),
@@ -360,12 +480,12 @@ class _MyHomePageState extends State<HomePage> {
                         decoration: BoxDecoration(
                           color: Color(Constants.linezBlue),
                         ),
-                        child: Center(child: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 20),))
+                        child: Center(child: Text("Linez", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .02, WidgetsBinding.instance.window.physicalSize.width * .04),)))
                     ),
                   ),
                   GestureDetector(
                     child: ListTile(
-                      title: Text("Send us feedback", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                      title: Text("Send us feedback", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                       trailing: Icon(Icons.arrow_forward),
                     ),
                     onTap: (){
@@ -374,7 +494,7 @@ class _MyHomePageState extends State<HomePage> {
                     },
                   ),
                   GestureDetector(child: ListTile(
-                    title: Text("Coming soon", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    title: Text("Coming soon", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                     trailing: Icon(Icons.arrow_forward),
                   ),
                     onTap: (){
@@ -383,11 +503,11 @@ class _MyHomePageState extends State<HomePage> {
                     },
                   ),
                   GestureDetector(child: ListTile(
-                    title: Text("Terms of Service", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    title: Text("Terms of Service", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                     trailing: Icon(Icons.arrow_forward),
                   ),
                   onTap: () async {
-                    const url = 'https://linezapp.com/terms_conditions.html';
+                    const url = 'https://linezapp.com/terms_conditions_app.html';
                     if (await canLaunchUrl(Uri.parse(url))) {
                       await launchUrl(Uri.parse(url));
                     } else {
@@ -395,11 +515,11 @@ class _MyHomePageState extends State<HomePage> {
                     }
                   },),
                   GestureDetector(child: ListTile(
-                    title: Text("Privacy Policy", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                    title: Text("Privacy Policy", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                     trailing: Icon(Icons.arrow_forward),
                   ),
                     onTap: () async {
-                      const url = 'https://linezapp.com/privacy.html';
+                      const url = 'https://linezapp.com/privacy_app.html';
                       if (await canLaunchUrl(Uri.parse(url))) {
                         await launchUrl(Uri.parse(url));
                       } else {
@@ -410,7 +530,7 @@ class _MyHomePageState extends State<HomePage> {
                       builder: (context, state) {
                       if(state is AuthLoginConfirmed){
                         return GestureDetector(child: ListTile(
-                          title: Text("Logout", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                          title: Text("Logout", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                           trailing: Icon(Icons.arrow_forward),
                         ),
                           onTap: (){
@@ -421,7 +541,7 @@ class _MyHomePageState extends State<HomePage> {
                       }
                       else {
                         return GestureDetector(child: ListTile(
-                          title: Text("Login with phone", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+                          title: Text("Login with phone", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                           trailing: Icon(Icons.arrow_forward),
                         ),
                           onTap: (){
@@ -435,19 +555,28 @@ class _MyHomePageState extends State<HomePage> {
               ),
         ),
       body: buildPageView(),
-      bottomNavigationBar: BottomNavigationBar(
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        backgroundColor: Color(Constants.linezBlue),
-        currentIndex: bottomSelectedIndex,
-        onTap: (index) {
-          bottomTapped(index);
-        },
-        selectedLabelStyle: TextStyle(color: Colors.white),
-        items: buildBottomNavBarItems(),
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Colors.white,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+        border:  Border(
+          top: BorderSide( //                   <--- right side
+          color: Colors.white,
+            width: 1.0,
+          ),
+        )
+        ),
+        child: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          backgroundColor: Color(Constants.linezBlue),
+          currentIndex: bottomSelectedIndex,
+          onTap: (index) {
+            bottomTapped(index);
+          },
+          selectedLabelStyle: TextStyle(color: Colors.white),
+          items: buildBottomNavBarItems(),
+          unselectedItemColor: Colors.white,
+          selectedItemColor: Colors.white,
       ),
-    );
+      ));
   }
 }

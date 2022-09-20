@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'dart:math' as math;
 
+import '../../constants.dart';
 import '../../models/location_model.dart';
 import 'clickable_location_widget.dart';
 
@@ -36,35 +37,40 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        GestureDetector(child: Container(
-          width: MediaQuery.of(context).size.width,
+        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+        child: GestureDetector(
+          child: Container(
+          //width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height/15,
           decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 2),
-              color: Colors.grey),
-          child:
-    Padding(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: Color(Constants.boxBlue)),
+          child: Padding(
               padding: EdgeInsets.fromLTRB(10, 4, 5, 4),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width * .80,
+                    width: MediaQuery.of(context).size.width * .6,
                     child: Align(
                       child: Text(
                         sectionTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
+                            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
                       ),
                       alignment: Alignment.centerLeft,
                     ),
                   ),
-                  Align(
+                  Container(
+                    width: MediaQuery.of(context).size.width * .3 - 20,
+                    child: Align(
                     child: Transform.rotate(
                       angle: !sectionOpen ? -math.pi / 2 : 0,
                       child: Image.asset("assets/images/arrow_icon.png",
-                          width: 30, height: 30),
+                          width: 25, height: 25, color: Colors.white,),
                     ),
                     alignment: Alignment.centerRight,
-                  ),
+                  ),)
                 ],
               ),
             ),
@@ -80,7 +86,7 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
               }
             });
           },
-        ),
+        )),
         Visibility(maintainState: true, visible: sectionOpen, child: body)
       ],
     );

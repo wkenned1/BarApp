@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../blocs/animation/animation_bloc.dart';
 import '../blocs/get_wait_time/wait_time_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
@@ -31,8 +32,42 @@ import 'map_test.dart';
 import 'package:location/location.dart';
 import 'package:notification_permissions/notification_permissions.dart'
     as NotificationPermissions;
-import 'package:workmanager/workmanager.dart';
 import 'package:flutter/services.dart' show rootBundle;
+
+
+
+//show popup when ticket icon is clicked
+Widget _buildTicketDialog(BuildContext context) {
+  return new AlertDialog(
+    title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
+    content: new Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(Constants.giveawayExplanation, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
+        (Platform.isIOS) ? Text("(${Constants.giveawayDisclaimerIOS})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .035),) : Text("(${Constants.giveawayDisclaimerAndroid})", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .04),),
+        Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0)),
+        Center(child: Container(child:
+        Row(children: [
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => PhoneAuthPage()),
+            );
+          }, child: Text("Sign Up", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
+          Padding(padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0)),
+          ElevatedButton(style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)), onPressed: (){
+            Navigator.of(context).pop();
+            context.read<AnimationBloc>().add(TicketAnimation());
+          }, child: Text("Not Now", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),)),
+        ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        ),),
+      ],
+    ),
+  );
+}
 
 class SearchPage extends StatelessWidget {
   bool launchBarPage = false;
@@ -85,11 +120,13 @@ class SearchPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(UserData.winnerMessage),
+          Text("You will receive a text with a link to claim your Amazon gift card."),
         ],
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -151,10 +188,16 @@ class SearchPage extends StatelessWidget {
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
+            showDialog(
+                context: context,
+                builder: (BuildContext context) =>
+                    _buildTicketDialog(context));
           },
-          child: const Text('Continue'),
+          child: const Text('Continue', style: TextStyle(color: Colors.white),),
         ),
       ],
     );
@@ -221,6 +264,7 @@ class SearchPage extends StatelessWidget {
 
     if(UserData.showDisclaimerPopup) {
       showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (BuildContext context) =>
               _buildDisclaimerDialog(context));
@@ -269,17 +313,20 @@ class SearchPage extends StatelessWidget {
         (context as Element).reassemble();
       },
       child: Container(
+          //color: Color(Constants.boxBlue),
           child: FutureBuilder<void>(
               future: _initFunction(context)/*_getUserLocation()*/,
               builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
                 return SingleChildScrollView(
                     child: Column(
                   children: [
+                    Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
-                        sectionTitle: "Bars",
-                        body: ClickableLocationsList(
-                            locations: barLocations,
-                            userLocation: userLocation)),
+                      sectionTitle: "Bars",
+                      body: ClickableLocationsList(
+                      locations: barLocations,
+                      userLocation: userLocation)),
+                //Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
                         sectionTitle: "Clubs",
                         body: ClickableLocationsList(

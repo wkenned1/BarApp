@@ -57,13 +57,16 @@ class DatabaseService {
   }
 
   addWaitTime(String address, int waitTime) async {
+    print("one");
     CollectionReference<Map<String, dynamic>> snap =
         await _db.collection("WaitTimes");
     DocumentSnapshot<Map<String, dynamic>> ref = await snap.doc(address).get();
+    print("two");
     if (!ref.exists) {
       await _db.collection("WaitTimes").doc(address).set({"reports": []});
       ref = await _db.collection("WaitTimes").doc(address).get();
     }
+    print("three");
     List<dynamic> dynamics = List<dynamic>.from(ref.get("reports"));
     List<WaitTimeModel> reports = [];
     for (dynamic r in dynamics) {
@@ -72,6 +75,7 @@ class DatabaseService {
           waitTime: cast["waitTime"] as int,
           timestamp: cast["timestamp"].toDate()));
     }
+    print("four");
     reports.add(
         WaitTimeModel(waitTime: waitTime, timestamp: DateTime.now().toUtc()));
     await _db
@@ -136,7 +140,7 @@ class DatabaseService {
     return ret;
   }
 
-  Future<bool> sendWinnerAddress(String address) async {
+  /*Future<bool> sendWinnerAddress(String address) async {
     print("debug 1");
     var client = new http.Client();
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -173,7 +177,7 @@ class DatabaseService {
     }
     print("WINNER: FALSE");
     return false;
-  }
+  }*/
 
   Future<void> disableWinnerPopup() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -297,7 +301,7 @@ class DatabaseService {
   Future<DateTime?> getGiveawayTime() async {
     DateTime? dt;
     DocumentSnapshot<Map<String, dynamic>> doc =
-    await _db.collection("GiveawayDate").doc("GiveawayDate").get();
+    await _db.collection("Globals").doc("GiveawayDate").get();
     if(doc.exists){
       try {
         dt = (doc["date"].toDate());
@@ -306,5 +310,19 @@ class DatabaseService {
       }
     }
     return dt;
+  }
+
+  Future<bool> getRestrictionMode() async {
+    bool disabled = false;
+    DocumentSnapshot<Map<String, dynamic>> doc =
+    await _db.collection("Globals").doc("RestrictionMode").get();
+    if(doc.exists){
+      try {
+        disabled = doc["disableAll"] as bool;
+      }
+      catch (e) {
+      }
+    }
+    return disabled;
   }
 }

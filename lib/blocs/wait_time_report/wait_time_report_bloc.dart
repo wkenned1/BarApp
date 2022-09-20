@@ -32,26 +32,33 @@ class WaitTimeReportBloc
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
 
+    //restrictions will be disabled during app review
+    //when restrictions are disabled users can submit wait times at any time and from any location
+    bool restrictionsDisabled = await _databaseRepository.getRestrictionMode();
+
     if (Platform.isIOS) {
       final accuracyStatus = await Geolocator.getLocationAccuracy();
-      switch(accuracyStatus) {
-        case LocationAccuracyStatus.reduced:
-        // Precise location switch is OFF.
-          emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
-          return;
-      /*case LocationAccuracyStatus.precise:
+      if(!restrictionsDisabled) {
+        switch(accuracyStatus) {
+          case LocationAccuracyStatus.reduced:
+          // Precise location switch is OFF.
+            emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+            return;
+        /*case LocationAccuracyStatus.precise:
       // Precise location switch is ON.
         break;*/
-        case LocationAccuracyStatus.unknown:
-          emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
-          return;
+          case LocationAccuracyStatus.unknown:
+            emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+            return;
+        }
       }
     }
 
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
+
     //check if day and time is correct
-    if ((hour >= 20 &&
+    if (restrictionsDisabled || (hour >= 20 &&
         hour <= 23 &&
         (weekday == 4 ||
             weekday == 5 ||
@@ -71,7 +78,7 @@ class WaitTimeReportBloc
           final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
           if (prev_ts
               .difference(DateTime.now().toUtc())
-              .inMinutes <
+              .inMinutes.abs() <
               Constants.waitTimeReset) {
             emit(WaitTimeReportState(
                 submitSuccessful: false,
@@ -82,29 +89,31 @@ class WaitTimeReportBloc
           }
         }
 
-        //checking location requirements
-        LatLng? userLoc = await getUserLocation();
-        if(userLoc == null){
-          emit(WaitTimeReportState(
-              submitSuccessful: false,
-              loading: false,
-              errorMessage:
-              Constants.waitTimeReportNoLocationError));
-          return;
-        }
-        double distance = calculateDistanceMeters(
-            userLoc.latitude,
-            userLoc.longitude,
-            event.location.latitude,
-            event.location.longitude);
-        //if user is too far away from bar
-        if(distance > Constants.distanceToBarRequirement){
-          emit(WaitTimeReportState(
-              submitSuccessful: false,
-              loading: false,
-              errorMessage:
-              Constants.waitTimeReportLocationError));
-          return;
+        if(!restrictionsDisabled) {
+          //checking location requirements
+          LatLng? userLoc = await getUserLocation();
+          if(userLoc == null){
+            emit(WaitTimeReportState(
+                submitSuccessful: false,
+                loading: false,
+                errorMessage:
+                Constants.waitTimeReportNoLocationError));
+            return;
+          }
+          double distance = calculateDistanceMeters(
+              userLoc.latitude,
+              userLoc.longitude,
+              event.location.latitude,
+              event.location.longitude);
+          //if user is too far away from bar
+          if(distance > Constants.distanceToBarRequirement){
+            emit(WaitTimeReportState(
+                submitSuccessful: false,
+                loading: false,
+                errorMessage:
+                Constants.waitTimeReportLocationError));
+            return;
+          }
         }
 
         await _databaseRepository.addWaitTime(event.address, event.waitTime);

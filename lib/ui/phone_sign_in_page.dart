@@ -23,6 +23,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   String verificationID = "";
   bool otpVisibility = false;
   bool ageConfirmed = false;
+  bool consentConfirmed = false;
 
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
@@ -95,7 +96,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         //key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
-          title: Text("Linez"),
+          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.width * .07),),
           automaticallyImplyLeading: false,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),
@@ -135,7 +136,6 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       child: Checkbox(
                           value: ageConfirmed,
                           onChanged: (bool? event) {
-                            print(ageConfirmed);
                             setState(() {
                               ageConfirmed = !ageConfirmed;
                             });
@@ -144,25 +144,48 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   )
                 ],
               ),
+              Padding(child: Text("I consent to being contacted by text if I win a giveaway", textAlign: TextAlign.center, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),), padding: EdgeInsets.fromLTRB(20, 0, 20, 0),),
+              Transform.scale(
+                  scale: 1.5,
+                  child: Checkbox(
+                      value: consentConfirmed,
+                      onChanged: (bool? event) {
+                        setState(() {
+                          consentConfirmed = !consentConfirmed;
+                        });
+                      }
+                  )
+              ),
               ElevatedButton(onPressed: () {
-                if(ageConfirmed) {
-                  print("SEND: ${phoneNumber}");
+                if(ageConfirmed && consentConfirmed) {
                   verifyPhone(context);
                 }
               }, child: Text("Submit"),
-                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue))),
+                  style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue))),
               if(otpVisibility)
                 Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0), child: Column(
                   children: [
                     Text("Enter verification code", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .06)),
+                    Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 0), child:
                     TextFormField(
                       controller: otp,
                       keyboardType: TextInputType.number,
-                    ),
-                    ElevatedButton(onPressed: () {
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10.0),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black, width: 1.0),
+                        ),
+                        hintText: "Code", // pass the hint text parameter here
+                      ),
+                    ),),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue)),
+                        onPressed: () {
                       signIn(context);
-                    }, child: Text("submit"),
-    style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)))
+                    }, child: Text("submit"),)
                   ],
                 ),),
             ],

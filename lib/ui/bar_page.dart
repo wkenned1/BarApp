@@ -18,6 +18,7 @@ Widget waitTimeDisplay(int time, {double fontSize = 15}) {
     "${time} min",
     style: TextStyle(
         fontSize: fontSize,
+        fontWeight: FontWeight.bold,
         color: Color((time <= 10)
             ? Constants.waitTimeTextGreen
             : (time > 10 && time <= 30)
@@ -30,6 +31,7 @@ Widget waitTimeDisplayAdjustable(int time, double width) {
   return Text(
     "${time} min",
     style: TextStyle(
+      fontWeight: FontWeight.bold,
         fontSize: width*.05,
         color: Color((time <= 10)
             ? Constants.waitTimeTextGreen
@@ -64,12 +66,14 @@ class _BarPageState extends State<BarPage> {
           Text((day < 4)
               ? "It's a weekday bozo, there's no line out here."
               : (hour > 2 && hour < 6)
-                  ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."
-                  : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."),
+                  ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 3:00am."
+                  : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 3:00am."),
         ],
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+          backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -91,6 +95,8 @@ class _BarPageState extends State<BarPage> {
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -113,6 +119,8 @@ class _BarPageState extends State<BarPage> {
       ),
       actions: <Widget>[
         new ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Color(Constants.linezBlue)),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -124,6 +132,9 @@ class _BarPageState extends State<BarPage> {
 
   @override
   Widget build(BuildContext context) {
+    double buttonHeight = MediaQuery.of(context).size.height * .07;
+    double buttonWidth = MediaQuery.of(context).size.width * .4;
+    double buttonTextSize = MediaQuery.of(context).size.width*.06;
     int waitTime = -1;
     context.read<WaitTimeBloc>().add(GetWaitTime(
           address: location.address,
@@ -133,7 +144,7 @@ class _BarPageState extends State<BarPage> {
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
           centerTitle: true,
-          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold),),
+          title: Text("Linez", style: TextStyle(fontWeight: FontWeight.bold, fontFamily: 'BerkshiresWash', fontSize: MediaQuery.of(context).size.width * .07),),
           automaticallyImplyLeading: false,
           leading: new IconButton(
             icon: new Icon(Icons.arrow_back, color: Colors.white),
@@ -151,117 +162,110 @@ class _BarPageState extends State<BarPage> {
                     final time = state.waitTime ?? -1;
 
                     return time >= 0
-                        ? waitTimeDisplay(time, fontSize: 30)
+                        ? waitTimeDisplay(time, fontSize: MediaQuery.of(context).size.width*.08)
                         : Text("No wait time available",
-                        style: TextStyle(fontSize: 30));
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.width*.08));
                     // return widget here based on BlocA's state
                   }),
                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                   Column(
                     children: [
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 0;
                                 setState(() => pressAttention = 0);
                               },
-                              child: Text("0 min", style: TextStyle(fontSize: 30)),
+                              child: Text("0 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 0 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 0 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 1;
                                 setState(() => pressAttention = 1);
                               },
-                              child: Text("5 min", style: TextStyle(fontSize: 30)),
+                              child: Text("5 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 1 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 1 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 2;
                                 setState(() => pressAttention = 2);
                               },
-                              child: Text("10 min", style: TextStyle(fontSize: 30)),
+                              child: Text("10 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 2 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 2 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 3;
                                 setState(() => pressAttention = 3);
                               },
-                              child: Text("20 min", style: TextStyle(fontSize: 30)),
+                              child: Text("20 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 3 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 3 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 4;
                                 setState(() => pressAttention = 4);
                               },
-                              child: Text("30 min", style: TextStyle(fontSize: 30)),
+                              child: Text("30 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 4 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 4 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 5;
                                 setState(() => pressAttention = 5);
                               },
-                              child: Text("45 min", style: TextStyle(fontSize: 30)),
+                              child: Text("45 min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 5 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 5 ? Color(Constants.boxBlue) : Color(Constants.linezBlue),
                               ))),
                       Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                       Container(
-                          width: 200,
-                          height: 50,
+                          width: buttonWidth,
+                          height: buttonHeight,
                           child: ElevatedButton(
                               onPressed: () {
                                 index = 6;
                                 setState(() => pressAttention = 6);
                               },
-                              child: Text("60+ min", style: TextStyle(fontSize: 30)),
+                              child: Text("60+ min", style: TextStyle(fontSize: buttonTextSize)),
                               style: ElevatedButton.styleFrom(
-                                primary:
-                                pressAttention != 6 ? Colors.grey : Color(Constants.linezBlue),
+                                backgroundColor: pressAttention != 6 ? Color(Constants.boxBlue): Color(Constants.linezBlue),
                               ))),
                     ],
                   ),
                   Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, 15)),
                   Container(
-                      width: 200,
-                      height: 50,
+                      width: buttonWidth,
+                      height: buttonHeight,
                       child: ElevatedButton(
                           onPressed: () {
                               int submission = -1;
@@ -300,6 +304,9 @@ class _BarPageState extends State<BarPage> {
                               }
                               //Navigator.of(context).pop();
                             },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(Constants.submitButtonBlue),
+                          ),
                           child: Text("Submit", style: TextStyle(fontSize: 30)))),
                 MultiBlocListener(
                     listeners: [

@@ -3,13 +3,16 @@ import 'package:flutter/cupertino.dart';
 class Constants {
   static const title = "Bar App";
   static const kBlackColor = "0xFF000000";
-  static const waitTimeReset = 90;
+  static const waitTimeReset = 120;
 
   //color scheme
-  static const waitTimeTextRed = 0xffff3311;
+  static const waitTimeTextRed = 0xffff492b;
   static const waitTimeTextOrange = 0xfff99500;
   static const waitTimeTextGreen = 0xff2ac300;
-  static const linezBlue = 0xff4285f4;
+  static const linezBlue = 0xff35558a;
+  static const boxBlue = 0xff516fa2;
+  //static const boxBlue = 0xff6183bc;
+  static const submitButtonBlue = 0xff4285f4;
 
   //shared preferences keys
   static const notifiedBarMarkerId = "notifiedBarMarkerId";
@@ -36,6 +39,9 @@ class Constants {
 
   //user related
   static const winnerMessageAfterPopup = "PopupShown";
+  static const giveawayExplanation = "Linez App will reward you every time you submit a line estimate. Earn 1 ticket for each entry for a chance to win a \$100 Amazon gift card at the end of the giveaway. Each winner will be texted a link to redeem the gift card on amazon.com. Start earning tickets by signing up with your mobile phone!";
+  static const giveawayDisclaimerIOS = "This giveaway is sponsored by Linez App and not Apple.";
+  static const giveawayDisclaimerAndroid = "This giveaway is sponsored by Linez App and not the Google Play Store.";
 
   //location icons
   static const customIconsMap = {

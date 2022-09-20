@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
@@ -107,9 +109,10 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                       height: 60,
                       child: Center(
                           child: Text(
+                            textAlign: TextAlign.center,
                         location.infoWindowTitle,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white),
+                            fontWeight: FontWeight.bold, fontSize: min(20, MediaQuery.of(context).size.width * .05), color: Colors.white),
                       )),
                       decoration: BoxDecoration(
                           color: Color(Constants.linezBlue),
@@ -156,11 +159,8 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                                     if (snapshot.data?.waitTime != null) {
                                       if (snapshot.data!.waitTime! >= 0) {
                                         return Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              "Wait time: ",
-                                              style: TextStyle(fontSize: 20),
-                                            ),
                                             waitTimeDisplay(
                                                 snapshot.data!.waitTime!,
                                                 fontSize: 20)
@@ -174,6 +174,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                                 },
                               )),
                               ElevatedButton(
+                                style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.linezBlue)),
                                 child: Text("Input Time"),
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -217,6 +218,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
           child: Stack(
             children: [
               GoogleMap(
+                myLocationButtonEnabled: false,
                 circles: circles,
                 myLocationEnabled: false,
                 //Map widget from google_maps_flutter package
