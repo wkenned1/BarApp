@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "632843554534",
+    "project_id": "barapp-5fbe5",
+    "storage_bucket": "barapp-5fbe5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:632843554534:android:eb550c05456600f8f9b527",
+        "android_client_info": {
+          "package_name": "com.linezapp.linez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "632843554534-3icj5jvc0q5atvl1tb62grk3mdcvlc0d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8wuA8xRS_dz-N1KR330Lk7Gp9MS42NY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "632843554534-3icj5jvc0q5atvl1tb62grk3mdcvlc0d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "632843554534-q58s491ee8jom8euo8mgo0ntmrr0aoe0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.barApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
