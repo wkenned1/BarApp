@@ -64,7 +64,7 @@ class WaitTimeReportBloc
             weekday == 5 ||
             weekday == 6 ||
             weekday == 7)) ||
-        (hour > 0 &&
+        (hour >= 0 &&
             hour <= 2 &&
             (weekday == 5 ||
                 weekday == 6 ||
