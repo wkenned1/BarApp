@@ -50,6 +50,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         UserData.winnerMessage = model.winnerMessage;
         UserData.feedbackTicketReceived = model.feedbackTicketReceived;
         UserData.reportedLocations = model.reportedLocations;
+        UserData.admin = model.admin ?? false;
         Navigator.of(context).pop();
       }
     });

@@ -4,6 +4,7 @@ import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -31,6 +32,24 @@ class WaitTimeReportBloc
   _reportWaitTime(
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null){
+      if(UserData.admin == true) {
+        final prefs = await SharedPreferences.getInstance();
+        await _databaseRepository.addWaitTime(event.address, event.waitTime);
+        int timestamp = DateTime
+            .now()
+            .toUtc()
+            .millisecondsSinceEpoch;
+        prefs.setInt(event.address, timestamp);
+        await _databaseRepository.addReportedLocation(event.address);
+        UserData.reportedLocations.add(event.address);
+        emit(WaitTimeReportState(submitSuccessful: true, loading: false));
+        return;
+      }
+    }
 
     //restrictions will be disabled during app review
     //when restrictions are disabled users can submit wait times at any time and from any location

@@ -7,13 +7,15 @@ class UserModel {
   String? password;
   final String? displayName;
   final int? age;
+  final bool? admin;
   UserModel(
       {this.uid,
       this.email,
       this.password,
       this.displayName,
       this.age,
-      this.isVerified});
+      this.isVerified,
+      this.admin});
 
   Map<String, dynamic> toMap() {
     return {
@@ -27,7 +29,8 @@ class UserModel {
       : uid = doc.id,
         email = doc.data()!["email"],
         age = doc.data()!["age"],
-        displayName = doc.data()!["displayName"];
+        displayName = doc.data()!["displayName"],
+        admin = doc.data()!["admin"] ?? null;
 
   UserModel copyWith({
     bool? isVerified,
@@ -36,6 +39,7 @@ class UserModel {
     String? password,
     String? displayName,
     int? age,
+    bool? admin
   }) {
     return UserModel(
         uid: uid ?? this.uid,
@@ -43,6 +47,8 @@ class UserModel {
         password: password ?? this.password,
         displayName: displayName ?? this.displayName,
         age: age ?? this.age,
-        isVerified: isVerified ?? this.isVerified);
+        isVerified: isVerified ?? this.isVerified,
+        admin: admin ?? this.admin
+    );
   }
 }

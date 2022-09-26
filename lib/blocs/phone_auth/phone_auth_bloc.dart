@@ -101,6 +101,7 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
         UserData.feedbackTicketReceived = false;
         UserData.winnerMessage = "";
         UserData.reportedLocations = [];
+        UserData.admin = false;
         emit(AuthLogout());
     // signed out
     } catch (e){

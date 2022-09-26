@@ -18,4 +18,5 @@ class UserData {
   static String winnerMessage = "";
   static List<String> reportedLocations = [];
   static bool showDisclaimerPopup = false;
+  static bool admin = false;
 }
