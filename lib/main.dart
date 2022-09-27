@@ -44,6 +44,7 @@ import 'models/profile_model.dart';
 import 'package:Linez/resources/services/database_service.dart';
 
 late final NotificationAppLaunchDetails? appLaunchDetails;
+Timer? _locationUpdate;
 
 Future<LatLng?> _getUserPosition() async {
   try {
@@ -217,6 +218,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //background process for updating location while the app is open
+    if(_locationUpdate == null) {
+      _locationUpdate = Timer.periodic(Duration(seconds: 30), (timer) async {
+        context.read<UserLocationBloc>().add(GetLocationEvent());
+      });
+    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

@@ -101,6 +101,7 @@ class ClickableLocationsList extends StatelessWidget {
       {
         locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, userLatLng.latitude, userLatLng.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, userLatLng.latitude, userLatLng.longitude)).toInt());
       }*/
+    context.read<UserLocationBloc>().add(GetLocationEvent());
     return SingleChildScrollView(
       child: Container(
         color: Color(Constants.linezBlue),
