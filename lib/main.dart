@@ -220,7 +220,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //background process for updating location while the app is open
     if(_locationUpdate == null) {
-      _locationUpdate = Timer.periodic(Duration(seconds: 30), (timer) async {
+      _locationUpdate = Timer.periodic(Duration(seconds: 10), (timer) async {
         context.read<UserLocationBloc>().add(GetLocationEvent());
       });
     }
