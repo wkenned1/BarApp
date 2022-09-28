@@ -57,6 +57,12 @@ class Constants {
     "Game On": "assets/images/game_on_icon_small.png", //game on
     "Sissy K’s": "assets/images/sissy_ks_icon_small.png",//sissy k's
   };
+
+  //time codes for wait times
+  static const offHoursClosedCode = 0;
+  static const showZeroMinCode = 1;
+  static const onHoursCode = 2;
+  static const offHoursNoneCode = 3;
 }
 
 //permissions

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
+import 'package:Linez/main.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,20 +76,10 @@ class WaitTimeReportBloc
 
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
+    int dtCode = checkDateTime(hour, weekday);
 
     //check if day and time is correct
-    if (restrictionsDisabled || (hour >= 20 &&
-        hour <= 23 &&
-        (weekday == 4 ||
-            weekday == 5 ||
-            weekday == 6 ||
-            weekday == 7)) ||
-        (hour >= 0 &&
-            hour <= 2 &&
-            (weekday == 5 ||
-                weekday == 6 ||
-                weekday == 7 ||
-                weekday == 1))) {
+    if (restrictionsDisabled || dtCode == Constants.onHoursCode || dtCode == Constants.showZeroMinCode) {
       try {
         final prefs = await SharedPreferences.getInstance();
         int? ts = prefs.getInt(event.address);

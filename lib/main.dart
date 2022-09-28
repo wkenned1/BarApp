@@ -57,6 +57,41 @@ Future<LatLng?> _getUserPosition() async {
   }
 }
 
+int checkDateTime(int hour, int weekday) {
+  if ((hour >= 20 &&
+      hour <= 23 &&
+      (weekday == 4 ||
+          weekday == 5 ||
+          weekday == 6 ||
+          weekday == 7)) ||
+      (hour >= 0 &&
+          hour <= 1 &&
+          (weekday == 5 ||
+              weekday == 6 ||
+              weekday == 7 ||
+              weekday == 1)) ){
+    if(hour == 20 || hour == 21) {
+      return Constants.showZeroMinCode;
+    }
+    else {
+      return Constants.onHoursCode;
+    }
+  }
+  else if ((hour >= 20 &&
+      hour <= 23 &&
+      (weekday == 1 ||
+          weekday == 2 ||
+          weekday == 3)) ||
+      (hour >= 0 &&
+          hour <= 1 &&
+          (weekday == 2 ||
+              weekday == 3 ||
+              weekday == 4)) ) {
+    return Constants.offHoursNoneCode;
+  }
+  return Constants.offHoursClosedCode;
+}
+
 void main() async {
   print("starting!");
   WidgetsFlutterBinding.ensureInitialized();
@@ -108,18 +143,8 @@ void main() async {
       //check if the current time is within the allowed range for sending notifications
       int hour = DateTime.now().hour;
       int weekday = DateTime.now().weekday;
-      if ((hour >= 20 &&
-          hour <= 23 &&
-          (weekday == 4 ||
-              weekday == 5 ||
-              weekday == 6 ||
-              weekday == 7)) ||
-          (hour > 0 &&
-              hour <= 2 &&
-              (weekday == 5 ||
-                  weekday == 6 ||
-                  weekday == 7 ||
-                  weekday == 1))) {
+      int dtCode = checkDateTime(hour, weekday);
+      if (dtCode == Constants.onHoursCode || dtCode == Constants.showZeroMinCode) {
         LatLng? userLocation = await _getUserPosition(); //_getUserPosition();
         if (userLocation != null) {
           final locations = new List.from(Locations.defaultBars)

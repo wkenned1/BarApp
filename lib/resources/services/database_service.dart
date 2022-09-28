@@ -315,7 +315,7 @@ class DatabaseService {
   Future<bool> getRestrictionMode() async {
     bool disabled = false;
     DocumentSnapshot<Map<String, dynamic>> doc =
-    await _db.collection("Globals").doc("RestrictionMode").get();
+    await _db.collection("Globals").doc("RestrictionModeNew").get();
     if(doc.exists){
       try {
         disabled = doc["disableAll"] as bool;

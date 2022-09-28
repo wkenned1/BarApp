@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
 import '../../constants.dart';
+import '../../main.dart';
 import '../../resources/repositories/database_repository_impl.dart';
 
 part 'wait_time_event.dart';
@@ -22,6 +23,12 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
     List<WaitTimeModel> waitTimes =
         await _databaseRepository.getWaitTimes(event.address);
     List<int> newWaitTimes = <int>[];
+    int hour = DateTime.now().hour;
+    int weekday = DateTime.now().weekday;
+    int dtCode = checkDateTime(hour, weekday);
+    if(dtCode == Constants.showZeroMinCode) {
+      newWaitTimes.add(0);
+    }
     for (var model in waitTimes) {
       if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
           Constants.waitTimeReset) {

@@ -11,6 +11,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../blocs/get_wait_time/wait_time_bloc.dart';
 import '../../blocs/user_location/user_location_bloc.dart';
 import '../../constants.dart';
+import '../../main.dart';
 import '../../resources/util/get_distance.dart';
 import '../../resources/util/location_util.dart';
 import '../bar_page.dart';
@@ -48,7 +49,7 @@ class ClickableLocationsList extends StatelessWidget {
   //creates single row with one location
   //when clicked takes the user to a page to report wait times
   Widget newClickableLocation(
-      LocationModel location, LatLng? userLocation, BuildContext context) {
+      LocationModel location, LatLng? userLocation, int dtCode, BuildContext context) {
     context.read<WaitTimeBloc>().add(GetWaitTime(
       address: location.address,
     ));
@@ -82,7 +83,7 @@ class ClickableLocationsList extends StatelessWidget {
                 }
               }
             }
-            return Text("none", style: TextStyle(color: Colors.white, /*fontWeight: FontWeight.bold,*/ fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05),));
+            return Text(((dtCode == Constants.offHoursClosedCode) ? "closed": "none"), style: TextStyle(color: Colors.white, /*fontWeight: FontWeight.bold,*/ fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05),));
           },
         ),
     )
@@ -102,6 +103,9 @@ class ClickableLocationsList extends StatelessWidget {
         locations.sort((a, b) => (calculateDistanceMeters(a.position.latitude, a.position.longitude, userLatLng.latitude, userLatLng.longitude) - calculateDistanceMeters(b.position.latitude, b.position.longitude, userLatLng.latitude, userLatLng.longitude)).toInt());
       }*/
     context.read<UserLocationBloc>().add(GetLocationEvent());
+    int hour = DateTime.now().hour;
+    int weekday = DateTime.now().weekday;
+    int dtCode = checkDateTime(hour, weekday);
     return SingleChildScrollView(
       child: Container(
         color: Color(Constants.linezBlue),
@@ -115,7 +119,7 @@ class ClickableLocationsList extends StatelessWidget {
                     children: <Widget>[
                       //Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
                       for (var location in locations)
-                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, state.location, context))
+                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, state.location, dtCode, context))
                     ],
                   )
                 ]);
@@ -127,7 +131,7 @@ class ClickableLocationsList extends StatelessWidget {
                     children: <Widget>[
                       //Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10),),
                       for (var location in locations)
-                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, null, context))
+                        Padding(padding: EdgeInsets.fromLTRB(10, 0, 10, 10), child: newClickableLocation(location, null, dtCode, context))
                     ],
                   )
                 ]);
