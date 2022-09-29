@@ -220,7 +220,6 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    print("building map");
     return Container(
           child: Stack(
             children: [
