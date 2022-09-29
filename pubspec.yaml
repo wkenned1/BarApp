@@ -74,6 +74,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/customIcons/
+    - assets/images/customIconsSmall/
   fonts:
     - family: BerkshiresWash
       fonts:

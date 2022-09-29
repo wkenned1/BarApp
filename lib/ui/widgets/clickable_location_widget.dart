@@ -62,9 +62,9 @@ class ClickableLocationsList extends StatelessWidget {
       BoxDecoration(color: Color(Constants.boxBlue), borderRadius: BorderRadius.all(Radius.circular(5))),
       child: ListTile(
         leading:
-      (location.type == "bar") ?
-        Image.asset("assets/images/bar_icon.png", width: 50, height: 50) :
-        Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),),
+      /*(location.type == "bar") ?*/
+        Image.asset(/*"assets/images/bar_icon.png"*/Constants.customIconsMap[location.markerId]!, width: 50, height: 50) //:
+        /*Padding(padding: EdgeInsets.fromLTRB(5, 0, 5, 0), child: Image.asset("assets/images/club_icon.png", width: 40, height: 40),)*/,
         title: Row(children: [Flexible(child: Text(location.markerId, maxLines: 1, softWrap: false, overflow: TextOverflow.fade, style: TextStyle(fontSize: min(MediaQuery.of(context).size.height * .03, MediaQuery.of(context).size.width * .05), color: Colors.white))),],),
         subtitle: Row(children: [Flexible(child: (userLocation != null) ?
       Text(

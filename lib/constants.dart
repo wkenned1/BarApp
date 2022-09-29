@@ -45,17 +45,61 @@ class Constants {
 
   //location icons
   static const customIconsMap = {
-    "OHE": "assets/images/ohe_icon.png", //OHE
-    "Lansdowne Pub": "assets/images/landsdowne_icon.png", //landsdowne
-    "Game On": "assets/images/game_on_icon.png", //game on
-    "Sissy K’s": "assets/images/sissy_ks_icon.png",//sissy k's
+    //bars
+    "OHE": "assets/images/customIcons/Icon_1.png", //OHE
+    "Lansdowne Pub": "assets/images/customIcons/Icon_3.png", //landsdowne
+    "Game On": "assets/images/customIcons/Icon_22.png", //game on
+    "Sissy K’s": "assets/images/customIcons/Icon_24.png",
+    "Fenway Johnnie's": "assets/images/customIcons/Icon_25.png",
+    "Loretta's": "assets/images/customIcons/Icon_26.png",
+    "Shenanigans": "assets/images/customIcons/Icon_27.png",
+    "Lincoln Tavern": "assets/images/customIcons/Icon_29.png",
+    "Fat Baby": "assets/images/customIcons/Icon_30.png",
+    "Capo": "assets/images/customIcons/Icon_32.png",
+    "Loco": "assets/images/customIcons/Icon_33.png",
+    "Stats": "assets/images/customIcons/Icon_34.png",
+    "Publico": "assets/images/customIcons/Icon_35.png",
+    "The Broadway": "assets/images/customIcons/Icon_37.png",
+    "Bell in Hand": "assets/images/customIcons/Icon_38.png",
+    "Hong Kong": "assets/images/customIcons/Icon_39.png",
+    "Wild Rover": "assets/images/customIcons/Icon_40.png",
+    "Ned Divine's": "assets/images/customIcons/Icon_41.png",
+    //clubs
+    "Royale": "assets/images/customIcons/Icon_49.png",
+    "Venu": "assets/images/customIcons/Icon_44.png",
+    "Icon": "assets/images/customIcons/Icon_54.png",
+    "The Tunnel": "assets/images/customIcons/Icon_55.png",
+    "Hava": "assets/images/customIcons/Icon_56.png",
+    "Bijou": "assets/images/customIcons/Icon_57.png",
   };
 
   static const customSmallIconsMap = {
-    "OHE": "assets/images/ohe_icon_small.png", //OHE
-    "Lansdowne Pub": "assets/images/landsdowne_icon_small.png", //landsdowne
-    "Game On": "assets/images/game_on_icon_small.png", //game on
-    "Sissy K’s": "assets/images/sissy_ks_icon_small.png",//sissy k's
+    //bars
+    "OHE": "assets/images/customIconsSmall/Icon_1.png", //OHE
+    "Lansdowne Pub": "assets/images/customIconsSmall/Icon_3.png", //landsdowne
+    "Game On": "assets/images/customIconsSmall/Icon_22.png", //game on
+    "Sissy K’s": "assets/images/customIconsSmall/Icon_24.png",
+    "Fenway Johnnie's": "assets/images/customIconsSmall/Icon_25.png",
+    "Loretta's": "assets/images/customIconsSmall/Icon_26.png",
+    "Shenanigans": "assets/images/customIconsSmall/Icon_27.png",
+    "Lincoln Tavern": "assets/images/customIconsSmall/Icon_29.png",
+    "Fat Baby": "assets/images/customIconsSmall/Icon_30.png",
+    "Capo": "assets/images/customIconsSmall/Icon_32.png",
+    "Loco": "assets/images/customIconsSmall/Icon_33.png",
+    "Stats": "assets/images/customIconsSmall/Icon_34.png",
+    "Publico": "assets/images/customIconsSmall/Icon_35.png",
+    "The Broadway": "assets/images/customIconsSmall/Icon_37.png",
+    "Bell in Hand": "assets/images/customIconsSmall/Icon_38.png",
+    "Hong Kong": "assets/images/customIconsSmall/Icon_39.png",
+    "Wild Rover": "assets/images/customIconsSmall/Icon_40.png",
+    "Ned Divine's": "assets/images/customIconsSmall/Icon_41.png",
+    //clubs
+    "Royale": "assets/images/customIconsSmall/Icon_49.png",
+    "Venu": "assets/images/customIconsSmall/Icon_44.png",
+    "Icon": "assets/images/customIconsSmall/Icon_54.png",
+    "The Tunnel": "assets/images/customIconsSmall/Icon_55.png",
+    "Hava": "assets/images/customIconsSmall/Icon_56.png",
+    "Bijou": "assets/images/customIconsSmall/Icon_57.png",
   };
 
   //time codes for wait times

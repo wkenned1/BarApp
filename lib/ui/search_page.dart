@@ -322,16 +322,16 @@ class SearchPage extends StatelessWidget {
                   children: [
                     Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
-                      sectionTitle: "Bars",
-                      body: ClickableLocationsList(
-                      locations: barLocations,
-                      userLocation: userLocation)),
-                //Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                    new ClickableSectionsWidget(
                         sectionTitle: "Clubs",
                         body: ClickableLocationsList(
                             locations: clubLocations,
-                            userLocation: userLocation))
+                            userLocation: userLocation), sectionOpen: false,),
+                    new ClickableSectionsWidget(
+                      sectionTitle: "Bars",
+                      body: ClickableLocationsList(
+                      locations: barLocations,
+                      userLocation: userLocation), sectionOpen: true,),
+                //Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                   ],
                 ));
               })),
