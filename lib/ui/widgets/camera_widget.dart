@@ -286,14 +286,18 @@ class DisplayPictureScreen extends StatelessWidget {
           child: Container(width: 0, height: 0,),),
         Align(
           alignment: FractionalOffset.bottomCenter,
-          child: ElevatedButton(
-              child: Text("Submit"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(Constants.boxBlue),
-              ), onPressed: () {
-            context.read<LineImageBloc>().add(LineImageSubmit(imagePath: imagePath, id: id));
+          child: Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, MediaQuery.of(context).size.height * .03),
+            child: Container(
+              width: MediaQuery.of(context).size.width * .35,
+              height: MediaQuery.of(context).size.width * .15,
+              child: ElevatedButton(
+                child: Text("Submit", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .08),),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(Constants.submitButtonBlue),
+                ), onPressed: () {
+              context.read<LineImageBloc>().add(LineImageSubmit(imagePath: imagePath, id: id));
           },
-          ),
+          ),))
         ),
         Image.file(File(imagePath)),
       ],)
