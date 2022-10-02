@@ -3,9 +3,11 @@ import 'dart:math';
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../blocs/get_wait_time/wait_time_bloc.dart';
+import '../blocs/user_location/user_location_bloc.dart';
 import '../constants.dart';
 import '../globals.dart';
 import '../models/location_model.dart';
@@ -37,6 +39,12 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   CustomInfoWindowController _customInfoWindowController =
       CustomInfoWindowController();
   Set<Circle> circles = Set();
+  bool hasLocation = false;
+  LatLng? userLoc;
+  bool zoomedOnUser = false;
+
+  late BitmapDescriptor barMarkerbitmap;
+  late BitmapDescriptor clubMarkerbitmap;
 
   LatLng startLocation = LatLng(42.3428, -71.0675);
 
@@ -60,20 +68,20 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
     List<LocationModel> locations = new List.from(Locations.defaultBars)
       ..addAll(Locations.defaultClubs);
 
-    BitmapDescriptor barMarkerbitmap = await BitmapDescriptor.fromAssetImage(
+    barMarkerbitmap = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       bar_icon_path,
     );
 
-    BitmapDescriptor clubMarkerbitmap = await BitmapDescriptor.fromAssetImage(
+    clubMarkerbitmap = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(),
       club_icon_path,
     );
 
     for (LocationModel location in locations) {
-      late BitmapDescriptor? customIconBitMap = null;
+      BitmapDescriptor? customIconBitMap = null;
 
-      /*if (Platform.isIOS) {
+      if (Platform.isIOS) {
         if(Constants.customSmallIconsMap.containsKey(location.markerId)){
           customIconBitMap = await BitmapDescriptor.fromAssetImage(
             ImageConfiguration(),
@@ -88,9 +96,10 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             Constants.customIconsMap[location.markerId]!,
           );
         }
-      }*/
+      }
 
       markers.add(Marker(
+        zIndex: 1,
           //add start location marker
           markerId: MarkerId(location.markerId),
           position: location.position, //position of marker
@@ -99,7 +108,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             title: location.infoWindowTitle,
           ),*/
           //TODO: replace harcoded bit marker with function
-          icon: (location.type == "bar") ? barMarkerbitmap: clubMarkerbitmap,
+          icon: customIconBitMap ?? barMarkerbitmap, //(location.type == "bar") ? barMarkerbitmap: clubMarkerbitmap,
           onTap: () {
             _customInfoWindowController.addInfoWindow!(
               Container(
@@ -151,7 +160,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                               Center(
                                   child: FutureBuilder<WaitTimeState>(
                                 future: getWaitTime(GetWaitTime(
-                                  address: location.address,
+                                  id: location.infoWindowTitle,
                                 )),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<WaitTimeState> snapshot) {
@@ -204,7 +213,6 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             ); //Icon for Marker
           }));
     }
-
     setState(() {
       //refresh UI
     });
@@ -213,14 +221,43 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     return Container(
           child: Stack(
             children: [
+              MultiBlocListener(
+                listeners: [
+                  BlocListener<UserLocationBloc, UserLocationState>(
+                      listener: (context, state) {
+                        if(state is UserLocationUpdate) {
+                          setState(() {
+                            if(mapController != null && state.location != null && !zoomedOnUser) {
+                              zoomedOnUser = true;
+                              mapController!.animateCamera(
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target: state.location,
+                                    zoom: 16,
+                                  ),
+                                ),
+                              );
+                            }
+                            userLoc = state.location;
+                            hasLocation = true;
+                          });
+                        }
+                        else {
+                          setState(() {
+                            zoomedOnUser = false;
+                            userLoc = null;
+                            hasLocation = false;
+                          });
+                        }
+                      } )],
+                child: Container(width: 0, height: 0,),),
               GoogleMap(
-                myLocationButtonEnabled: false,
+                myLocationButtonEnabled: hasLocation,
                 circles: circles,
-                myLocationEnabled: false,
+                myLocationEnabled: hasLocation,
                 //Map widget from google_maps_flutter package
                 zoomGesturesEnabled: true, //enable Zoom in, out on map
                 initialCameraPosition: CameraPosition(

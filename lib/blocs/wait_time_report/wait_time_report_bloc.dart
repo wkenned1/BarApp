@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
+import 'package:Linez/main.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -32,6 +34,24 @@ class WaitTimeReportBloc
       WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
     emit(WaitTimeReportState(submitSuccessful: false, loading: true));
 
+    FirebaseAuth auth = FirebaseAuth.instance;
+    var user = auth.currentUser;
+    if(user != null){
+      if(UserData.admin == true) {
+        final prefs = await SharedPreferences.getInstance();
+        await _databaseRepository.addWaitTime(event.id, event.waitTime);
+        int timestamp = DateTime
+            .now()
+            .toUtc()
+            .millisecondsSinceEpoch;
+        prefs.setInt(event.id, timestamp);
+        await _databaseRepository.addReportedLocation(event.id);
+        UserData.reportedLocations.add(event.id);
+        emit(WaitTimeReportState(submitSuccessful: true, loading: false));
+        return;
+      }
+    }
+
     //restrictions will be disabled during app review
     //when restrictions are disabled users can submit wait times at any time and from any location
     bool restrictionsDisabled = await _databaseRepository.getRestrictionMode();
@@ -56,23 +76,13 @@ class WaitTimeReportBloc
 
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
+    int dtCode = checkDateTime(hour, weekday);
 
     //check if day and time is correct
-    if (restrictionsDisabled || (hour >= 20 &&
-        hour <= 23 &&
-        (weekday == 4 ||
-            weekday == 5 ||
-            weekday == 6 ||
-            weekday == 7)) ||
-        (hour > 0 &&
-            hour <= 2 &&
-            (weekday == 5 ||
-                weekday == 6 ||
-                weekday == 7 ||
-                weekday == 1))) {
+    if (restrictionsDisabled || dtCode == Constants.onHoursCode || dtCode == Constants.showZeroMinCode) {
       try {
         final prefs = await SharedPreferences.getInstance();
-        int? ts = prefs.getInt(event.address);
+        int? ts = prefs.getInt(event.id);
         //check if user reported this bar previously
         if (ts != null) {
           final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
@@ -116,14 +126,14 @@ class WaitTimeReportBloc
           }
         }
 
-        await _databaseRepository.addWaitTime(event.address, event.waitTime);
+        await _databaseRepository.addWaitTime(event.id, event.waitTime);
         int timestamp = DateTime
             .now()
             .toUtc()
             .millisecondsSinceEpoch;
-        prefs.setInt(event.address, timestamp);
-        await _databaseRepository.addReportedLocation(event.address);
-        UserData.reportedLocations.add(event.address);
+        prefs.setInt(event.id, timestamp);
+        await _databaseRepository.addReportedLocation(event.id);
+        UserData.reportedLocations.add(event.id);
         emit(WaitTimeReportState(submitSuccessful: true, loading: false));
       } catch (e) {
         emit(WaitTimeReportState(

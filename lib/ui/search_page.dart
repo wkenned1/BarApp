@@ -309,7 +309,7 @@ class SearchPage extends StatelessWidget {
     return RefreshIndicator(
       //TODO: find a cleaner way to refresh the page
       onRefresh: () async {
-        context.read<UserLocationBloc>().add(GetLocationEvent());
+        //context.read<UserLocationBloc>().add(GetLocationEvent());
         (context as Element).reassemble();
       },
       child: Container(
@@ -322,16 +322,16 @@ class SearchPage extends StatelessWidget {
                   children: [
                     Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                     new ClickableSectionsWidget(
-                      sectionTitle: "Bars",
-                      body: ClickableLocationsList(
-                      locations: barLocations,
-                      userLocation: userLocation)),
-                //Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
-                    new ClickableSectionsWidget(
                         sectionTitle: "Clubs",
                         body: ClickableLocationsList(
                             locations: clubLocations,
-                            userLocation: userLocation))
+                            userLocation: userLocation), sectionOpen: false,),
+                    new ClickableSectionsWidget(
+                      sectionTitle: "Bars",
+                      body: ClickableLocationsList(
+                      locations: barLocations,
+                      userLocation: userLocation), sectionOpen: true,),
+                //Padding(padding: EdgeInsets.fromLTRB(0, 10, 0, 0)),
                   ],
                 ));
               })),

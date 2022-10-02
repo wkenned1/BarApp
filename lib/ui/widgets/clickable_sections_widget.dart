@@ -10,13 +10,14 @@ import 'clickable_location_widget.dart';
 class ClickableSectionsWidget extends StatefulWidget {
   final String sectionTitle;
   final ClickableLocationsList body;
+  final bool sectionOpen;
   const ClickableSectionsWidget(
-      {Key? key, required this.sectionTitle, required this.body})
+      {Key? key, required this.sectionTitle, required this.body, required this.sectionOpen})
       : super(key: key);
 
   @override
   _ClickableSectionsWidgetState createState() =>
-      _ClickableSectionsWidgetState(sectionTitle, body);
+      _ClickableSectionsWidgetState(sectionTitle, body, sectionOpen);
 }
 
 class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
@@ -25,7 +26,7 @@ class _ClickableSectionsWidgetState extends State<ClickableSectionsWidget> {
   double turns = 0.0;
   final ClickableLocationsList body;
 
-  _ClickableSectionsWidgetState(this.sectionTitle, this.body);
+  _ClickableSectionsWidgetState(this.sectionTitle, this.body, this.sectionOpen);
 
   @override
   void initState() {

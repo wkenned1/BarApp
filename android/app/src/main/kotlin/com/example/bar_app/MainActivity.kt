@@ -1,4 +1,4 @@
-package com.example.Linez
+package com.linezapp.linez
 
 import io.flutter.embedding.android.FlutterActivity
 

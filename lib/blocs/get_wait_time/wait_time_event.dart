@@ -9,9 +9,9 @@ abstract class WaitTimeEvent {
 }
 
 class GetWaitTime extends WaitTimeEvent {
-  final String address;
+  final String id;
 
-  const GetWaitTime({required this.address});
+  const GetWaitTime({required this.id});
 
   @override
   List<Object> get props => [];

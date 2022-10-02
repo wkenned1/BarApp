@@ -23,6 +23,7 @@ import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
 import 'blocs/get_wait_time/wait_time_bloc.dart';
+import 'blocs/line_image/line_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/user_location/user_location_bloc.dart';
 import 'blocs/wait_time_report/wait_time_report_bloc.dart';
@@ -44,6 +45,7 @@ import 'models/profile_model.dart';
 import 'package:Linez/resources/services/database_service.dart';
 
 late final NotificationAppLaunchDetails? appLaunchDetails;
+Timer? _locationUpdate;
 
 Future<LatLng?> _getUserPosition() async {
   try {
@@ -54,6 +56,41 @@ Future<LatLng?> _getUserPosition() async {
   } catch (e) {
     return null;
   }
+}
+
+int checkDateTime(int hour, int weekday) {
+  if ((hour >= 20 &&
+      hour <= 23 &&
+      (weekday == 4 ||
+          weekday == 5 ||
+          weekday == 6 ||
+          weekday == 7)) ||
+      (hour >= 0 &&
+          hour <= 1 &&
+          (weekday == 5 ||
+              weekday == 6 ||
+              weekday == 7 ||
+              weekday == 1)) ){
+    if(hour == 20 || hour == 21) {
+      return Constants.showZeroMinCode;
+    }
+    else {
+      return Constants.onHoursCode;
+    }
+  }
+  else if ((hour >= 20 &&
+      hour <= 23 &&
+      (weekday == 1 ||
+          weekday == 2 ||
+          weekday == 3)) ||
+      (hour >= 0 &&
+          hour <= 1 &&
+          (weekday == 2 ||
+              weekday == 3 ||
+              weekday == 4)) ) {
+    return Constants.offHoursNoneCode;
+  }
+  return Constants.offHoursClosedCode;
 }
 
 void main() async {
@@ -107,18 +144,8 @@ void main() async {
       //check if the current time is within the allowed range for sending notifications
       int hour = DateTime.now().hour;
       int weekday = DateTime.now().weekday;
-      if ((hour >= 20 &&
-          hour <= 23 &&
-          (weekday == 4 ||
-              weekday == 5 ||
-              weekday == 6 ||
-              weekday == 7)) ||
-          (hour > 0 &&
-              hour <= 2 &&
-              (weekday == 5 ||
-                  weekday == 6 ||
-                  weekday == 7 ||
-                  weekday == 1))) {
+      int dtCode = checkDateTime(hour, weekday);
+      if (dtCode == Constants.onHoursCode || dtCode == Constants.showZeroMinCode) {
         LatLng? userLocation = await _getUserPosition(); //_getUserPosition();
         if (userLocation != null) {
           final locations = new List.from(Locations.defaultBars)
@@ -205,6 +232,9 @@ void main() async {
         ),
         BlocProvider(
             create: (context) => AnimationBloc()
+        ),
+        BlocProvider(
+            create: (context) => LineImageBloc(StorageRepositoryImpl(), DatabaseRepositoryImpl())
         )
       ],
       child: MyApp(),
@@ -217,6 +247,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //background process for updating location while the app is open
+    if(_locationUpdate == null) {
+      _locationUpdate = Timer.periodic(Duration(seconds: 10), (timer) async {
+        context.read<UserLocationBloc>().add(GetLocationEvent());
+      });
+    }
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(

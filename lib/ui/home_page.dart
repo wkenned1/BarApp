@@ -304,7 +304,9 @@ class _MyHomePageState extends State<HomePage> {
                   return
                   BlocBuilder<ProfileBloc, ProfileState>(
                   builder: (context, state) {
+                    print("profile state");
                     if(state is ProfileUpdatedState){
+                      print("profile update");
                       return
                         InkWell(
                             splashColor: Colors.transparent,
