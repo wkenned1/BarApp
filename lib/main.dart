@@ -78,7 +78,10 @@ int checkDateTime(int hour, int weekday) {
       return Constants.onHoursCode;
     }
   }
-  else if ((hour >= 20 &&
+  else if (hour >= 2 && hour <= 10) {
+    return Constants.offHoursClosedCode;
+  }
+  /*else if ((hour >= 20 &&
       hour <= 23 &&
       (weekday == 1 ||
           weekday == 2 ||
@@ -89,8 +92,8 @@ int checkDateTime(int hour, int weekday) {
               weekday == 3 ||
               weekday == 4)) ) {
     return Constants.offHoursNoneCode;
-  }
-  return Constants.offHoursClosedCode;
+  }*/
+  return Constants.offHoursNoneCode;
 }
 
 void main() async {
