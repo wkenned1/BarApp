@@ -19,8 +19,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   }
 
   _getProfile(event, emit) async {
+    print("bloc1");
     ProfileModel? profile = await _databaseRepository.getUserProfile();
+    print("bloc2");
     if(profile != null) {
+      print("bloc3");
       UserData.userTickets = profile.tickets;
       UserData.winner = profile.winner;
       UserData.feedbackTicketReceived = profile.feedbackTicketReceived;

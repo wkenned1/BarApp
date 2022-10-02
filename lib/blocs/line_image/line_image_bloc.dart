@@ -1,53 +1,84 @@
 import 'dart:async';
 
-import 'package:Linez/constants.dart';
-import 'package:Linez/globals.dart';
-import 'package:Linez/main.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:meta/meta.dart';
+import 'dart:io' show Platform;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../constants.dart';
+import '../../globals.dart';
+import '../../main.dart';
 import '../../resources/repositories/database_repository_impl.dart';
 import '../../resources/util/get_distance.dart';
 import '../../resources/util/get_location.dart';
-import '../get_wait_time/wait_time_bloc.dart';
-import 'dart:io' show Platform;
 
-part 'wait_time_report_event.dart';
-part 'wait_time_report_state.dart';
+part 'line_image_event.dart';
+part 'line_image_state.dart';
 
-class WaitTimeReportBloc
-    extends Bloc<WaitTimeReportEvent, WaitTimeReportState> {
+class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
+  final StorageRepository _storageRepository;
   final DatabaseRepository _databaseRepository;
 
-  WaitTimeReportBloc(this._databaseRepository)
-      : super(WaitTimeReportState(submitSuccessful: false, loading: false)) {
-    on<WaitTimeReportEvent>(_reportWaitTime);
+  LineImageBloc(this._storageRepository, this._databaseRepository) : super(LineImageInitial()) {
+    on<LineImageSubmit>(_submitImage);
   }
 
-  _reportWaitTime(
-      WaitTimeReportEvent event, Emitter<WaitTimeReportState> emit) async {
-    emit(WaitTimeReportState(submitSuccessful: false, loading: true));
+  /*_submitImage(event, emit) async {
+    emit(LineImageLoading());
+
+    final prefs = await SharedPreferences.getInstance();
+    int? ts = prefs.getInt(event.address + "-img");
+    //check if user reported this bar previously
+    if (ts != null) {
+      final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
+      if (prev_ts
+          .difference(DateTime.now().toUtc())
+          .inMinutes.abs() <
+          Constants.waitTimeReset) {
+        emit(LineImageIntervalError());
+        return;
+      }
+    }
+
+    bool result = await _storageRepository.submitLineImage(event.imagePath, event.address);
+    if(result) {
+      int timestamp = DateTime
+          .now()
+          .toUtc()
+          .millisecondsSinceEpoch;
+      prefs.setInt(event.address + "-img", timestamp);
+      emit(LineImageSubmitted());
+    }
+    else {
+      emit(LineImageError(message: "Something went wrong"));
+    }
+  }*/
+
+  _submitImage(
+      event, emit) async {
 
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     if(user != null){
       if(UserData.admin == true) {
         final prefs = await SharedPreferences.getInstance();
-        await _databaseRepository.addWaitTime(event.id, event.waitTime);
-        int timestamp = DateTime
-            .now()
-            .toUtc()
-            .millisecondsSinceEpoch;
-        prefs.setInt(event.id, timestamp);
-        await _databaseRepository.addReportedLocation(event.id);
-        UserData.reportedLocations.add(event.id);
-        emit(WaitTimeReportState(submitSuccessful: true, loading: false));
+        bool result = await _storageRepository.submitLineImage(event.imagePath, event.id);
+        if(result) {
+          int timestamp = DateTime
+              .now()
+              .toUtc()
+              .millisecondsSinceEpoch;
+          prefs.setInt(event.id + "-img", timestamp);
+          await _databaseRepository.addReportedLocation(event.id);
+          UserData.reportedLocations.add(event.id);
+          emit(LineImageSubmitted());
+        }
+        else {
+          emit(LineImageError(message: "Something went wrong"));
+        }
         return;
       }
     }
@@ -62,13 +93,13 @@ class WaitTimeReportBloc
         switch(accuracyStatus) {
           case LocationAccuracyStatus.reduced:
           // Precise location switch is OFF.
-            emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+            emit(LineImageImpreciseLocationError());
             return;
         /*case LocationAccuracyStatus.precise:
       // Precise location switch is ON.
         break;*/
           case LocationAccuracyStatus.unknown:
-            emit(WaitTimeReportState(submitSuccessful: false, loading: false, errorMessage: Constants.waitTimeImpreciseLocationError));
+            emit(LineImageImpreciseLocationError());
             return;
         }
       }
@@ -82,7 +113,7 @@ class WaitTimeReportBloc
     if (restrictionsDisabled || dtCode == Constants.onHoursCode || dtCode == Constants.showZeroMinCode) {
       try {
         final prefs = await SharedPreferences.getInstance();
-        int? ts = prefs.getInt(event.id);
+        int? ts = prefs.getInt(event.id+ "-img");
         //check if user reported this bar previously
         if (ts != null) {
           final prev_ts = DateTime.fromMillisecondsSinceEpoch(ts).toUtc();
@@ -90,11 +121,7 @@ class WaitTimeReportBloc
               .difference(DateTime.now().toUtc())
               .inMinutes.abs() <
               Constants.waitTimeReset) {
-            emit(WaitTimeReportState(
-                submitSuccessful: false,
-                loading: false,
-                errorMessage:
-                Constants.waitTimeReportIntervalError));
+            emit(LineImageIntervalError());
             return;
           }
         }
@@ -103,11 +130,7 @@ class WaitTimeReportBloc
           //checking location requirements
           LatLng? userLoc = await getUserLocation();
           if(userLoc == null){
-            emit(WaitTimeReportState(
-                submitSuccessful: false,
-                loading: false,
-                errorMessage:
-                Constants.waitTimeReportNoLocationError));
+            emit(LineImageNoLocationError());
             return;
           }
           double distance = calculateDistanceMeters(
@@ -117,33 +140,25 @@ class WaitTimeReportBloc
               event.location.longitude);
           //if user is too far away from bar
           if(distance > Constants.distanceToBarRequirement){
-            emit(WaitTimeReportState(
-                submitSuccessful: false,
-                loading: false,
-                errorMessage:
-                Constants.waitTimeReportLocationError));
+            emit(LineImageNoLocationError());
             return;
           }
         }
 
-        await _databaseRepository.addWaitTime(event.id, event.waitTime);
         int timestamp = DateTime
             .now()
             .toUtc()
             .millisecondsSinceEpoch;
-        prefs.setInt(event.id, timestamp);
+        prefs.setInt(event.id + "-img", timestamp);
         await _databaseRepository.addReportedLocation(event.id);
         UserData.reportedLocations.add(event.id);
-        emit(WaitTimeReportState(submitSuccessful: true, loading: false));
+        emit(LineImageSubmitted());
       } catch (e) {
-        emit(WaitTimeReportState(
-            submitSuccessful: false,
-            loading: false,
-            errorMessage: e.toString()));
+        emit(LineImageError(message: "Something went wrong"));
       }
     }
     else {
-      emit(WaitTimeReportState(submitSuccessful: false, errorMessage: Constants.waitTimeReportTimeError, loading: false));
+      emit(LineImageTimeError(hour: hour, weekday: weekday));
     }
   }
 }

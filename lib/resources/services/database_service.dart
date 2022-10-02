@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:Linez/constants.dart';
 import 'package:Linez/globals.dart';
+import 'package:Linez/models/image_info_model.dart';
 import 'package:Linez/models/profile_model.dart';
 import 'package:Linez/models/user_feedback_model.dart';
 import 'package:Linez/models/wait_time_location_model.dart';
@@ -10,6 +12,8 @@ import 'package:Linez/models/wait_time_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -17,6 +21,31 @@ import 'dart:convert';
 
 import '../../models/location_model.dart';
 import '../../models/user_model.dart';
+
+
+class StorageService {
+  FirebaseStorage _storage = FirebaseStorage.instance;
+
+  Future<bool> submitLineImage(String imagePath, String address) async {
+    var file = File(imagePath);
+    if (file != null) {
+      //Upload to Firebase
+      try {
+        final id = UniqueKey().hashCode;
+        var snapshot = await _storage.ref()
+            .child('linePhotos/${address}/${id}.png')
+            .putFile(file);
+      }
+      catch (err) {
+        print("ERROR: ${err.toString()}");
+        return false;
+      }
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -56,17 +85,14 @@ class DatabaseService {
     return null;
   }
 
-  addWaitTime(String address, int waitTime) async {
-    print("one");
+  addWaitTime(String id, int waitTime) async {
     CollectionReference<Map<String, dynamic>> snap =
         await _db.collection("WaitTimes");
-    DocumentSnapshot<Map<String, dynamic>> ref = await snap.doc(address).get();
-    print("two");
+    DocumentSnapshot<Map<String, dynamic>> ref = await snap.doc(id).get();
     if (!ref.exists) {
-      await _db.collection("WaitTimes").doc(address).set({"reports": []});
-      ref = await _db.collection("WaitTimes").doc(address).get();
+      await _db.collection("WaitTimes").doc(id).set({"reports": []});
+      ref = await _db.collection("WaitTimes").doc(id).get();
     }
-    print("three");
     List<dynamic> dynamics = List<dynamic>.from(ref.get("reports"));
     List<WaitTimeModel> reports = [];
     for (dynamic r in dynamics) {
@@ -75,24 +101,36 @@ class DatabaseService {
           waitTime: cast["waitTime"] as int,
           timestamp: cast["timestamp"].toDate()));
     }
-    print("four");
     reports.add(
         WaitTimeModel(waitTime: waitTime, timestamp: DateTime.now().toUtc()));
     await _db
         .collection("WaitTimes")
-        .doc(address)
+        .doc(id)
         .set({"reports": reports.map((waitTime) => waitTime.toMap()).toList()});
-    print("CHANGED PROFILE !!!!!!!!!!!!");
     return true;
   }
 
-  Future<List<WaitTimeModel>> getWaitTimes(String address) async {
+  Future<ImageInfoModel> getImgUrl(String id) async {
+      DocumentSnapshot<Map<String, dynamic>> snapshot =
+      await _db.collection("WaitTimeImages").doc(id).get();
+      String name = snapshot.data()!["imgName"] ?? "";
+      if(name.isEmpty) {
+        return ImageInfoModel(timeCreated: null, downloadUrl: "");
+      }
+      final ref = FirebaseStorage.instance.ref().child("linePhotos/${id}/${name}");
+      // no need of the file extension, the name will do fine.
+      var url = await ref.getDownloadURL();
+      DateTime? created = (await ref.getMetadata()).timeCreated;
+      return ImageInfoModel(timeCreated: created, downloadUrl: url);
+  }
+
+  Future<List<WaitTimeModel>> getWaitTimes(String id) async {
     CollectionReference<Map<String, dynamic>> snap =
         await _db.collection("WaitTimes");
-    DocumentSnapshot ref = await snap.doc(address).get();
+    DocumentSnapshot ref = await snap.doc(id).get();
     if (!ref.exists) {
-      await _db.collection("WaitTimes").doc(address).set({"reports": []});
-      ref = await _db.collection("WaitTimes").doc(address).get();
+      await _db.collection("WaitTimes").doc(id).set({"reports": []});
+      ref = await _db.collection("WaitTimes").doc(id).get();
     }
 
     List<dynamic> dynamics = List<dynamic>.from(ref.get("reports"));

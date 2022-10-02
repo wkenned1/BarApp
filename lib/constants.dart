@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 class Constants {
   static const title = "Bar App";
   static const kBlackColor = "0xFF000000";
-  static const waitTimeReset = 120;
+  static const waitTimeReset = 60;
 
   //color scheme
   static const waitTimeTextRed = 0xffff492b;

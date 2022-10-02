@@ -23,6 +23,7 @@ import 'blocs/authentication/authentication_bloc.dart';
 import 'blocs/database/database_bloc.dart';
 import 'blocs/form/form_bloc.dart';
 import 'blocs/get_wait_time/wait_time_bloc.dart';
+import 'blocs/line_image/line_image_bloc.dart';
 import 'blocs/profile/profile_bloc.dart';
 import 'blocs/user_location/user_location_bloc.dart';
 import 'blocs/wait_time_report/wait_time_report_bloc.dart';
@@ -231,6 +232,9 @@ void main() async {
         ),
         BlocProvider(
             create: (context) => AnimationBloc()
+        ),
+        BlocProvider(
+            create: (context) => LineImageBloc(StorageRepositoryImpl(), DatabaseRepositoryImpl())
         )
       ],
       child: MyApp(),

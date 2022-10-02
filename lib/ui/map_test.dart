@@ -41,6 +41,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
   Set<Circle> circles = Set();
   bool hasLocation = false;
   LatLng? userLoc;
+  bool zoomedOnUser = false;
 
   late BitmapDescriptor barMarkerbitmap;
   late BitmapDescriptor clubMarkerbitmap;
@@ -159,7 +160,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                               Center(
                                   child: FutureBuilder<WaitTimeState>(
                                 future: getWaitTime(GetWaitTime(
-                                  address: location.address,
+                                  id: location.infoWindowTitle,
                                 )),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<WaitTimeState> snapshot) {
@@ -229,12 +230,24 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
                       listener: (context, state) {
                         if(state is UserLocationUpdate) {
                           setState(() {
+                            if(mapController != null && state.location != null && !zoomedOnUser) {
+                              zoomedOnUser = true;
+                              mapController!.animateCamera(
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target: state.location,
+                                    zoom: 16,
+                                  ),
+                                ),
+                              );
+                            }
                             userLoc = state.location;
                             hasLocation = true;
                           });
                         }
                         else {
                           setState(() {
+                            zoomedOnUser = false;
                             userLoc = null;
                             hasLocation = false;
                           });

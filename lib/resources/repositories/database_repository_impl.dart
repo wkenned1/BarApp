@@ -18,13 +18,13 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   }
 
   @override
-  Future<void> addWaitTime(String address, int waitTime) {
-    return service.addWaitTime(address, waitTime);
+  Future<void> addWaitTime(String id, int waitTime) {
+    return service.addWaitTime(id, waitTime);
   }
 
   @override
-  Future<List<WaitTimeModel>> getWaitTimes(String address) {
-    return service.getWaitTimes(address);
+  Future<List<WaitTimeModel>> getWaitTimes(String id) {
+    return service.getWaitTimes(id);
   }
 
   @override
@@ -61,12 +61,26 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
 abstract class DatabaseRepository {
   Future<void> saveUserData(UserModel user);
   Future<List<UserModel>> retrieveUserData();
-  Future<void> addWaitTime(String address, int waitTime);
-  Future<List<WaitTimeModel>> getWaitTimes(String address);
+  Future<void> addWaitTime(String id, int waitTime);
+  Future<List<WaitTimeModel>> getWaitTimes(String id);
   Future<bool> sendFeedback(String message);
   void incrementTickets({bool fromFeedback = false});
   Future<void> deleteProfile();
   Future<void> addReportedLocation(String address);
   Future<ProfileModel?> getUserProfile();
   Future<bool> getRestrictionMode();
+}
+
+
+class StorageRepositoryImpl implements StorageRepository {
+  StorageService service = StorageService();
+
+  @override
+  Future<bool> submitLineImage(String imagePath, String address) {
+    return service.submitLineImage(imagePath, address);
+  }
+}
+
+abstract class StorageRepository {
+  Future<bool> submitLineImage(String imagePath, String address);
 }

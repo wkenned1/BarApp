@@ -21,13 +21,13 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
 
   _getWaitTime(GetWaitTime event, Emitter<WaitTimeState> emit) async {
     List<WaitTimeModel> waitTimes =
-        await _databaseRepository.getWaitTimes(event.address);
+        await _databaseRepository.getWaitTimes(event.id);
     List<int> newWaitTimes = <int>[];
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
     int dtCode = checkDateTime(hour, weekday);
-    if(dtCode == Constants.showZeroMinCode) {
-      newWaitTimes.add(0);
+    if(dtCode == Constants.showZeroMinCode && waitTimes.length == 0) {
+      emit(WaitTimeState(address: "test", waitTime: 0));
     }
     for (var model in waitTimes) {
       if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
@@ -37,7 +37,7 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
       }
     }
     if (newWaitTimes.length == 0) {
-      emit(WaitTimeState(address: event.address));
+      emit(WaitTimeState(address: event.id));
       return;
     }
     int median = 0;
@@ -58,8 +58,14 @@ class WaitTimeBloc extends Bloc<WaitTimeEvent, WaitTimeState> {
 Future<WaitTimeState> getWaitTime(GetWaitTime event) async {
   final DatabaseRepository _databaseRepository = DatabaseRepositoryImpl();
   List<WaitTimeModel> waitTimes =
-      await _databaseRepository.getWaitTimes(event.address);
+      await _databaseRepository.getWaitTimes(event.id);
   List<int> newWaitTimes = <int>[];
+  int hour = DateTime.now().hour;
+  int weekday = DateTime.now().weekday;
+  int dtCode = checkDateTime(hour, weekday);
+  if(dtCode == Constants.showZeroMinCode && waitTimes.length == 0) {
+    return WaitTimeState(address: "test", waitTime: 0);
+  }
   for (var model in waitTimes) {
     if (DateTime.now().toUtc().difference(model.timestamp).inMinutes <
         Constants.waitTimeReset) {
@@ -68,7 +74,7 @@ Future<WaitTimeState> getWaitTime(GetWaitTime event) async {
     }
   }
   if (newWaitTimes.length == 0) {
-    return WaitTimeState(address: event.address);
+    return WaitTimeState(address: event.id);
   }
   int median = 0;
   newWaitTimes.sort();
