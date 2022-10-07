@@ -263,11 +263,11 @@ class SearchPage extends StatelessWidget {
     }
 
     if(UserData.showDisclaimerPopup) {
-      showDialog(
+      /*showDialog(
           barrierDismissible: false,
           context: context,
           builder: (BuildContext context) =>
-              _buildDisclaimerDialog(context));
+              _buildDisclaimerDialog(context));*/
     }
 
     AppInfo.giveawayDate = await DatabaseService().getGiveawayTime();

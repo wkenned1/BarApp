@@ -2,9 +2,11 @@ import 'package:Linez/globals.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../blocs/phone_auth/phone_auth_bloc.dart';
 import '../constants.dart';
@@ -93,6 +95,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle defaultStyle = TextStyle(color: Colors.black, fontSize: MediaQuery.of(context).size.width * .05);
+    TextStyle linkStyle = TextStyle(color: Colors.blue, fontSize: MediaQuery.of(context).size.width * .05);
     return Scaffold(
         //key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
@@ -145,7 +149,39 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                   )
                 ],
               ),
-              Padding(child: Text("I consent to being contacted by text if I win a giveaway", textAlign: TextAlign.center, style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),), padding: EdgeInsets.fromLTRB(20, 0, 20, 0),),
+              Padding(padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child:
+              RichText(text: TextSpan(
+                style: defaultStyle,
+                children: <TextSpan>[
+                  TextSpan(text: "I accept Linez App's "),
+                  TextSpan(
+                      text: 'Terms of Service',
+                      style: linkStyle,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          const url = 'https://linezapp.com/terms_conditions.html';
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        }),
+                  TextSpan(text: ' and '),
+                  TextSpan(
+                      text: 'Privacy Policy',
+                      style: linkStyle,
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          const url = 'https://linezapp.com/privacy.html';
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(Uri.parse(url));
+                          } else {
+                            throw 'Could not launch $url';
+                          }
+                        }),
+                ],
+              ), textAlign: TextAlign.center, /*style: TextStyle(fontSize: MediaQuery.of(context).size.width * .05),*/)),
               Transform.scale(
                   scale: 1.5,
                   child: Checkbox(
