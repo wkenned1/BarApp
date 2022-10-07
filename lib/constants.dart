@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
 class Constants {
+  //firebase constans
+  static const default_bar_icon = "default_bar.png";
+  static const default_club_icon = "default_club.png";
+
   static const title = "Bar App";
   static const kBlackColor = "0xFF000000";
   static const waitTimeReset = 60;

@@ -1,8 +1,10 @@
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -13,6 +15,8 @@ import '../globals.dart';
 import '../models/location_model.dart';
 import 'bar_page.dart';
 import 'dart:io' show Platform;
+import 'package:http/http.dart' as http;
+import 'dart:ui' as ui;
 
 class TriangleClipper extends CustomClipper<Path> {
   @override
@@ -57,6 +61,14 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
     super.initState();
   }
 
+  Future<Uint8List> getMarker(int height, String url) async {
+    var request = await http.get(Uri.parse(url));
+    var data = request.bodyBytes;
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),  targetHeight: height);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
   addMarkers() async {
     String bar_icon_path = "assets/images/bar_icon.png";
     String club_icon_path = "assets/images/club_icon.png";
@@ -81,7 +93,13 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
     for (LocationModel location in locations) {
       BitmapDescriptor? customIconBitMap = null;
 
-      if (Platform.isIOS) {
+      if(location.icon != null) {
+        /*var request = await http.get(Uri.parse(location.icon!));
+        var bytes = request.bodyBytes;*/
+        customIconBitMap = BitmapDescriptor.fromBytes(await getMarker(280, location.icon!));
+      }
+
+      /*if (Platform.isIOS) {
         if(Constants.customSmallIconsMap.containsKey(location.markerId)){
           customIconBitMap = await BitmapDescriptor.fromAssetImage(
             ImageConfiguration(),
@@ -96,7 +114,7 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             Constants.customIconsMap[location.markerId]!,
           );
         }
-      }
+      }*/
 
       markers.add(Marker(
         zIndex: 1,

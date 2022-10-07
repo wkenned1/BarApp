@@ -7,12 +7,14 @@ class LocationModel {
   final String infoWindowTitle;
   final String address;
   final String type;
+  final String? icon;
   const LocationModel({
     required this.markerId,
     required this.position,
     required this.infoWindowTitle,
     required this.address,
     required this.type,
+    this.icon
   });
 
   Map<String, dynamic> toMap() {
@@ -21,7 +23,8 @@ class LocationModel {
       'position': position,
       'infoWindowTitle': infoWindowTitle,
       'address': address,
-      'type': type
+      'type': type,
+      'icon': icon
     };
   }
 
@@ -32,16 +35,18 @@ class LocationModel {
         displayName = doc.data()!["displayName"];*/
 
   LocationModel copyWith(
-      {required String markerId,
-      required LatLng position,
-      required String infoWindowTitle,
-      required String address,
-      required String type}) {
+      {String? markerId,
+      LatLng? position,
+      String? infoWindowTitle,
+      String? address,
+      String? type, String? icon}) {
     return LocationModel(
-        markerId: this.markerId,
-        position: this.position,
-        infoWindowTitle: this.infoWindowTitle,
-        address: this.address,
-        type: this.type);
+        markerId: markerId ?? this.markerId,
+        position: position ?? this.position,
+        infoWindowTitle: infoWindowTitle ?? this.infoWindowTitle,
+        address: address ?? this.address,
+        type: type ?? this.type,
+      icon: icon ?? this.icon
+    );
   }
 }

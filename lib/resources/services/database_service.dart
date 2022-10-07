@@ -172,7 +172,39 @@ class DatabaseService {
               LatLng(obj["latitude"] as double, obj["longitude"] as double),
           infoWindowTitle: obj["infoWindowTitle"] as String,
           address: obj["address"] as String,
-          type: obj["type"] as String);
+          type: obj["type"] as String,
+          icon: obj["icon"] as String?
+      );
+
+      if(model.icon != null) {
+        String folder = "normal_icons";
+        if(Platform.isIOS) {
+          //folder = "small_icons_ios";
+        }
+        final ref = FirebaseStorage.instance.ref().child("locationIcons/${folder}/${model.icon}");
+        // no need of the file extension, the name will do fine.
+        var url = await ref.getDownloadURL();
+        try {
+          model = model.copyWith(icon: await ref.getDownloadURL());
+        }
+        catch (e) {
+        }
+      }
+      else {
+        String folder = "normal_icons";
+        if(Platform.isIOS) {
+          //folder = "small_icons_ios";
+        }
+        final ref = FirebaseStorage.instance.ref().child("locationIcons/${folder}/${(model.type == "bar") ? Constants.default_bar_icon : Constants.default_club_icon}");
+        // no need of the file extension, the name will do fine.
+        var url = await ref.getDownloadURL();
+        try {
+          model = model.copyWith(icon: await ref.getDownloadURL());
+        }
+        catch (e) {
+        }
+      }
+
       ret.add(model);
     }
     return ret;

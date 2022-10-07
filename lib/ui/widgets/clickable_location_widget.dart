@@ -1,3 +1,5 @@
+
+import 'dart:io';
 import 'dart:math';
 
 import 'package:Linez/globals.dart';
@@ -73,6 +75,16 @@ class ClickableLocationsList extends StatelessWidget {
     /*context.read<WaitTimeBloc>().add(GetWaitTime(
       id: location.infoWindowTitle,
     ));*/
+    String bar_icon_path = "assets/images/bar_icon.png";
+    String club_icon_path = "assets/images/club_icon.png";
+    if (Platform.isIOS) {
+      bar_icon_path = "assets/images/bar_icon_small.png";
+      club_icon_path = "assets/images/club_icon_small.png";
+    }
+    String default_icon_path = club_icon_path;
+    if(location.type == "bar") {
+      default_icon_path = bar_icon_path;
+    }
     return GestureDetector(child: Container(
       //margin: const EdgeInsets.fromLTRB(0, 0,10,0),
       //padding: const EdgeInsets.all(3.0),
@@ -86,7 +98,8 @@ class ClickableLocationsList extends StatelessWidget {
               AsyncSnapshot<FutureResultClickableLocation> snapshot) {
             return ListTile(
               leading: (!snapshot.hasData || snapshot.data!.imgName.downloadUrl.isEmpty) ?
-              Image.asset(Constants.customIconsMap[location.markerId]!, width: 60, height: 60) :
+              /*Image.asset(Constants.customIconsMap[location.markerId]!, width: 60, height: 60)*/
+              ((location.icon != null) ? Image.network(location.icon!) : Image.asset(default_icon_path)) :
               GestureDetector(child: Container(
                 width: 60,
                 height: 60,
