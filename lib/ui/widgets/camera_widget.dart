@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:Linez/models/location_model.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,23 +17,26 @@ class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
   super.key,
   required this.camera,
-  required this.id
+  required this.id,
+  required this.location
   });
 
   final CameraDescription camera;
   final String id;
+  final LocationModel location;
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState(id: id);
+  TakePictureScreenState createState() => TakePictureScreenState(id: id, location: location);
 }
 
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
+  final LocationModel location;
 
   final String id;
 
-  TakePictureScreenState({required this.id});
+  TakePictureScreenState({required this.id, required this.location});
   /*
       // Obtain a list of the available cameras on the device.
     final cameras = await availableCameras();
@@ -50,7 +54,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       widget.camera,
       // Define the resolution to use.
       ResolutionPreset.medium,
+      imageFormatGroup: ImageFormatGroup.yuv420,
     );
+    _controller.setFlashMode(FlashMode.off);
 
     // Next, initialize the controller. This returns a Future.
     _initializeControllerFuture = _controller.initialize();
@@ -65,6 +71,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _controller.setFlashMode(FlashMode.off);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
@@ -108,6 +115,8 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
                 // Attempt to take a picture and get the file `image`
                 // where it was saved.
+                await _controller.setFlashMode(FlashMode.off);
+                print("Flash mode ${_controller.value.flashMode}");
                 final image = await _controller.takePicture();
 
                 if (!mounted) return;
@@ -118,7 +127,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     builder: (context) => DisplayPictureScreen(
                       // Pass the automatically generated path to
                       // the DisplayPictureScreen widget.
-                      imagePath: image.path, id: id,
+                      imagePath: image.path, id: id, location: location,
                     ),
                   ),
                 );
@@ -140,8 +149,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
   final String id;
+  final LocationModel location;
 
-  const DisplayPictureScreen({super.key, required this.imagePath, required this.id});
+  const DisplayPictureScreen({super.key, required this.imagePath, required this.id, required this.location});
 
   Widget _buildTimeErrorDialog(int hour, int day, BuildContext context) {
     return new AlertDialog(
@@ -153,8 +163,8 @@ class DisplayPictureScreen extends StatelessWidget {
           Text((day < 4)
               ? "It's a weekday bozo, there's no line out here."
               : (hour > 2 && hour < 6)
-              ? "It's too late to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."
-              : "It's too early to enter a line time dummy. Submit your line estimate between 8:00pm and 2:00am."),
+              ? "It's too late to report a line dummy. Submit your line estimate between 8:00pm and 2:00am."
+              : "It's too early to report a line dummy. Submit your line estimate between 8:00pm and 2:00am."),
         ],
       ),
       actions: <Widget>[
@@ -201,7 +211,7 @@ class DisplayPictureScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           (locImprecise) ? Text("You must have precise location tracking enabled") :
-          Text(locEnabled ? "You have to be close to the bar to report a wait time." : "You must enable location tracking before reporting a wait time."),
+          Text(locEnabled ? "You have to be close to the bar to report a line." : "You must enable precise location tracking before reporting a line."),
         ],
       ),
       actions: <Widget>[
@@ -295,7 +305,7 @@ class DisplayPictureScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(Constants.submitButtonBlue),
                 ), onPressed: () {
-              context.read<LineImageBloc>().add(LineImageSubmit(imagePath: imagePath, id: id));
+              context.read<LineImageBloc>().add(LineImageSubmit(imagePath: imagePath, id: id, location: location.position));
           },
           ),))
         ),

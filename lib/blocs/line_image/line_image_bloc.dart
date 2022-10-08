@@ -125,7 +125,6 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
             return;
           }
         }
-
         if(!restrictionsDisabled) {
           //checking location requirements
           LatLng? userLoc = await getUserLocation();
@@ -140,7 +139,7 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
               event.location.longitude);
           //if user is too far away from bar
           if(distance > Constants.distanceToBarRequirement){
-            emit(LineImageNoLocationError());
+            emit(LineImageLocationError());
             return;
           }
         }
