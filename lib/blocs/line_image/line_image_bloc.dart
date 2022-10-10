@@ -143,15 +143,20 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
             return;
           }
         }
-
-        int timestamp = DateTime
-            .now()
-            .toUtc()
-            .millisecondsSinceEpoch;
-        prefs.setInt(event.id + "-img", timestamp);
-        await _databaseRepository.addReportedLocation(event.id);
-        UserData.reportedLocations.add(event.id);
-        emit(LineImageSubmitted());
+        bool result = await _storageRepository.submitLineImage(event.imagePath, event.id);
+        if(result) {
+          int timestamp = DateTime
+              .now()
+              .toUtc()
+              .millisecondsSinceEpoch;
+          prefs.setInt(event.id + "-img", timestamp);
+          await _databaseRepository.addReportedLocation(event.id);
+          UserData.reportedLocations.add(event.id);
+          emit(LineImageSubmitted());
+        }
+        else {
+          emit(LineImageError(message: "Something went wrong"));
+        }
       } catch (e) {
         emit(LineImageError(message: "Something went wrong"));
       }
