@@ -121,6 +121,15 @@ class DatabaseService {
       // no need of the file extension, the name will do fine.
       var url = await ref.getDownloadURL();
       DateTime? created = (await ref.getMetadata()).timeCreated;
+      if(created == null) {
+        return ImageInfoModel(timeCreated: null, downloadUrl: "");
+      }
+      if (created!
+          .difference(DateTime.now().toUtc())
+          .inHours.abs() >
+          Constants.imageExpiration) {
+        return ImageInfoModel(timeCreated: null, downloadUrl: "");
+      }
       return ImageInfoModel(timeCreated: created, downloadUrl: url);
   }
 

@@ -4,6 +4,7 @@ class Constants {
   static const title = "Bar App";
   static const kBlackColor = "0xFF000000";
   static const waitTimeReset = 60;
+  static const imageExpiration = 24;
 
   //color scheme
   static const waitTimeTextRed = 0xffff492b;
