@@ -65,6 +65,11 @@ class Constants {
     "Hong Kong": "assets/images/customIcons/Icon_39.png",
     "Wild Rover": "assets/images/customIcons/Icon_40.png",
     "Ned Divine's": "assets/images/customIcons/Icon_41.png",
+    "The Black Rose": "assets/images/customIcons/Icon_5.png",
+    "Hennessy’s": "assets/images/customIcons/Icon_6.png",
+    "White Bull Tavern": "assets/images/customIcons/Icon_7.png",
+    "Bill’s Bar": "assets/images/customIcons/Icon_9.png",
+    "House of Blues": "assets/images/customIcons/Icon_11.png",
     //clubs
     "Royale": "assets/images/customIcons/Icon_49.png",
     "Venu": "assets/images/customIcons/Icon_44.png",
@@ -94,6 +99,11 @@ class Constants {
     "Hong Kong": "assets/images/customIconsSmall/Icon_39.png",
     "Wild Rover": "assets/images/customIconsSmall/Icon_40.png",
     "Ned Divine's": "assets/images/customIconsSmall/Icon_41.png",
+    "The Black Rose": "assets/images/customIcons/Icon_5.png",
+    "Hennessy’s": "assets/images/customIcons/Icon_6.png",
+    "White Bull Tavern": "assets/images/customIcons/Icon_7.png",
+    "Bill’s Bar": "assets/images/customIcons/Icon_9.png",
+    "House of Blues": "assets/images/customIcons/Icon_11.png",
     //clubs
     "Royale": "assets/images/customIconsSmall/Icon_49.png",
     "Venu": "assets/images/customIconsSmall/Icon_44.png",

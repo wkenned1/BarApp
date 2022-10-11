@@ -171,7 +171,8 @@ class DatabaseService {
     CollectionReference _collectionRef = _db.collection('Locations');
     QuerySnapshot querySnapshot = await _collectionRef.get();
     // Get data from docs and convert map to List
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    var allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //remove any
     List<LocationModel> ret = [];
     for (var l in allData) {
       Map<String, dynamic> obj = l as Map<String, dynamic>;
@@ -182,7 +183,9 @@ class DatabaseService {
           infoWindowTitle: obj["infoWindowTitle"] as String,
           address: obj["address"] as String,
           type: obj["type"] as String);
-      ret.add(model);
+      if(Constants.customIconsMap.containsKey(model.markerId) && Constants.customSmallIconsMap.containsKey(model.markerId)) {
+        ret.add(model);
+      }
     }
     return ret;
   }
