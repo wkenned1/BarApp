@@ -1,5 +1,6 @@
 import 'package:Linez/globals.dart';
 import 'package:Linez/resources/services/database_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -31,6 +32,22 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
   FirebaseAuth auth = FirebaseAuth.instance;
   String phoneNumber = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseAnalytics.instance
+        .setCurrentScreen(
+        screenName: 'SignUpPage'
+    );
+    FirebaseAnalytics.instance.logEvent(
+      name: 'pageView',
+      parameters: {
+        'page': 'SignUpPage',
+      },
+    );
+  }
 
   void signIn(BuildContext context) async {
 

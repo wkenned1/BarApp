@@ -10,6 +10,7 @@ import 'package:Linez/ui/search_page.dart';
 import 'package:Linez/ui/user_feedback_page.dart';
 import 'package:Linez/ui/widgets/countdown_widget.dart';
 import 'package:Linez/ui/widgets/ticket_icon_widget.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -80,6 +81,16 @@ class _GetLocationState extends State<GetLocationWidget> {
 
 //show popup when ticket icon is clicked
 Widget _buildTicketDialog(BuildContext context) {
+  FirebaseAnalytics.instance
+      .setCurrentScreen(
+      screenName: 'SignUpPopup'
+  );
+  FirebaseAnalytics.instance.logEvent(
+    name: 'pageView',
+    parameters: {
+      'page': 'SignUpPopup',
+    },
+  );
   return new AlertDialog(
     title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
@@ -118,6 +129,16 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
       showCountdown = true;
     }
   }
+  FirebaseAnalytics.instance
+      .setCurrentScreen(
+      screenName: 'SignedInTicketPopup'
+  );
+  FirebaseAnalytics.instance.logEvent(
+    name: 'pageView',
+    parameters: {
+      'page': 'SignedInTicketPopup',
+    },
+  );
   return new AlertDialog(
     title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
@@ -247,6 +268,29 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void pageChanged(int index) {
+    if(index == 0) {
+      FirebaseAnalytics.instance
+          .setCurrentScreen(
+          screenName: 'SearchPage'
+      );
+      FirebaseAnalytics.instance.logEvent(
+        name: 'pageView',
+        parameters: {
+          'page': 'SearchPage',
+        },
+      );
+    } else {
+      FirebaseAnalytics.instance
+          .setCurrentScreen(
+          screenName: 'MapPage'
+      );
+      FirebaseAnalytics.instance.logEvent(
+        name: 'pageView',
+        parameters: {
+          'page': 'MapPage',
+        },
+      );
+    }
     setState(() {
       bottomSelectedIndex = index;
     });

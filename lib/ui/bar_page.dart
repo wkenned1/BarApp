@@ -6,6 +6,7 @@ import 'package:Linez/models/location_model.dart';
 import 'package:Linez/resources/services/database_service.dart';
 import 'package:Linez/ui/widgets/camera_widget.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -57,6 +58,22 @@ class _BarPageState extends State<BarPage> {
   _BarPageState({Key? key, required this.location});
 
   int pressAttention = -1;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FirebaseAnalytics.instance
+        .setCurrentScreen(
+        screenName: 'WaitTimeReportPage'
+    );
+    FirebaseAnalytics.instance.logEvent(
+      name: 'pageView',
+      parameters: {
+        'page': 'WaitTimeReportPage',
+      },
+    );
+  }
 
   Widget _buildTimeErrorDialog(int hour, int day, BuildContext context) {
     return new AlertDialog(

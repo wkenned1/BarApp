@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:Linez/blocs/profile/profile_bloc.dart';
 import 'package:Linez/blocs/user_location/user_location_bloc.dart';

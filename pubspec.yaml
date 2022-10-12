@@ -51,6 +51,7 @@ dependencies:
   camera: ^0.10.0+1
   firebase_storage: ^10.3.10
   flutter_native_splash: ^2.2.10+1
+  firebase_analytics: ^9.3.8
 
   #mapbox_geocoding: ^0.1.3
 
