@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:Linez/models/location_model.dart';
 import 'package:camera/camera.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,6 +48,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void initState() {
     super.initState();
+    FirebaseAnalytics.instance
+        .setCurrentScreen(
+        screenName: 'TakePicturePage'
+    );
+    FirebaseAnalytics.instance.logEvent(
+      name: 'pageView',
+      parameters: {
+        'page': 'TakePicturePage',
+      },
+    );
     // To display the current output from the Camera,
     // create a CameraController.
     _controller = CameraController(
