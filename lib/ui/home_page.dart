@@ -81,16 +81,18 @@ class _GetLocationState extends State<GetLocationWidget> {
 
 //show popup when ticket icon is clicked
 Widget _buildTicketDialog(BuildContext context) {
-  FirebaseAnalytics.instance
-      .setCurrentScreen(
-      screenName: 'SignUpPopup'
-  );
-  FirebaseAnalytics.instance.logEvent(
-    name: 'pageView',
-    parameters: {
-      'page': 'SignUpPopup',
-    },
-  );
+  if(!UserData.admin) {
+    FirebaseAnalytics.instance
+        .setCurrentScreen(
+        screenName: 'SignUpPopup'
+    );
+    FirebaseAnalytics.instance.logEvent(
+      name: 'pageView',
+      parameters: {
+        'page': 'SignUpPopup',
+      },
+    );
+  }
   return new AlertDialog(
     title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
@@ -129,16 +131,18 @@ Widget _buildTicketSignedInDialog(BuildContext context) {
       showCountdown = true;
     }
   }
-  FirebaseAnalytics.instance
-      .setCurrentScreen(
-      screenName: 'SignedInTicketPopup'
-  );
-  FirebaseAnalytics.instance.logEvent(
-    name: 'pageView',
-    parameters: {
-      'page': 'SignedInTicketPopup',
-    },
-  );
+  if(!UserData.admin) {
+    FirebaseAnalytics.instance
+        .setCurrentScreen(
+        screenName: 'SignedInTicketPopup'
+    );
+    FirebaseAnalytics.instance.logEvent(
+      name: 'pageView',
+      parameters: {
+        'page': 'SignedInTicketPopup',
+      },
+    );
+  }
   return new AlertDialog(
     title: const Text("Giveaway", style: TextStyle(fontSize: 25),),
     content: new Column(
@@ -268,28 +272,30 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   void pageChanged(int index) {
-    if(index == 0) {
-      FirebaseAnalytics.instance
-          .setCurrentScreen(
-          screenName: 'SearchPage'
-      );
-      FirebaseAnalytics.instance.logEvent(
-        name: 'pageView',
-        parameters: {
-          'page': 'SearchPage',
-        },
-      );
-    } else {
-      FirebaseAnalytics.instance
-          .setCurrentScreen(
-          screenName: 'MapPage'
-      );
-      FirebaseAnalytics.instance.logEvent(
-        name: 'pageView',
-        parameters: {
-          'page': 'MapPage',
-        },
-      );
+    if(!UserData.admin) {
+      if (index == 0) {
+        FirebaseAnalytics.instance
+            .setCurrentScreen(
+            screenName: 'SearchPage'
+        );
+        FirebaseAnalytics.instance.logEvent(
+          name: 'pageView',
+          parameters: {
+            'page': 'SearchPage',
+          },
+        );
+      } else {
+        FirebaseAnalytics.instance
+            .setCurrentScreen(
+            screenName: 'MapPage'
+        );
+        FirebaseAnalytics.instance.logEvent(
+          name: 'pageView',
+          parameters: {
+            'page': 'MapPage',
+          },
+        );
+      }
     }
     setState(() {
       bottomSelectedIndex = index;

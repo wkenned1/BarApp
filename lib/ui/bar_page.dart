@@ -63,16 +63,18 @@ class _BarPageState extends State<BarPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAnalytics.instance
-        .setCurrentScreen(
-        screenName: 'WaitTimeReportPage'
-    );
-    FirebaseAnalytics.instance.logEvent(
-      name: 'pageView',
-      parameters: {
-        'page': 'WaitTimeReportPage',
-      },
-    );
+    if(!UserData.admin) {
+      FirebaseAnalytics.instance
+          .setCurrentScreen(
+          screenName: 'WaitTimeReportPage'
+      );
+      FirebaseAnalytics.instance.logEvent(
+        name: 'pageView',
+        parameters: {
+          'page': 'WaitTimeReportPage',
+        },
+      );
+    }
   }
 
   Widget _buildTimeErrorDialog(int hour, int day, BuildContext context) {

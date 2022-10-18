@@ -11,6 +11,7 @@ import 'package:loader_overlay/loader_overlay.dart';
 import '../../blocs/line_image/line_image_bloc.dart';
 import '../../blocs/profile/profile_bloc.dart';
 import '../../constants.dart';
+import '../../globals.dart';
 import '../../resources/services/database_service.dart';
 
 // A screen that allows users to take a picture using a given camera.
@@ -48,16 +49,18 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseAnalytics.instance
-        .setCurrentScreen(
-        screenName: 'TakePicturePage'
-    );
-    FirebaseAnalytics.instance.logEvent(
-      name: 'pageView',
-      parameters: {
-        'page': 'TakePicturePage',
-      },
-    );
+    if(!UserData.admin) {
+      FirebaseAnalytics.instance
+          .setCurrentScreen(
+          screenName: 'TakePicturePage'
+      );
+      FirebaseAnalytics.instance.logEvent(
+        name: 'pageView',
+        parameters: {
+          'page': 'TakePicturePage',
+        },
+      );
+    }
     // To display the current output from the Camera,
     // create a CameraController.
     _controller = CameraController(
@@ -66,6 +69,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       // Define the resolution to use.
       ResolutionPreset.medium,
       imageFormatGroup: ImageFormatGroup.yuv420,
+        enableAudio: false,
     );
     _controller.setFlashMode(FlashMode.off);
 
@@ -309,10 +313,10 @@ class DisplayPictureScreen extends StatelessWidget {
           alignment: FractionalOffset.bottomCenter,
           child: Padding(padding: EdgeInsets.fromLTRB(0, 0, 0, MediaQuery.of(context).size.height * .03),
             child: Container(
-              width: MediaQuery.of(context).size.width * .35,
+              width: MediaQuery.of(context).size.width * .4,
               height: MediaQuery.of(context).size.width * .15,
               child: ElevatedButton(
-                child: Text("Submit", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .08),),
+                child: Text("Submit", style: TextStyle(fontSize: MediaQuery.of(context).size.width * .07),),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(Constants.submitButtonBlue),
                 ), onPressed: () {

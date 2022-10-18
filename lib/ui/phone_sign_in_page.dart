@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../blocs/phone_auth/phone_auth_bloc.dart';
@@ -27,6 +28,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   bool otpVisibility = false;
   bool ageConfirmed = false;
   bool consentConfirmed = false;
+  String errorMessage = "";
+  bool showError = false;
 
   static GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
@@ -37,20 +40,22 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseAnalytics.instance
-        .setCurrentScreen(
-        screenName: 'SignUpPage'
-    );
-    FirebaseAnalytics.instance.logEvent(
-      name: 'pageView',
-      parameters: {
-        'page': 'SignUpPage',
-      },
-    );
+    if(!UserData.admin) {
+      FirebaseAnalytics.instance
+          .setCurrentScreen(
+          screenName: 'SignUpPage'
+      );
+      FirebaseAnalytics.instance.logEvent(
+        name: 'pageView',
+        parameters: {
+          'page': 'SignUpPage',
+        },
+      );
+    }
   }
 
   void signIn(BuildContext context) async {
-
+    context.loaderOverlay.show();
     PhoneAuthCredential credential =
     PhoneAuthProvider.credential(verificationId: verificationID, smsCode: otp.text);
 
@@ -61,6 +66,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       if(model == null){
         await DatabaseService().addUserProfile(ProfileModel(tickets: 0, winner: false, feedbackTicketReceived: false, winnerMessage: "", reportedLocations: []));
         UserData.userTickets = 0;
+        context.loaderOverlay.hide();
         Navigator.of(context).pop();
       }
       else {
@@ -70,12 +76,14 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         UserData.feedbackTicketReceived = model.feedbackTicketReceived;
         UserData.reportedLocations = model.reportedLocations;
         UserData.admin = model.admin ?? false;
+        context.loaderOverlay.hide();
         Navigator.of(context).pop();
       }
     });
   }
 
   void verifyPhone(BuildContext context) async {
+    context.loaderOverlay.show();
     //check if user is already signed in
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
@@ -90,22 +98,40 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       timeout: const Duration(minutes: 2),
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await auth.signInWithCredential(credential).then((value){
-
+        context.loaderOverlay.hide();
+        /*await auth.signInWithCredential(credential).then((value){
           print("You are logged in successfully");
           Navigator.of(context).pop();
-        });
+        });*/
       },
       verificationFailed: (FirebaseAuthException e) {
+        context.loaderOverlay.hide();
         print(e.message);
+        setState(() {
+          if(e.message != null){
+            errorMessage = e.code + " " + e.message!;
+          }
+          else {
+            errorMessage = e.code;
+          }
+          //showError = true;
+        });
+
       },
       codeSent: (String verificationId, int? resendToken) {
+        context.loaderOverlay.hide();
         otpVisibility = true;
         verificationID = verificationId;
-        setState(() {});
+        setState(() {
+          //showError = false;
+        });
       },
       codeAutoRetrievalTimeout: (String verificationId) {
-
+        context.loaderOverlay.hide();
+        setState(() {
+          errorMessage = "timed out";
+          //showError = true;
+        });
       },
     );
   }
@@ -114,7 +140,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   Widget build(BuildContext context) {
     TextStyle defaultStyle = TextStyle(color: Colors.black, fontSize: MediaQuery.of(context).size.width * .05);
     TextStyle linkStyle = TextStyle(color: Colors.blue, fontSize: MediaQuery.of(context).size.width * .05);
-    return Scaffold(
+    return LoaderOverlay(child: Scaffold(
         //key: GlobalKey<ScaffoldState>(),
         appBar: AppBar(
           backgroundColor: Color(Constants.linezBlue),
@@ -216,6 +242,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                 }
               }, child: Text("Submit"),
                   style: ElevatedButton.styleFrom(backgroundColor: Color(Constants.submitButtonBlue))),
+              Visibility(child: Text("ERROR: ${errorMessage}", style: TextStyle(color: Colors.red),), visible: showError,),
               if(otpVisibility)
                 Padding(padding: EdgeInsets.fromLTRB(0, 15.0, 0, 0), child: Column(
                   children: [
@@ -245,6 +272,6 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             ],
           ),
         ))
-    );
+    ));
   }
 }

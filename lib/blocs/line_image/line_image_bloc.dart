@@ -86,7 +86,7 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
     //restrictions will be disabled during app review
     //when restrictions are disabled users can submit wait times at any time and from any location
     bool restrictionsDisabled = await _databaseRepository.getRestrictionMode();
-
+    print("working 1");
     if (Platform.isIOS) {
       final accuracyStatus = await Geolocator.getLocationAccuracy();
       if(!restrictionsDisabled) {
@@ -104,13 +104,17 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
         }
       }
     }
+    print("working 2");
 
     int hour = DateTime.now().hour;
     int weekday = DateTime.now().weekday;
     int dtCode = checkDateTime(hour, weekday);
 
+    print("working 3");
+
     //check if day and time is correct
     if (restrictionsDisabled || dtCode == Constants.onHoursCode || dtCode == Constants.showZeroMinCode) {
+      print("working 4");
       try {
         final prefs = await SharedPreferences.getInstance();
         int? ts = prefs.getInt(event.id+ "-img");
@@ -125,6 +129,7 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
             return;
           }
         }
+        print("working 5");
         if(!restrictionsDisabled) {
           //checking location requirements
           LatLng? userLoc = await getUserLocation();
@@ -143,7 +148,9 @@ class LineImageBloc extends Bloc<LineImageEvent, LineImageState> {
             return;
           }
         }
+        print("working 6");
         bool result = await _storageRepository.submitLineImage(event.imagePath, event.id);
+        print("working 7 ${result}");
         if(result) {
           int timestamp = DateTime
               .now()
