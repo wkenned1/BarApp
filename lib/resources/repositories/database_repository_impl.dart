@@ -8,16 +8,6 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
   DatabaseService service = DatabaseService();
 
   @override
-  Future<void> saveUserData(UserModel user) {
-    return service.addUserData(user);
-  }
-
-  @override
-  Future<List<UserModel>> retrieveUserData() {
-    return service.retrieveUserData();
-  }
-
-  @override
   Future<void> addWaitTime(String id, int waitTime) {
     return service.addWaitTime(id, waitTime);
   }
@@ -59,8 +49,6 @@ class DatabaseRepositoryImpl implements DatabaseRepository {
 }
 
 abstract class DatabaseRepository {
-  Future<void> saveUserData(UserModel user);
-  Future<List<UserModel>> retrieveUserData();
   Future<void> addWaitTime(String id, int waitTime);
   Future<List<WaitTimeModel>> getWaitTimes(String id);
   Future<bool> sendFeedback(String message);

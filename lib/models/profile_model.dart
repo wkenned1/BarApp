@@ -7,9 +7,10 @@ class ProfileModel {
   final String winnerMessage;
   final List<String> reportedLocations;
   final bool? admin;
+  final String? driverId;
 
   ProfileModel(
-      {required this.tickets, required this.winner, required this.feedbackTicketReceived, required this.winnerMessage, required this.reportedLocations, this.admin});
+      {required this.tickets, required this.winner, required this.feedbackTicketReceived, required this.winnerMessage, required this.reportedLocations, this.admin, this.driverId});
 
   Map<String, dynamic> toMap() {
     return {
@@ -18,12 +19,13 @@ class ProfileModel {
       'feedbackTicketReceived': feedbackTicketReceived,
       'winnerMessage': winnerMessage,
       'reportedLocations': reportedLocations,
-      'admin': admin
+      'admin': admin,
+      'driverId': driverId
     };
   }
 
   ProfileModel.fromDocumentSnapshot(DocumentSnapshot<Map<String, dynamic>> doc)
-      : tickets = doc.data()!["tickets"], winner = doc.data()!["winner"], feedbackTicketReceived = doc.data()!["feedbackTicketReceived"], winnerMessage = doc.data()!["winnerMessage"], reportedLocations = (doc["reportedLocations"] as List)?.map((item) => item as String)?.toList() ?? [], admin = doc.data()!["admin"] ?? null;
+      : tickets = doc.data()!["tickets"], winner = doc.data()!["winner"], feedbackTicketReceived = doc.data()!["feedbackTicketReceived"], winnerMessage = doc.data()!["winnerMessage"], reportedLocations = (doc["reportedLocations"] as List)?.map((item) => item as String)?.toList() ?? [], admin = doc.data()!["admin"] ?? null, driverId = doc.data()!["driverId"] ?? null;
 
   ProfileModel copyWith({
     required int tickets,
@@ -31,7 +33,8 @@ class ProfileModel {
     required bool feedbackTicketReceived,
     required String winnerMessage,
     required List<String> reportedLocations,
-    bool? admin
+    bool? admin,
+    String? driverId
   }) {
     return ProfileModel(
         tickets: tickets ?? this.tickets,
@@ -39,7 +42,8 @@ class ProfileModel {
         feedbackTicketReceived: feedbackTicketReceived ?? this.feedbackTicketReceived,
         winnerMessage: winnerMessage ?? this.winnerMessage,
         reportedLocations: reportedLocations ?? this.reportedLocations,
-        admin: admin ?? this.admin
+        admin: admin ?? this.admin,
+        driverId: driverId ?? this.driverId
     );
   }
 }

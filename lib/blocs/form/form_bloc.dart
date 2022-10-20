@@ -54,9 +54,7 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
     ));
     UserModel user = UserModel(
         email: state.email,
-        password: state.password,
-        age: state.age,
-        displayName: state.displayName);
+        password: state.password,);
 
     if (event.value == Status.signUp) {
       await _updateUIAndSignUp(event, emit, user);
@@ -84,8 +82,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
     if (state.isFormValid) {
       try {
         UserCredential? authUser = await _authenticationRepository.signIn(user);
-        UserModel updatedUser = user.copyWith(uid: authUser!.user!.uid);
-        await _databaseRepository.saveUserData(updatedUser);
         emit(state.copyWith(isLoading: false, errorMessage: ""));
       } on FirebaseAuthException catch (e) {
         emit(state.copyWith(
@@ -107,9 +103,6 @@ class FormBloc extends Bloc<FormEvent, FormAuthState> {
     if (state.isFormValid) {
       try {
         UserCredential? authUser = await _authenticationRepository.signUp(user);
-        UserModel updatedUser = user.copyWith(
-            uid: authUser!.user!.uid, isVerified: authUser.user!.emailVerified);
-        await _databaseRepository.saveUserData(updatedUser);
         emit(state.copyWith(isLoading: false, errorMessage: ""));
       } on FirebaseAuthException catch (e) {
         emit(state.copyWith(

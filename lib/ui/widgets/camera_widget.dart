@@ -244,7 +244,7 @@ class DisplayPictureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return LoaderOverlay(child: Scaffold(
       appBar: AppBar(
         backgroundColor: Color(Constants.linezBlue),
         centerTitle: true,
@@ -320,12 +320,13 @@ class DisplayPictureScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(Constants.submitButtonBlue),
                 ), onPressed: () {
+                  context.loaderOverlay.show();
               context.read<LineImageBloc>().add(LineImageSubmit(imagePath: imagePath, id: id, location: location.position));
           },
           ),))
         ),
         Image.file(File(imagePath)),
       ],)
-    );
+    ));
   }
 }

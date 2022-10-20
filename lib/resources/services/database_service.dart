@@ -50,10 +50,6 @@ class StorageService {
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  addUserData(UserModel userData) async {
-    await _db.collection("Users").doc(userData.uid).set(userData.toMap());
-  }
-
   addUserProfile(ProfileModel profile) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
@@ -67,14 +63,44 @@ class DatabaseService {
     }
   }
 
+  updateDriverLocation(LatLng location, String driverId) async {
+    if(driverId.isEmpty) {
+      return;
+    }
+    print("working 1");
+      FirebaseAuth auth = FirebaseAuth.instance;
+      var user = auth.currentUser;
+    print("working 2");
+      if(user != null) {
+        if (user!.uid != null) {
+          print("working 3");
+          DocumentSnapshot<Map<String, dynamic>> doc =
+          await _db.collection("Globals").doc("DriverLocations").get();
+          print("working 4");
+          if (doc.exists) {
+            print("working 5 driver: ${driverId}");
+            await _db.collection("Globals").doc("DriverLocations").update({
+              driverId: {
+                "lat": location.latitude,
+                "long": location.longitude
+              }
+            });
+            print("working 6");
+          }
+        }
+      }
+  }
+
   Future<ProfileModel?> getUserProfile() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     var user = auth.currentUser;
     if(user != null) {
       if (user!.uid != null) {
+        print("uid: ${user!.uid}");
         DocumentSnapshot<Map<String, dynamic>> doc =
         await _db.collection("Users").doc(user!.uid).get();
         if(doc.exists){
+          print(doc.data());
           return ProfileModel.fromDocumentSnapshot(doc);
         }
         else {
@@ -151,20 +177,6 @@ class DatabaseService {
           timestamp: cast["timestamp"].toDate()));
     }
     return reports;
-  }
-
-  Future<List<UserModel>> retrieveUserData() async {
-    QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Users").get();
-    return snapshot.docs
-        .map((docSnapshot) => UserModel.fromDocumentSnapshot(docSnapshot))
-        .toList();
-  }
-
-  Future<String> retrieveUserName(UserModel user) async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Users").doc(user.uid).get();
-    return snapshot.data()!["displayName"];
   }
 
   Future<List<LocationModel>> getLocations() async {

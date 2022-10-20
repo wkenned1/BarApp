@@ -9,11 +9,6 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   DatabaseService dbService = DatabaseService();
 
   @override
-  Stream<UserModel> getCurrentUser() {
-    return service.retrieveCurrentUser();
-  }
-
-  @override
   Future<UserCredential?> signUp(UserModel user) {
     try {
       return service.signUp(user);
@@ -25,7 +20,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   @override
   Future<UserCredential?> signIn(UserModel user) {
     try {
-      return service.signInAnon();
+      return service.signIn(user);
     } on FirebaseAuthException catch (e) {
       throw FirebaseAuthException(code: e.code, message: e.message);
     }
@@ -36,16 +31,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     return service.signOut();
   }
 
-  @override
-  Future<String?> retrieveUserName(UserModel user) {
-    return dbService.retrieveUserName(user);
-  }
 }
 
 abstract class AuthenticationRepository {
-  Stream<UserModel> getCurrentUser();
   Future<UserCredential?> signUp(UserModel user);
   Future<UserCredential?> signIn(UserModel user);
   Future<void> signOut();
-  Future<String?> retrieveUserName(UserModel user);
 }

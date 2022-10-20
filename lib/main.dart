@@ -10,6 +10,7 @@ import 'package:Linez/resources/util/get_distance.dart';
 import 'package:Linez/resources/util/get_location.dart';
 import 'package:Linez/ui/phone_sign_in_page.dart';
 import 'package:Linez/ui/sign_up_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'globals.dart';
 import 'models/location_model.dart';
 import 'package:geolocator/geolocator.dart' as Geo;
+import 'package:flutter_isolate/flutter_isolate.dart';
 
 import 'models/profile_model.dart';
 import 'package:Linez/resources/services/database_service.dart';
@@ -94,6 +96,28 @@ int checkDateTime(int hour, int weekday) {
     return Constants.offHoursNoneCode;
   }*/
   return Constants.offHoursNoneCode;
+}
+
+/////////////////////////
+//background location tracking
+/////////////////////////
+void getLocBackground(String s) async {
+  print("MESSAGE ${s}");
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseAppCheck.instance.activate(
+  );
+  Timer.periodic(Duration(seconds:10),(timer) async {
+    LatLng? location = await getUserLocation();
+      if(location == null) {
+        print("no loc");
+      }
+      else {
+        print("lat ${location.latitude}, long: ${location.longitude}");
+        await DatabaseService().updateDriverLocation(location, s);
+      }
+  });
 }
 
 void main() async {
@@ -205,8 +229,7 @@ void main() async {
       providers: [
         BlocProvider(
           create: (context) =>
-              AuthenticationBloc(AuthenticationRepositoryImpl())
-                ..add(AuthenticationStarted()),
+              AuthenticationBloc(AuthenticationRepositoryImpl()),
         ),
         BlocProvider(
           create: (context) => FormBloc(

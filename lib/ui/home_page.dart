@@ -29,6 +29,7 @@ import '../globals.dart';
 import '../main.dart';
 import '../resources/services/notification_service.dart';
 import '../resources/util/get_location.dart';
+import 'driver_sign_in.dart';
 import 'logout_page.dart';
 
 class GetLocationWidget extends StatefulWidget {
@@ -592,15 +593,26 @@ class _MyHomePageState extends State<HomePage> {
                         );
                       }
                       else {
-                        return GestureDetector(child: ListTile(
-                          title: Text("Login with phone", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
-                          trailing: Icon(Icons.arrow_forward),
+                        return Column(children: [
+                          GestureDetector(child: ListTile(
+                            title: Text("Login as Driver", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
+                            trailing: Icon(Icons.arrow_forward),
+                          ),
+                            onTap: (){
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => DriverSignInPagePage()));
+                            },
+                          ),
+                        GestureDetector(child: ListTile(
+                        title: Text("Login with phone", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
+                        trailing: Icon(Icons.arrow_forward),
                         ),
-                          onTap: (){
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PhoneAuthPage()));
-                          },
-                        );
+                        onTap: (){
+                        Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PhoneAuthPage()));
+                        },
+                        ),
+                        ],);
                       }
                     }),
                 ],

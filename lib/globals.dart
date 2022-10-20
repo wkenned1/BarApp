@@ -19,4 +19,8 @@ class UserData {
   static List<String> reportedLocations = [];
   static bool showDisclaimerPopup = false;
   static bool admin = false;
+
+  //drivers
+  static bool driver = false;
+  static String driverId = "";
 }

@@ -5,16 +5,6 @@ import '../../models/user_model.dart';
 class AuthenticationService {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Stream<UserModel> retrieveCurrentUser() {
-    return auth.authStateChanges().map((User? user) {
-      if (user != null) {
-        return UserModel(uid: user.uid);
-      } else {
-        return UserModel(uid: "uid");
-      }
-    });
-  }
-
   Future<UserCredential?> signUp(UserModel user) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
