@@ -88,12 +88,24 @@ class _MapState extends State<MapSample> with AutomaticKeepAliveClientMixin {
             Constants.customSmallIconsMap[location.markerId]!,
           );
         }
+        else {
+          customIconBitMap = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(),
+            Constants.customSmallIconsMap["OHE"]!,
+          );
+        }
       }
       else {
         if(Constants.customIconsMap.containsKey(location.markerId)){
           customIconBitMap = await BitmapDescriptor.fromAssetImage(
             ImageConfiguration(),
             Constants.customIconsMap[location.markerId]!,
+          );
+        }
+        else {
+          customIconBitMap = await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(),
+            Constants.customSmallIconsMap["OHE"]!,
           );
         }
       }

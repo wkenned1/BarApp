@@ -102,7 +102,6 @@ int checkDateTime(int hour, int weekday) {
 //background location tracking
 /////////////////////////
 void getLocBackground(String s) async {
-  print("MESSAGE ${s}");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -114,7 +113,6 @@ void getLocBackground(String s) async {
         print("no loc");
       }
       else {
-        print("lat ${location.latitude}, long: ${location.longitude}");
         await DatabaseService().updateDriverLocation(location, s);
       }
   });

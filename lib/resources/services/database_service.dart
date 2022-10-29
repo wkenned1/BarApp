@@ -67,25 +67,19 @@ class DatabaseService {
     if(driverId.isEmpty) {
       return;
     }
-    print("working 1");
       FirebaseAuth auth = FirebaseAuth.instance;
       var user = auth.currentUser;
-    print("working 2");
       if(user != null) {
         if (user!.uid != null) {
-          print("working 3");
           DocumentSnapshot<Map<String, dynamic>> doc =
           await _db.collection("Globals").doc("DriverLocations").get();
-          print("working 4");
           if (doc.exists) {
-            print("working 5 driver: ${driverId}");
             await _db.collection("Globals").doc("DriverLocations").update({
               driverId: {
                 "lat": location.latitude,
                 "long": location.longitude
               }
             });
-            print("working 6");
           }
         }
       }
@@ -96,11 +90,9 @@ class DatabaseService {
     var user = auth.currentUser;
     if(user != null) {
       if (user!.uid != null) {
-        print("uid: ${user!.uid}");
         DocumentSnapshot<Map<String, dynamic>> doc =
         await _db.collection("Users").doc(user!.uid).get();
         if(doc.exists){
-          print(doc.data());
           return ProfileModel.fromDocumentSnapshot(doc);
         }
         else {
@@ -195,9 +187,9 @@ class DatabaseService {
           infoWindowTitle: obj["infoWindowTitle"] as String,
           address: obj["address"] as String,
           type: obj["type"] as String);
-      if(Constants.customIconsMap.containsKey(model.markerId) && Constants.customSmallIconsMap.containsKey(model.markerId)) {
+      //if(Constants.customIconsMap.containsKey(model.markerId) && Constants.customSmallIconsMap.containsKey(model.markerId)) {
         ret.add(model);
-      }
+      //}
     }
     return ret;
   }

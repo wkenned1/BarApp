@@ -73,6 +73,7 @@ class ClickableLocationsList extends StatelessWidget {
     /*context.read<WaitTimeBloc>().add(GetWaitTime(
       id: location.infoWindowTitle,
     ));*/
+
     return GestureDetector(child: Container(
       //margin: const EdgeInsets.fromLTRB(0, 0,10,0),
       //padding: const EdgeInsets.all(3.0),
@@ -86,7 +87,7 @@ class ClickableLocationsList extends StatelessWidget {
               AsyncSnapshot<FutureResultClickableLocation> snapshot) {
             return ListTile(
               leading: (!snapshot.hasData || snapshot.data!.imgName.downloadUrl.isEmpty) ?
-              Image.asset(Constants.customIconsMap[location.markerId]!, width: 60, height: 60) :
+              Image.asset((Constants.customIconsMap.containsKey(location.markerId)) ? Constants.customIconsMap[location.markerId]! : Constants.customIconsMap["OHE"]!, width: 60, height: 60) :
               GestureDetector(child: Container(
                 width: 60,
                 height: 60,

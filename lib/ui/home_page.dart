@@ -594,7 +594,7 @@ class _MyHomePageState extends State<HomePage> {
                       }
                       else {
                         return Column(children: [
-                          GestureDetector(child: ListTile(
+                          /* GestureDetector(child: ListTile(
                             title: Text("Login as Driver", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                             trailing: Icon(Icons.arrow_forward),
                           ),
@@ -602,7 +602,7 @@ class _MyHomePageState extends State<HomePage> {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (context) => DriverSignInPagePage()));
                             },
-                          ),
+                          ),*/
                         GestureDetector(child: ListTile(
                         title: Text("Login with phone", style: TextStyle(fontSize: min(WidgetsBinding.instance.window.physicalSize.height * .01, WidgetsBinding.instance.window.physicalSize.width * .02)),),
                         trailing: Icon(Icons.arrow_forward),
